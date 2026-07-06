@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD — Chuleta de examen</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--red:#c0392b;--green:#1d8a4e;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--red:#ff7a6b;--green:#46c98b;--blue:#6ea8ff;--amber:#e0a830;}}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45;max-width:860px;margin:0 auto;padding:22px 20px;font-size:.92rem;}
+  h1{font-size:1.35rem;margin:0 0 2px;} h2{font-size:1.02rem;margin:16px 0 6px;border-bottom:2px solid var(--line);padding-bottom:3px;}
+  .sub{color:var(--mut);margin:0 0 8px;font-size:.88rem;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;} .grid>div{min-width:0;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:6px 0;}
+  table{border-collapse:collapse;width:100%;font-size:.85rem;margin:5px 0;} th,td{border:1px solid var(--line);padding:4px 7px;text-align:left;vertical-align:top;}
+  th{background:var(--card);}
+  ul{margin:4px 0;padding-left:18px;} li{margin:2px 0;}
+  code{background:var(--card);border:1px solid var(--line);padding:0 4px;border-radius:4px;font-size:.85em;}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow:auto;font-size:.76rem;line-height:1.35;margin:5px 0;}
+  .red{color:var(--red);font-weight:600;} .green{color:var(--green);font-weight:600;} .amber{color:var(--amber);font-weight:600;}
+  @media print{ body{font-size:8.6pt;padding:0;max-width:none;} pre{font-size:7.3pt;} h2{margin:8px 0 3px;} .card{page-break-inside:avoid;} .grid{gap:6px;} @page{margin:11mm;} }
+  @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<h1>CI/CD — Chuleta de examen</h1>
+<p class="sub">Examen: <strong>8 test (4 pts) + 1 desarrollo teórico-práctico + 1 ejercicio práctico</strong>. Los test son similares a los de la plataforma. El práctico gira en torno a <span class="red">Jenkins</span> (estilo Actividad 3).</p>
+
+<div class="grid">
+<div>
+
+<h2>📌 Definiciones que caen seguro</h2>
+<div class="card">
+<ul>
+<li><strong>ALM</strong> = gobierno + desarrollo + operaciones.</li>
+<li><strong>CI</strong>: integrar y probar automáticamente cada cambio.</li>
+<li><strong>Entrega Continua</strong>: siempre desplegable; paso a producción <em>manual</em>.</li>
+<li><strong>Despliegue Continuo</strong>: a producción <em>automático</em> si pasan las pruebas.</li>
+<li><strong>Construir/probar/desplegar automáticamente</strong> = los cambios de código inician build + pruebas + despliegue sin intervención humana.</li>
+<li><strong>Informes JUnit</strong> = XML con resultados de ejecución de pruebas (no solo Java/unitarias).</li>
+<li><strong>Quality Gate</strong> (Sonar): condiciones que el código debe cumplir o el pipeline falla. Sonar aporta: calidad multi-vista + evolución + problemas potenciales (<em>todas</em>).</li>
+</ul>
+</div>
+
+<h2>🌿 Git y flujos (T2-T3)</h2>
+<div class="card">
+<ul>
+<li><strong>Commit</strong>: cambios registrados en la historia · <strong>Rama</strong>: línea independiente · <strong>Repo</strong>: ficheros + historia · <strong>Merge</strong>: combinar dos ramas.</li>
+<li><strong>Centralizado</strong>: solo trunk/master (1 rama).</li>
+<li><strong>Feature branching</strong>: rama por funcionalidad, mismo repo; vale en cualquier VCS (no exige PRs).</li>
+<li><strong>GitLab flow</strong>: features + ramas de <em>entorno</em> (production/pre-production).</li>
+<li><strong>Forking</strong>: fork por dev + PRs entre forks.</li>
+<li><strong>Gitflow</strong>: main + develop + feature/release/hotfix. Features → develop. Cada commit en master lleva <em>etiqueta de versión</em>.</li>
+<li>Versionar código/scripts/config; <span class="red">no</span> los binarios generados (→ Nexus).</li>
+</ul>
+</div>
+
+<h2>🧪 Pruebas y pipeline (T4-T5)</h2>
+<div class="card">
+<ul>
+<li><strong>Pipeline</strong>: source → build → test → release → deploy → operate. Cada fase = puerta de calidad.</li>
+<li><strong>Fase de commit</strong>: build + pruebas unitarias.</li>
+<li><strong>Pirámide</strong>: base unitarias (muchas/rápidas) → integración → cima E2E/UI (pocas/lentas).</li>
+<li>Tipos: unitarias (aisladas) · sistema (E2E, app arrancada) · GUI (navegador) · rendimiento (no funcional).</li>
+</ul>
+</div>
+
+</div>
+<div>
+
+<h2>⚙️ Herramientas (T7-T9)</h2>
+<div class="card">
+<ul>
+<li><strong>Jenkins</strong>: master + agentes. Pipeline como código en <code>Jenkinsfile</code> (repo). Jerarquía: <code>pipeline → stages → stage → steps</code>.</li>
+<li><strong>GitLab CI</strong>: <code>.gitlab-ci.yml</code> define stages y jobs; los ejecutan <em>runners</em> (shell/Docker/K8s). Disparo general: push a rama.</li>
+<li><strong>Bitbucket</strong>: Git de Atlassian (+ Jira/Trello). Históricamente también <em>Mercurial</em>.</li>
+<li><strong>CircleCI</strong>: CI/CD cloud, cachés.</li>
+<li><strong>Nexus</strong>: repositorio de artefactos + proxy de dependencias.</li>
+</ul>
+</div>
+
+<h2>🚀 Modelos de despliegue (T10)</h2>
+<table>
+<tr><th>Modelo</th><th>Clave</th></tr>
+<tr><td><strong>Blue/Green</strong></td><td>2 entornos idénticos; conmutación total; rollback inmediato; coste doble.</td></tr>
+<tr><td><strong>Canary</strong></td><td>% pequeño y creciente de usuarios reales; fallo acotado; exige métricas.</td></tr>
+<tr><td><strong>Rolling</strong></td><td>Servidores poco a poco; conviven versiones.</td></tr>
+<tr><td><strong>Feature flag</strong></td><td>on/off por configuración sin desplegar; desacopla desplegar de liberar.</td></tr>
+</table>
+
+<h2>🛠️ Código que pide el práctico</h2>
+<div class="card">
+<strong>Jenkinsfile — test + archivar XML (estilo Act. 3):</strong>
+<pre>pipeline {
+  agent any
+  stages {
+    stage('Build') { steps { sh 'mvn -B clean package -DskipTests' } }
+    stage('Test') {
+      steps { sh 'mvn test' }
+      post { always {
+        junit 'target/surefire-reports/*.xml'
+        archiveArtifacts artifacts: 'target/surefire-reports/*.xml',
+                         allowEmptyArchive: true
+      } }
+    }
+  }
+}</pre>
+<strong>.gitlab-ci.yml — build/test/deploy solo en main:</strong>
+<pre>stages: [build, test, deploy]
+build: { stage: build, script: ./mvnw -B package,
+         artifacts: { paths: [target/*.jar] } }
+test:
+  stage: test
+  script: ./mvnw test
+  artifacts: { reports: { junit: target/surefire-reports/TEST-*.xml } }
+deploy:
+  stage: deploy
+  script: ./deploy.sh target/*.jar
+  rules: [ if: '$CI_COMMIT_BRANCH == "main"' ]</pre>
+</div>
+
+</div>
+</div>
+
+<p class="sub">Fuentes: guía del profesor (grabaciones), banco oficial verificado 10/10 y PDFs de Teoría. Compañeros: <code>simulacro.html</code> · <code>flashcards.html</code> · <code>resumen_temas.html</code>.</p>
+</body>
+</html>

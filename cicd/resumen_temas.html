@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD — Resumen por temas</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--blue:#2563c9;--amber:#b9770e;--green:#1d8a4e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--blue:#6ea8ff;--amber:#e0a830;--green:#46c98b;}}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 60px;}
+  h1{font-size:1.45rem;margin:0 0 2px;} h2{font-size:1.12rem;margin:26px 0 8px;border-bottom:2px solid var(--line);padding-bottom:4px;}
+  .sub{color:var(--mut);margin:0 0 10px;font-size:.93rem;}
+  .c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;}
+  .c b:first-child{color:var(--blue);}
+  .pg{color:var(--mut);font-size:.82rem;white-space:nowrap;}
+  .ej{color:var(--mut);font-size:.9rem;display:block;margin-top:3px;}
+  code{background:var(--bg);border:1px solid var(--line);padding:0 4px;border-radius:4px;font-size:.86em;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .toc a{border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;color:var(--fg);font-size:.85rem;background:var(--card);}
+  .star{color:var(--amber);}
+</style>
+</head>
+<body>
+<h1>CI/CD — Resumen por temas</h1>
+<p class="sub">5-6 conceptos por tema con ejemplo y página del PDF de Teoría. ⭐ = lo recalca el profe o cae en los test oficiales.</p>
+<div class="toc"><a href="#t1">T1</a><a href="#t2">T2</a><a href="#t3">T3</a><a href="#t4">T4</a><a href="#t5">T5</a><a href="#t6">T6</a><a href="#t7">T7</a><a href="#t8">T8</a><a href="#t9">T9</a><a href="#t10">T10</a></div>
+
+<h2 id="t1">Tema 1 · Introducción (ALM y CI/CD)</h2>
+<div class="c"><b>ALM</b> <span class="star">⭐</span> — Application Lifecycle Management: gestión del ciclo de vida completo de la aplicación con tres aspectos: <b>gobierno, desarrollo y operaciones</b>, presentes en cada fase. <span class="pg">(pág. 5)</span><span class="ej">Ej.: el gobierno decide qué se construye; desarrollo lo construye; operaciones lo mantiene en producción.</span></div>
+<div class="c"><b>Integración Continua (CI)</b> <span class="star">⭐</span> — cada cambio se integra en la rama principal y dispara build + pruebas automáticas. <span class="pg">(pág. 17)</span><span class="ej">Ej.: un push a Git lanza un job de Jenkins que compila y ejecuta los tests unitarios.</span></div>
+<div class="c"><b>Entrega Continua vs Despliegue Continuo</b> <span class="star">⭐</span> — con Entrega Continua el producto siempre está listo para desplegar pero el paso a producción es <b>manual</b>; con Despliegue Continuo todo cambio que pasa las pruebas llega a producción <b>automáticamente</b>. <span class="pg">(págs. 3-4)</span><span class="ej">Ej.: "botón de release" = Delivery; "merge a main = deploy" = Deployment.</span></div>
+<div class="c"><b>Construir/probar/desplegar automáticamente</b> — los cambios de código inician una construcción, ejecutan pruebas y permiten desplegar <b>sin intervención humana</b> (no basta con scripts sueltos o solo jobs). <span class="pg">(pág. 5)</span></div>
+<div class="c"><b>Antipatrones</b> — despliegue manual, entornos distintos entre etapas, gestión manual de configuración: lo que la entrega continua elimina. <span class="pg">(pág. 5)</span><span class="ej">Ej.: probar el despliegue en producción por primera vez el día de la release.</span></div>
+<div class="c"><b>Modelo de madurez</b> — escala para evaluar cuán automatizado está el proceso (build, test, deploy, medición). <span class="pg">(pág. 18)</span></div>
+
+<h2 id="t2">Tema 2 · Control de versiones</h2>
+<div class="c"><b>Repositorio</b> — almacén con los ficheros del proyecto y toda su historia de versiones. <span class="pg">(pág. 5)</span></div>
+<div class="c"><b>Commit</b> <span class="star">⭐</span> — conjunto de cambios registrados en la historia del repositorio. <b>Rama</b>: línea de desarrollo independiente desde un punto de la historia. <b>Merge</b>: combinación de los cambios de dos ramas. <span class="pg">(págs. 5-6)</span><span class="ej">Ej. (relacionar T2·P4 del test oficial).</span></div>
+<div class="c"><b>Edición simultánea vs bloqueo</b> — modelo optimista (varios editan y luego se fusionan) frente a bloquear el fichero para un solo editor; Git usa el primero. <span class="pg">(págs. 6-9)</span></div>
+<div class="c"><b>Qué versionar</b> <span class="star">⭐</span> — código, scripts, configuración y definición del pipeline; los binarios generados NO (van al repositorio de artefactos). <span class="pg">(Tema 2)</span></div>
+
+<h2 id="t3">Tema 3 · Flujos de trabajo con Git</h2>
+<div class="c"><b>Flujo centralizado</b> <span class="star">⭐</span> — una sola rama principal (trunk/master); todos hacen commit ahí. <span class="pg">(pág. 5)</span></div>
+<div class="c"><b>Feature branching</b> <span class="star">⭐</span> — una rama por funcionalidad en el mismo repo; se fusiona al terminar. Puede implementarse en <b>cualquier VCS</b> (no exige pull requests). <span class="pg">(pág. 10)</span></div>
+<div class="c"><b>Gitflow</b> <span class="star">⭐</span> — ramas permanentes <code>main</code> y <code>develop</code> + <code>feature/release/hotfix</code>. Las features se fusionan a <b>develop</b>; cada commit en master se <b>etiqueta con la versión</b>. <span class="pg">(pág. 12)</span></div>
+<div class="c"><b>GitLab flow</b> — feature branches + ramas de <b>entorno</b> (production, pre-production): el despliegue va ligado a ramas. <span class="pg">(pág. 18)</span></div>
+<div class="c"><b>Forking workflow</b> — cada desarrollador con su fork y contribución vía <b>pull requests</b> entre forks (típico de open source). <span class="pg">(págs. 6, 16)</span></div>
+
+<h2 id="t4">Tema 4 · Fases de la entrega continua</h2>
+<div class="c"><b>Pipeline de despliegue</b> <span class="star">⭐</span> — cadena automatizada: source → build → test → release → deploy → operate; cada fase es una puerta de calidad que detiene el avance si falla. <span class="pg">(pág. 4)</span></div>
+<div class="c"><b>Fase de commit</b> <span class="star">⭐</span> — la primera: compila y ejecuta <b>pruebas unitarias</b>; da feedback en minutos. <span class="pg">(pág. 6)</span></div>
+<div class="c"><b>Artefacto único</b> — se construye una sola vez y se promociona el mismo binario por todos los entornos. <span class="pg">(pág. 6)</span><span class="ej">Ej.: el JAR que pasó las pruebas es el que llega a producción, no una recompilación.</span></div>
+<div class="c"><b>Pruebas de aceptación</b> — validan requisitos de negocio en un entorno tipo producción, tras la fase de commit. <span class="pg">(pág. 7)</span></div>
+
+<h2 id="t5">Tema 5 · Pruebas</h2>
+<div class="c"><b>Pirámide de pruebas</b> <span class="star">⭐</span> — base: unitarias (muchas, rápidas, baratas) · medio: integración/servicio · cima: E2E/UI (pocas, lentas, caras). <span class="pg">(pág. 11)</span></div>
+<div class="c"><b>Tipos de prueba</b> <span class="star">⭐</span> — unitarias (una unidad aislada) · de sistema (E2E con la app arrancada) · de GUI (vía navegador) · de rendimiento (no funcionales: tiempos bajo carga). <span class="pg">(págs. 6-8)</span><span class="ej">Ej. (relacionar T5·P5 del test oficial).</span></div>
+<div class="c"><b>Informes JUnit</b> <span class="star">⭐</span> — ficheros <b>XML con el resultado de la ejecución</b> de pruebas; los publican las herramientas de CI. No son exclusivos de Java ni de pruebas unitarias. <span class="pg">(pág. 25)</span></div>
+<div class="c"><b>Automatización</b> — las pruebas se ejecutan en el pipeline en cada cambio; las manuales quedan para exploratorias. <span class="pg">(Tema 5)</span></div>
+
+<h2 id="t6">Tema 6 · Evaluación y calidad del código</h2>
+<div class="c"><b>Métricas de entrega</b> — lead time, frecuencia de despliegue, tasa de fallos, tiempo de recuperación: miden la salud del proceso. <span class="pg">(pág. 6)</span></div>
+<div class="c"><b>Análisis estático</b> — examinar el código sin ejecutarlo buscando bugs, vulnerabilidades y code smells. <span class="pg">(pág. 5)</span></div>
+<div class="c"><b>SonarQube</b> <span class="star">⭐</span> — plataforma de análisis estático: calidad desde varios puntos de vista + evolución temporal + problemas potenciales (<b>"todas las anteriores"</b> en el test). <span class="pg">(pág. 4)</span></div>
+<div class="c"><b>Quality Gate</b> <span class="star">⭐</span> — condiciones (bugs, cobertura, duplicación… sobre código nuevo) que deciden pasa/falla; integrado como stage, rompe el pipeline si falla. <span class="pg">(Tema 6)</span></div>
+<div class="c"><b>Revisiones de código</b> — inspección por pares (pull requests) como práctica de calidad complementaria al análisis automático. <span class="pg">(pág. 4)</span></div>
+
+<h2 id="t7">Tema 7 · Jenkins</h2>
+<div class="c"><b>Arquitectura master + agentes</b> <span class="star">⭐</span> — el master orquesta (UI, cola, planificación) y los agentes/nodos ejecutan los trabajos. <span class="pg">(pág. 4)</span></div>
+<div class="c"><b>Jenkinsfile</b> <span class="star">⭐</span> — pipeline como código (Groovy) versionado en el repositorio. Es donde "debe definirse" el pipeline. <span class="pg">(pág. 4)</span></div>
+<div class="c"><b>Declarativa vs scripted</b> — declarativa: estructura fija <code>pipeline → stages → stage → steps</code>; scripted: Groovy libre. <span class="pg">(pág. 14)</span></div>
+<div class="c"><b>Triggers</b> — qué dispara el pipeline: webhook del SCM, encuesta (polling), programado (cron), manual. <span class="pg">(pág. 7)</span></div>
+<div class="c"><b><code>post { always { … } }</code></b> <span class="star">⭐</span> — acciones tras el stage pase lo que pase: publicar <code>junit</code> y <code>archiveArtifacts</code> (clave del ejercicio práctico estilo Actividad 3). <span class="pg">(Tema 7)</span></div>
+
+<h2 id="t8">Tema 8 · GitLab</h2>
+<div class="c"><b>Plataforma integrada</b> — repositorio + CI/CD + registro en un solo producto. <span class="pg">(Tema 8)</span></div>
+<div class="c"><b>.gitlab-ci.yml</b> <span class="star">⭐</span> — YAML en la raíz del repo que define <b>stages</b> (orden) y <b>jobs</b> (script, artifacts, rules). <span class="pg">(pág. 8)</span></div>
+<div class="c"><b>Runners</b> <span class="star">⭐</span> — procesos que ejecutan los jobs; executors: shell, Docker, Kubernetes. <span class="pg">(pág. 8)</span></div>
+<div class="c"><b>Artifacts</b> — ficheros que un job guarda y pasa a los siguientes (JAR, informes JUnit). <span class="pg">(pág. 21)</span></div>
+<div class="c"><b>Disparadores</b> <span class="star">⭐</span> — el disparo general del pipeline es el <b>push a una rama</b> (commits/tags); también merge requests. <span class="pg">(Tema 8)</span></div>
+
+<h2 id="t9">Tema 9 · Otras herramientas</h2>
+<div class="c"><b>Bitbucket</b> <span class="star">⭐</span> — repositorios <b>Git</b> de Atlassian (históricamente también Mercurial), integrado con Jira/Trello; CI con Bitbucket Pipelines. <span class="pg">(pág. 5)</span></div>
+<div class="c"><b>CircleCI</b> — CI/CD en la nube; destaca por las <b>cachés</b> para acelerar builds; config en <code>.circleci/config.yml</code>. <span class="pg">(pág. 7)</span></div>
+<div class="c"><b>Nexus</b> <span class="star">⭐</span> — repositorio de <b>artefactos</b>: almacena/versiona binarios (JAR, imágenes, paquetes) y hace de proxy de dependencias. <span class="pg">(pág. 23)</span></div>
+
+<h2 id="t10">Tema 10 · Modelos de despliegue</h2>
+<div class="c"><b>Blue/Green</b> <span class="star">⭐</span> — dos entornos idénticos; se conmuta TODO el tráfico de golpe; rollback inmediato; coste: infraestructura doble. <span class="pg">(pág. 10)</span></div>
+<div class="c"><b>Canary releasing</b> <span class="star">⭐</span> — la nueva versión recibe una porción pequeña y creciente del tráfico real; un fallo solo afecta a esa porción; exige monitorización. <span class="pg">(pág. 12)</span></div>
+<div class="c"><b>Rolling (incremental)</b> <span class="star">⭐</span> — se sustituyen los servidores poco a poco; ambas versiones conviven durante el proceso. <span class="pg">(págs. 12-13)</span></div>
+<div class="c"><b>Feature flags</b> <span class="star">⭐</span> — activar/desactivar funcionalidades por configuración sin desplegar; desacoplan despliegue de exposición; habilitan A/B y rollback sin redeploy. <span class="pg">(pág. 4)</span></div>
+
+<p class="sub">Fuentes: PDFs de <code>Teoria/</code> (páginas citadas), guía del profesor y banco oficial verificado. Compañeros: <code>chuleta.html</code> · <code>simulacro.html</code> · <code>flashcards.html</code>.</p>
+</body>
+</html>

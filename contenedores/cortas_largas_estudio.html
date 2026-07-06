@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contenedores — Cortas y largas (estudiar)</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:860px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;margin:0 0 2px;} .sub{color:var(--mut);margin:0 0 14px;font-size:.95rem;}
+  .filters{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer;font:inherit;font-size:.86rem;}
+  .chip.on{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent);font-weight:600;}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;}
+  .btn{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;}
+  .btn:hover{border-color:var(--blue);}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 8px;font-weight:600;font-size:.9rem;z-index:5;color:var(--mut);}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .q.larga{border-left:4px solid var(--amber);}
+  .q.corta{border-left:4px solid var(--blue);}
+  .tag{font-size:.75rem;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.03em;}
+  .qh{font-weight:600;margin:5px 0 0;cursor:pointer;display:flex;gap:8px;align-items:baseline;}
+  .qh .arrow{color:var(--mut);font-size:.8rem;transition:transform .15s;flex:none;}
+  .q.open .arrow{transform:rotate(90deg);}
+  .a{display:none;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line);font-size:.95rem;}
+  .q.open .a{display:block;}
+  .a ul{margin:6px 0 2px;padding-left:18px;} .a li{margin:3px 0;}
+  code{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:.86em;}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:auto;font-size:.82rem;line-height:1.4;white-space:pre;}
+</style>
+</head>
+<body>
+<h1>Contenedores — Preguntas cortas y largas</h1>
+<p class="sub">Versión para <strong>estudiar</strong>: haz clic en una pregunta para desplegar la respuesta. Filtra por tipo o tema. El grueso es Kubernetes (temas 6-10) sobre Docker (1-5). Para repaso a ciegas usa <a href="cortas_largas_flashcards.html">la versión flashcards</a>.</p>
+<div class="filters" id="tipoFilters"></div>
+<div class="filters" id="temaFilters"></div>
+<div class="tools">
+  <button class="btn" id="expand">▼ Desplegar todas</button>
+  <button class="btn" id="collapse">▲ Plegar todas</button>
+</div>
+<div class="bar" id="bar"></div>
+<div id="list"></div>
+
+<script src="_banco_cortas_largas.js"></script>
+<script>
+const B = window.BANCO;
+const TEMAS = [...new Set(B.map(x=>x.tema))].sort((a,b)=>a-b);
+let fTipo = "todas";           // todas | corta | larga
+let fTema = new Set(TEMAS);    // temas activos
+const $ = id => document.getElementById(id);
+
+function chip(label,on,onclick){
+  const b=document.createElement('button');
+  b.className='chip'+(on?' on':''); b.textContent=label; b.onclick=onclick;
+  return b;
+}
+function buildFilters(){
+  const tf=$('tipoFilters'); tf.innerHTML='';
+  [["todas","Todas"],["corta","Cortas"],["larga","Largas"]].forEach(([k,lab])=>{
+    const n = k==="todas"?B.length:B.filter(x=>x.tipo===k).length;
+    tf.appendChild(chip(lab+' ('+n+')', fTipo===k, ()=>{fTipo=k;render();}));
+  });
+  const mf=$('temaFilters'); mf.innerHTML='';
+  TEMAS.forEach(t=>{
+    mf.appendChild(chip('Tema '+t, fTema.has(t), ()=>{
+      fTema.has(t)&&fTema.size>1 ? fTema.delete(t) : fTema.add(t); render();
+    }));
+  });
+  mf.appendChild(chip('Todos los temas', fTema.size===TEMAS.length, ()=>{fTema=new Set(TEMAS);render();}));
+}
+function visible(){
+  return B.map((x,i)=>({...x,i}))
+          .filter(x=>(fTipo==="todas"||x.tipo===fTipo)&&fTema.has(x.tema));
+}
+function render(){
+  buildFilters();
+  const items=visible();
+  $('bar').textContent = items.length+' preguntas · '+
+    items.filter(x=>x.tipo==="corta").length+' cortas · '+
+    items.filter(x=>x.tipo==="larga").length+' largas';
+  const l=$('list'); l.innerHTML='';
+  items.forEach(x=>{
+    const d=document.createElement('div');
+    d.className='q '+x.tipo;
+    d.innerHTML='<span class="tag">'+(x.tipo==="corta"?"Corta":"Larga")+' · Tema '+x.tema+'</span>'+
+      '<div class="qh"><span class="arrow">▶</span><span>'+x.q+'</span></div>'+
+      '<div class="a">'+x.a+'</div>';
+    d.querySelector('.qh').onclick=()=>d.classList.toggle('open');
+    l.appendChild(d);
+  });
+}
+$('expand').onclick=()=>document.querySelectorAll('.q').forEach(q=>q.classList.add('open'));
+$('collapse').onclick=()=>document.querySelectorAll('.q').forEach(q=>q.classList.remove('open'));
+render();
+</script>
+</body>
+</html>

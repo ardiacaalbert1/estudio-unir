@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD — Guía del profesor (examen y prioridades)</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--red:#c0392b;--amber:#b9770e;--gray:#777;--card:#f7f7f8;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--red:#ff7a6b;--amber:#e0a830;--gray:#999;--card:#272727;}}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:820px;margin:0 auto;padding:28px 22px;}
+  h1{font-size:1.5rem;margin:0 0 4px;} h2{font-size:1.15rem;margin:28px 0 10px;border-bottom:2px solid var(--line);padding-bottom:5px;}
+  .sub{color:var(--mut);margin:0 0 8px;} .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0;}
+  table{border-collapse:collapse;width:100%;font-size:.92rem;margin:8px 0;} th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;}
+  th{background:var(--card);} .red{color:var(--red);font-weight:600;} .amber{color:var(--amber);font-weight:600;} .gray{color:var(--gray);font-weight:600;}
+  .ts{color:var(--mut);font-variant-numeric:tabular-nums;font-size:.85em;white-space:nowrap;}
+  ul{margin:6px 0 6px 2px;padding-left:20px;} li{margin:3px 0;}
+  .warn{border-left:4px solid var(--amber);}
+</style>
+</head>
+<body>
+<h1>CI/CD — Guía del profesor</h1>
+<p class="sub">Destilado de las grabaciones de Integración y Entrega Continua. Timestamps = minuto de la grabación.</p>
+
+<h2>🎯 Cómo es el examen (DEFINITIVO — clase "Simulacro Examen")</h2>
+<div class="card">
+<ul>
+<li><strong>Duración: 90 minutos</strong> (antes eran 2 h). Reparto sugerido por el profe: 10-15 min test · 15-20 min desarrollo · 50 min práctica · ~10 min de repaso.</li>
+<li><strong>Test: 8 preguntas = 4 puntos</strong>, selección simple (4 opciones, solo 1 cierta), contenido teórico. <span class="red">Los errores NO restan → responder todas.</span></li>
+<li><strong>Preguntas cortas de desarrollo teórico</strong> (tipo: "¿En qué consisten las pruebas unitarias?", "Estructura tipo de un Jenkinsfile").</li>
+<li><strong>2 casos prácticos de 2 puntos cada uno</strong>: contexto de proyecto + preguntas guiadas.</li>
+<li><span class="red">Solo entra lo del temario oficial</span> (los PDFs del campus): las herramientas "de moda" que mencionó en clase fuera del temario NO entran. "No voy a ir a pillar".</li>
+<li>Literal: <em>"con preguntas distintas, no va a ser muy distinto a lo que os acabo de presentar"</em> (el simulacro es la mejor referencia).</li>
+<li>Exámenes ~11-12 julio; notas ~21-23 julio.</li>
+</ul>
+</div>
+
+<h2>📝 El simulacro, pregunta a pregunta (con respuesta correcta)</h2>
+<table>
+<tr><th>Pregunta del test</th><th>Respuesta correcta</th></tr>
+<tr><td>¿Qué permite la automatización de ALM?</td><td>Desplegar a menudo y de manera automática, lo que reduce el riesgo y aumenta la fiabilidad del despliegue.</td></tr>
+<tr><td>¿Cuándo tiene sentido usar Nexus como repositorio?</td><td>Cuando los proyectos son privados y no se desea alojarlos en un repositorio público.</td></tr>
+<tr><td>¿Qué es Stage Branching / GitLab Flow?</td><td>Estrategia en la que se <strong>nombran las ramas según el entorno</strong> en el que se despliegan. <span class="amber">(Aquí hubo fallos en clase — repasar los flujos de T3.)</span></td></tr>
+<tr><td>¿Qué significa que un despliegue no tenga pérdida de servicio?</td><td>Que ofrece <strong>todas las funcionalidades durante todo el proceso</strong> de despliegue.</td></tr>
+<tr><td>¿Cómo actualizar sistemas dependientes sin problemas de compatibilidad?</td><td>API compatible hacia atrás / versionado del API / actualización conjunta → las opciones se complementan (repasar T10).</td></tr>
+<tr><td>Ventajas del Canary Releasing</td><td>"A y B son correctas": un error solo afecta a los usuarios del servidor canario + se puede detener o dejar de dirigirle tráfico sin tocar el resto.</td></tr>
+<tr><td>¿Qué se recomienda para reducir el tiempo de ejecución de las pruebas?</td><td>Aprovechar los recursos de la nube (+ dividir en baterías, paralelizar, cuarentena de no válidos — repasar la lista completa de T5).</td></tr>
+</table>
+<div class="card warn">
+<strong>Preguntas de desarrollo del simulacro (con lo que el profe valoró):</strong>
+<ul>
+<li><strong>"¿En qué consisten las pruebas unitarias?"</strong> — prueban una funcionalidad concreta de forma aislada, sin integraciones con terceros; no necesitan el sistema desplegado; NO es obligatorio que estén automatizadas (deseable). Verifican que cada pieza hace exactamente lo que debe.</li>
+<li><strong>"¿Cuál es una estructura tipo de un Jenkinsfile?"</strong> — hay que incluir el <strong>esqueleto</strong> (pipeline → agent → stages → stage → steps) y decir que está escrito en <strong>Groovy</strong>. <span class="red">Trampa señalada en clase: un Jenkinsfile NO es JSON ni YAML</span> ("cuidadito, no nos tiremos a la piscina").</li>
+</ul>
+</div>
+
+<h2>🧪 El caso práctico del simulacro (modelo de lo que caerá)</h2>
+<div class="card">
+<p><strong>Contexto</strong>: proyecto en producción alineado con <code>master</code>. Piden una funcionalidad nueva (1 semana, equipo A) y surge una incidencia grave (hotfix en 48 h, equipo B). Tras la semana, surge OTRA incidencia en producción con la funcionalidad aún sin acabar, y la funcionalidad debe incluir el hotfix.</p>
+<ul>
+<li>a) Pasos en Git para que ambos equipos trabajen en paralelo (ramas feature/hotfix desde master).</li>
+<li>b) Pasos para el segundo hotfix e implantación en producción + integrar el hotfix en la rama de la funcionalidad (merge/rebase).</li>
+<li>c) <strong>Indicar los comandos Git</strong> de cada paso (<code>git checkout -b</code>, <code>merge</code>, <code>tag</code>, <code>push</code>…).</li>
+<li>d) Los diagramas/flujogramas ayudan a la nota (en digital, con flechitas de texto o un esquema simple). Si falta algún dato, <strong>declara la premisa</strong> que asumes.</li>
+</ul>
+<p>El profe avisó: el caso también puede ir de <strong>pipelines, calidad de código o pruebas unitarias</strong>, no solo de Git.</p>
+</div>
+
+<h2>🧭 Repaso final del profe (énfasis por tema)</h2>
+<table>
+<tr><th>Tema</th><th>Lo que destacó en el repaso</th></tr>
+<tr><td>T1</td><td>ALM, conceptos CI/CD y <strong>evaluaciones de madurez</strong> del equipo (dónde automatizar primero).</td></tr>
+<tr><td>T2-T3</td><td>Ventajas del control de versiones (volver a versión estable vía etiquetas) y workflows: lo importante es que el equipo se adapte.</td></tr>
+<tr><td>T4</td><td>Pipeline = secuencia automatizada disparada por un <strong>trigger</strong> (cualquier modificación de código) → compila, empaqueta, pruebas, calidad…</td></tr>
+<tr><td>T5-T6</td><td>Automatizar todos los tipos de pruebas; calidad de código: complejidad, credenciales hardcodeadas, cobertura, <strong>SonarQube</strong> y similares.</td></tr>
+<tr><td>T7</td><td>Jenkins: arquitectura <strong>máster + N agentes</strong> (el agente puede vivir en el máster o en máquinas/contenedores aparte); Jenkinsfile en Groovy.</td></tr>
+<tr><td>T8-T9</td><td>GitLab = ecosistema completo (gestión + VCS + CI/CD), no solo orquestador. Bitbucket≈Git, CircleCI≈Jenkins, Nexus = servidor centralizado de paquetes; saber combinarlas.</td></tr>
+<tr><td>T10</td><td><span class="red">Blue/Green, Canary Releasing y Feature Flags</span> ("centrarme principalmente en…"): disponibilidad 24x7 a cambio de más coste. Feature Flag = activar/desactivar funcionalidades ya desplegadas.</td></tr>
+</table>
+
+<h2>🔝 Prioridades (dónde se juega la nota)</h2>
+<div class="card">
+<ul>
+<li><span class="red">Evaluación continua muy práctica, en torno a Jenkins.</span> La <strong>Actividad 3</strong> = partir de un esqueleto de pipeline en Jenkins y completar etapas de pruebas + archivado de XML de resultados (reusando lo de la Actividad 2) <span class="ts">(T10+Examen 37:00)</span>.</li>
+<li>Saber leer/escribir un <strong>pipeline como código</strong>: <code>Jenkinsfile</code> (T7) y <code>.gitlab-ci.yml</code> (T8).</li>
+<li>Entender bien las <strong>fases del pipeline</strong> (T4) y la <strong>pirámide de pruebas</strong> (T5): son transversales.</li>
+</ul>
+</div>
+
+<h2>🗂️ Enfoque por bloque</h2>
+<table>
+<tr><th>Bloque</th><th>Contenido</th></tr>
+<tr><td><strong>Fundamentos (T1–T3)</strong></td><td>ALM y definiciones CI/CD/despliegue continuo, control de versiones y flujos de Git (Gitflow, GitLab flow, PRs).</td></tr>
+<tr><td><strong>Proceso y calidad (T4–T6)</strong></td><td>Fases de la entrega continua, tipos y pirámide de pruebas, métricas y análisis estático (SonarQube).</td></tr>
+<tr><td><strong>Herramientas y deploy (T7–T10)</strong></td><td>Jenkins, GitLab CI, otras (Bitbucket/CircleCI/Nexus) y modelos de despliegue (Blue/Green, Canary, Rolling, Feature Flags).</td></tr>
+</table>
+
+<h2>🎬 Cobertura de grabaciones</h2>
+<p class="sub">14 sesiones transcritas — temario completo T1–T10 + clase del examen + laboratorio.</p>
+<table>
+<tr><th>Grabación</th><th>Contenido real</th></tr>
+<tr><td>1 · Presentación y Tema 1</td><td>Introducción / ALM</td></tr>
+<tr><td>2 · Tema 2 · 3 · Tema 2 y 3 · 4 · Tema 3</td><td>Control de versiones y flujos de Git</td></tr>
+<tr><td>5 · Tema 4</td><td>Fases de la entrega continua</td></tr>
+<tr><td>6 · Tema 5</td><td>Pruebas / pirámide de pruebas</td></tr>
+<tr><td>7 · Tema 6</td><td><strong>Evaluación y calidad (SonarQube)</strong></td></tr>
+<tr><td>8 · Tema 7 · 9 · Tema 7</td><td><strong>Jenkins</strong> (1ª y 2ª sesión, <code>Jenkinsfile</code>)</td></tr>
+<tr><td>10 · Tema 8</td><td>GitLab CI (<code>.gitlab-ci.yml</code>)</td></tr>
+<tr><td>11 · Tema 9</td><td>Otras herramientas (Bitbucket/CircleCI/Nexus)</td></tr>
+<tr><td>12 · Tema 10 · 13 · Tema 10 + Examen</td><td>Modelos de despliegue + <strong>modelo de examen y simulacro</strong></td></tr>
+<tr><td>Laboratorio</td><td>Sesión de apoyo a la <strong>Actividad 3</strong> (laboratorio, entrega 15-jun)</td></tr>
+<tr><td>Simulacro Examen</td><td><strong>Última clase (3-jul)</strong>: formato definitivo, simulacro con respuestas comentadas, caso práctico Git modelo y repaso T1-T10 — volcado en esta guía</td></tr>
+</table>
+<div class="card">
+<strong>✅ Sin huecos.</strong> 15/15 sesiones transcritas, asignatura cerrada. La referencia más fiel al examen es la clase <em>Simulacro Examen</em>, resumida arriba.
+</div>
+</body>
+</html>

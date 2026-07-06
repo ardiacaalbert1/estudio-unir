@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contenedores — Simulacro ampliado</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;margin:0 0 2px;} h2{font-size:1.15rem;margin:30px 0 8px;border-bottom:2px solid var(--line);padding-bottom:5px;}
+  .sub{color:var(--mut);margin:0 0 6px;font-size:.95rem;}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .qh{font-weight:600;margin:0 0 9px;}
+  .opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;cursor:pointer;font:inherit;transition:.15s;}
+  .opt:hover{border-color:var(--blue);}
+  .opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);font-weight:600;}
+  .opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .opt:disabled{cursor:default;opacity:1;}
+  .exp{display:none;margin-top:10px;padding:10px 12px;border-left:3px solid var(--blue);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .exp.show{display:block;}
+  .reveal{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;}
+  .model{display:none;margin-top:10px;padding:11px 13px;border-left:3px solid var(--green);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .model.show{display:block;}
+  .model ul,.exp ul{margin:6px 0 2px;padding-left:18px;} .model li{margin:3px 0;}
+  code{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:.86em;}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:auto;font-size:.82rem;line-height:1.4;}
+  .tag{font-size:.78rem;color:var(--mut);font-weight:600;}
+
+  h3{font-size:1.02rem;margin:22px 0 4px;color:var(--mut);}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .toc a{border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;color:var(--fg);font-size:.85rem;background:var(--card);}
+  .toc a:hover{border-color:var(--blue);}
+  .pair{margin:5px 0;} .pair b{color:var(--blue);}
+</style>
+</head>
+<body>
+<h1>Contenedores — Simulacro ampliado</h1>
+<p class="sub">Examen real: test + cortas + <strong>casos prácticos</strong> (como las actividades). Los test del examen salen de una base que <em>incluye</em> estos de la plataforma. Parte 1 = práctica · Parte 2 = <strong>banco oficial</strong> (100 preguntas, verificadas 10/10).</p>
+<div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
+
+<h2>Parte 1 · Simulacro de práctica</h2>
+<h2>📝 Tipo test</h2>
+
+<div class="q" data-c="2">
+<div class="qh">1. En un <code>Dockerfile</code>, ¿qué diferencia hay entre <code>CMD</code> y <code>ENTRYPOINT</code>?</div>
+<div class="opts">
+<button class="opt">Son idénticos.</button>
+<button class="opt"><code>CMD</code> instala paquetes y <code>ENTRYPOINT</code> expone puertos.</button>
+<button class="opt"><code>ENTRYPOINT</code> fija el ejecutable del contenedor; <code>CMD</code> da argumentos por defecto que se pueden sobrescribir en <code>docker run</code>.</button>
+<button class="opt"><code>CMD</code> solo se puede usar una vez por imagen y <code>ENTRYPOINT</code> varias.</button>
+</div>
+<div class="exp"><code>ENTRYPOINT</code> = el programa que se ejecuta siempre; <code>CMD</code> = sus argumentos por defecto. <code>docker run img args</code> sustituye al <code>CMD</code>, no al <code>ENTRYPOINT</code> (salvo <code>--entrypoint</code>).</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">2. ¿Por qué importa el <strong>orden de las instrucciones</strong> en un Dockerfile?</div>
+<div class="opts">
+<button class="opt">Cada instrucción crea una capa cacheable; poner lo que menos cambia arriba (p. ej. instalar dependencias antes de copiar el código) aprovecha mejor la caché.</button>
+<button class="opt">No influye, Docker reordena solo.</button>
+<button class="opt">Porque <code>FROM</code> debe ir el último.</button>
+<button class="opt">Para que la imagen pese más.</button>
+</div>
+<div class="exp">Las imágenes son <strong>capas</strong>. Si una capa cambia, se invalida la caché de todas las siguientes. Por eso se copia primero <code>package.json</code>/<code>pom.xml</code> e instalan dependencias, y el código fuente (que cambia mucho) al final.</div>
+</div>
+
+<div class="q" data-c="1">
+<div class="qh">3. Diferencia entre un <strong>volumen</strong> y un <strong>bind mount</strong>:</div>
+<div class="opts">
+<button class="opt">El volumen se borra al parar el contenedor; el bind mount no.</button>
+<button class="opt">El volumen lo gestiona Docker (en su área de almacenamiento); el bind mount mapea una ruta concreta del host.</button>
+<button class="opt">Son lo mismo con distinto nombre.</button>
+<button class="opt">El bind mount solo funciona en Kubernetes.</button>
+</div>
+<div class="exp">Volumen = almacenamiento gestionado por Docker, portable y recomendado para datos persistentes. Bind mount = ruta literal del host montada dentro del contenedor (útil en desarrollo, frágil entre máquinas).</div>
+</div>
+
+<div class="q" data-c="3">
+<div class="qh">4. ¿Para qué sirve <strong>Docker Compose</strong>?</div>
+<div class="opts">
+<button class="opt">Para construir imágenes multi-arquitectura.</button>
+<button class="opt">Para orquestar contenedores en varios nodos en producción.</button>
+<button class="opt">Para sustituir al Dockerfile.</button>
+<button class="opt">Para definir y levantar una aplicación multi-contenedor (servicios, redes, volúmenes) con un único <code>docker-compose.yml</code>.</button>
+</div>
+<div class="exp">Compose describe en YAML varios <em>servicios</em> y sus redes/volúmenes para levantarlos juntos con <code>docker compose up</code>. Para orquestación multinodo en prod se usa Swarm o Kubernetes.</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">5. En Kubernetes, un <strong>Pod</strong> es:</div>
+<div class="opts">
+<button class="opt">La unidad mínima desplegable; uno o varios contenedores que comparten red (misma IP) y almacenamiento.</button>
+<button class="opt">Un nodo físico del clúster.</button>
+<button class="opt">Un balanceador de carga.</button>
+<button class="opt">Una imagen de contenedor.</button>
+</div>
+<div class="exp">El Pod es la unidad mínima que K8s programa. Sus contenedores comparten el mismo <em>network namespace</em> (una IP, <code>localhost</code> entre ellos) y pueden compartir volúmenes.</div>
+</div>
+
+<div class="q" data-c="2">
+<div class="qh">6. ¿Para qué se usan las <strong>labels</strong> y los <strong>selectors</strong>?</div>
+<div class="opts">
+<button class="opt">Para cifrar los secretos del clúster.</button>
+<button class="opt">Para limitar la CPU de los Pods.</button>
+<button class="opt">Para identificar y agrupar objetos (Pods…) por pares clave-valor; un Service o Deployment usa el <em>selector</em> para saber a qué Pods aplica.</button>
+<button class="opt">Para versionar las imágenes.</button>
+</div>
+<div class="exp">Las <em>labels</em> (<code>app: web</code>) etiquetan objetos; los <em>selectors</em> los seleccionan. Así un Service enruta tráfico a los Pods cuyo label coincide. El profe las marca como "lo más importante" en Pods.</div>
+</div>
+
+<div class="q" data-c="1">
+<div class="qh">7. Diferencia entre <strong>liveness probe</strong> y <strong>readiness probe</strong>:</div>
+<div class="opts">
+<button class="opt">La liveness comprueba el disco; la readiness, la memoria.</button>
+<button class="opt">La <em>liveness</em> decide si reiniciar el contenedor (está "vivo"); la <em>readiness</em> decide si el Pod está listo para recibir tráfico (entra/sale de los endpoints del Service).</button>
+<button class="opt">Son lo mismo.</button>
+<button class="opt">La readiness reinicia el nodo.</button>
+</div>
+<div class="exp"><strong>Liveness</strong> falla → K8s reinicia el contenedor. <strong>Readiness</strong> falla → K8s lo saca de los <em>endpoints</em> del Service (no le manda tráfico) sin reiniciarlo. El profe las marca como "lo más importante".</div>
+</div>
+
+<div class="q" data-c="3">
+<div class="qh">8. ¿Qué tipo de <strong>Service</strong> expone la aplicación <em>fuera</em> del clúster mediante un balanceador externo?</div>
+<div class="opts">
+<button class="opt"><code>ClusterIP</code></button>
+<button class="opt"><code>Headless</code></button>
+<button class="opt"><code>NodePort</code> únicamente</button>
+<button class="opt"><code>LoadBalancer</code></button>
+</div>
+<div class="exp"><code>ClusterIP</code> (solo interno, por defecto) → <code>NodePort</code> (abre un puerto en cada nodo) → <code>LoadBalancer</code> (provisiona un balanceador externo del proveedor). Para HTTP suele añadirse un <em>Ingress</em> por delante.</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">9. La relación correcta en un despliegue de Kubernetes es:</div>
+<div class="opts">
+<button class="opt">Deployment → gestiona un ReplicaSet → que mantiene N Pods; permite rolling updates y rollback.</button>
+<button class="opt">Pod → gestiona un Deployment → que crea nodos.</button>
+<button class="opt">Service → crea los Pods directamente.</button>
+<button class="opt">ReplicaSet → contiene varios Deployments.</button>
+</div>
+<div class="exp">El <strong>Deployment</strong> declara el estado deseado y gestiona un <strong>ReplicaSet</strong>, que asegura el número de réplicas de <strong>Pods</strong>. Al cambiar la imagen hace <em>rolling update</em> y permite <code>rollout undo</code>.</div>
+</div>
+
+<div class="q" data-c="2">
+<div class="qh">10. Un <strong>CronJob</strong> en Kubernetes sirve para:</div>
+<div class="opts">
+<button class="opt">Exponer un Pod en un puerto fijo.</button>
+<button class="opt">Mantener siempre N réplicas en ejecución.</button>
+<button class="opt">Ejecutar Jobs de forma programada según una expresión cron (tareas periódicas: backups, informes…).</button>
+<button class="opt">Balancear el tráfico entre nodos.</button>
+</div>
+<div class="exp">Un <strong>Job</strong> ejecuta una tarea hasta completarse; un <strong>CronJob</strong> lanza Jobs según un horario cron (<code>"0 2 * * *"</code> = cada día a las 2:00). El profe avisó: posible pregunta corta sobre CronJobs.</div>
+</div>
+
+<h2>✍️ Preguntas cortas / desarrollo</h2>
+
+<div class="q">
+<div class="qh">1. Explica la diferencia entre <code>CMD</code> y <code>ENTRYPOINT</code> con un ejemplo.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+<code>ENTRYPOINT</code> fija el ejecutable; <code>CMD</code> aporta argumentos por defecto sobrescribibles.
+<pre>ENTRYPOINT ["ping"]
+CMD ["localhost"]</pre>
+<code>docker run img</code> → <code>ping localhost</code>. <code>docker run img google.com</code> → <code>ping google.com</code> (se sustituye el <code>CMD</code>, no el <code>ENTRYPOINT</code>). Patrón habitual: <code>ENTRYPOINT</code> = comando fijo, <code>CMD</code> = parámetros por defecto.
+</div>
+</div>
+
+<div class="q">
+<div class="qh">2. <strong>Liveness</strong> vs <strong>Readiness probe</strong>: para qué sirve cada una.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+<ul>
+<li><strong>Liveness</strong>: comprueba si el contenedor sigue funcionando. Si falla repetidamente, K8s lo <em>reinicia</em>. Detecta cuelgues/deadlocks.</li>
+<li><strong>Readiness</strong>: comprueba si el Pod está listo para atender peticiones. Si falla, K8s lo <em>quita de los endpoints</em> del Service (deja de enviarle tráfico) pero no lo reinicia. Útil al arrancar o ante dependencias temporalmente caídas.</li>
+</ul>
+(Existe además la <em>startup probe</em> para arranques lentos.)
+</div>
+</div>
+
+<div class="q">
+<div class="qh">3. <span class="tag">la marcó el profe</span> Explica el uso de los <strong>CronJobs</strong> en Kubernetes. Pon un ejemplo.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+Un CronJob ejecuta <strong>Jobs de forma periódica</strong> según una expresión cron. Sirve para tareas recurrentes: copias de seguridad, limpieza, informes, sincronizaciones.
+<pre>apiVersion: batch/v1
+kind: CronJob
+metadata: { name: backup }
+spec:
+  schedule: "0 2 * * *"        # cada día a las 02:00
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: backup
+            image: alpine
+            command: ["sh","-c","echo haciendo backup"]</pre>
+Campos clave: <code>schedule</code> (cron), <code>jobTemplate</code> (el Job a lanzar) y <code>restartPolicy</code> (<code>OnFailure</code>/<code>Never</code>).
+</div>
+</div>
+
+<div class="q">
+<div class="qh">4. Tipos de <strong>Service</strong> en Kubernetes y cuándo usar cada uno.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+<ul>
+<li><strong>ClusterIP</strong> (por defecto): IP interna; comunicación entre Pods dentro del clúster.</li>
+<li><strong>NodePort</strong>: abre el mismo puerto en todos los nodos; acceso externo básico (pruebas).</li>
+<li><strong>LoadBalancer</strong>: balanceador externo del proveedor cloud; exposición a internet.</li>
+<li><strong>ExternalName</strong>: alias DNS a un servicio externo.</li>
+</ul>
+Para HTTP/HTTPS con rutas y dominios se suele poner un <strong>Ingress</strong> delante de Services ClusterIP.
+</div>
+</div>
+
+<h2>🛠️ Casos prácticos</h2>
+
+<div class="q">
+<div class="qh"><span class="tag">CASO 1 · Dockerfile</span><br>Escribe un Dockerfile <em>multi-stage</em> para una app Node: compila en una etapa y deja una imagen final ligera que ejecute <code>node dist/server.js</code>.</div>
+<button class="reveal">Ver solución modelo</button>
+<div class="model">
+<pre># Etapa de build
+FROM node:20 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci                 # deps primero → mejor caché
+COPY . .
+RUN npm run build          # genera /app/dist
+
+# Etapa final ligera
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+EXPOSE 3000
+CMD ["node", "dist/server.js"]</pre>
+Claves: <em>multi-stage</em> para no arrastrar herramientas de build, <code>COPY package*.json</code> antes que el código (caché), imagen final <code>-alpine</code> y solo dependencias de producción.
+</div>
+</div>
+
+<div class="q">
+<div class="qh"><span class="tag">CASO 2 · estilo Práctica 3</span><br>Despliega en Kubernetes una app web con 3 réplicas y exponla dentro del clúster. Escribe el <code>Deployment</code> y el <code>Service</code>.</div>
+<button class="reveal">Ver solución modelo</button>
+<div class="model">
+<pre>apiVersion: apps/v1
+kind: Deployment
+metadata: { name: web }
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: web }     # casa con el label del Pod
+  template:
+    metadata:
+      labels: { app: web }
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.27
+        ports: [{ containerPort: 80 }]
+        readinessProbe:
+          httpGet: { path: /, port: 80 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: web-svc }
+spec:
+  selector: { app: web }          # enruta a los Pods con app=web
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP</pre>
+Claves que valora el profe: el <code>selector</code> del Service y el <code>matchLabels</code> del Deployment deben coincidir con las <em>labels</em> del Pod; <code>replicas: 3</code>; una <em>readiness probe</em> para no enrutar a Pods no listos.
+</div>
+</div>
+
+<h2 id="banco">🎯 Parte 2 · Banco oficial de la plataforma (100 preguntas)</h2>
+<p class="sub">Preguntas reales de los Test Tema 1–10 del campus, con la respuesta correcta verificada (todos los intentos al 100%). El orden es el del PDF.</p>
+<div class="toc"><a href="#bt1">T1</a><a href="#bt2">T2</a><a href="#bt3">T3</a><a href="#bt4">T4</a><a href="#bt5">T5</a><a href="#bt6">T6</a><a href="#bt7">T7</a><a href="#bt8">T8</a><a href="#bt9">T9</a><a href="#bt10">T10</a></div>
+<h3 id="bt1">Tema 1 · Fundamentos de Docker</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T1·P1 · banco oficial</span><br>Los registros de Docker sirven para:</div>
+<div class="opts"><button class="opt">Mantener un control de los contenedores en ejecución.</button><button class="opt">Almacenar y distribuir imágenes de Docker.</button><button class="opt">Permitir la comunicación entre dos contenedores Docker.</button><button class="opt">Instalar host de Docker remotos.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P2 · banco oficial</span><br>¿Qué es Docker Hub?:</div>
+<div class="opts"><button class="opt">Una herramienta para crear servidores Docker remotos.</button><button class="opt">Proceso que ejecuta los contenedores Docker.</button><button class="opt">Un registro público de imágenes Docker.</button><button class="opt">El formato de contenedor utilizado por Docker.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P3 · banco oficial</span><br>¿Qué es Docker Desktop?:</div>
+<div class="opts"><button class="opt">Un registro público de imágenes Docker.</button><button class="opt">Herramienta oficial de Docker para su instalación en Linux.</button><button class="opt">Aplicación para instalar Docker en Windows y Mac OS.</button><button class="opt">Herramienta para gestionar instalaciones de Docker remotas.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P4 · banco oficial</span><br>Los contenedores de Docker:</div>
+<div class="opts"><button class="opt">Permiten aprovechar mejor el hardware de la máquina host.</button><button class="opt">Son más pesados en tamaño que las máquinas virtuales.</button><button class="opt">No son convenientes para trabajar con microservicios.</button><button class="opt">Se inician más lento que las máquinas virtuales, pero son más seguros.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P5 · banco oficial</span><br>Los espacios de nombres (o namespaces):</div>
+<div class="opts"><button class="opt">Proporcionan capas de aislamiento a los contenedores.</button><button class="opt">Se utilizan para dar nombre a las imágenes Docker.</button><button class="opt">Son sistemas de archivos compartidos.</button><button class="opt">Sirven para clasificar imágenes Docker.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T1·P6 · banco oficial</span><br>Relacione los siguientes conceptos: namespaces Elegir... libcontainer Elegir... cgroups Elegir... unionfs Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>namespaces</b> → Aislamiento: cada contenedor tiene su propia vista de los recursos del sistema.</div><div class="pair"><b>libcontainer</b> → Runtime nativo que crea contenedores hablando directamente con el kernel.</div><div class="pair"><b>cgroups</b> → Limitan y controlan los recursos (CPU, memoria) de cada contenedor.</div><div class="pair"><b>unionfs</b> → Sistema de ficheros en capas (las imágenes se construyen por capas).</div></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P7 · banco oficial</span><br>¿En qué lenguaje de programación está escrito Docker?:</div>
+<div class="opts"><button class="opt">Go.</button><button class="opt">Python.</button><button class="opt">Java.</button><button class="opt">C++.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P8 · banco oficial</span><br>¿Cómo podemos indicarle a Docker Machine las credenciales de nuestro proveedor de la nube?:</div>
+<div class="opts"><button class="opt">Utilizando variables de entorno.</button><button class="opt">Mediante parámetros del comando docker-machine.</button><button class="opt">Creando un fichero de configuración.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T1·P9 · banco oficial</span><br>¿Cómo se comunica el cliente de Docker con el demonio de Docker?:</div>
+<div class="opts"><button class="opt">Mediante memoria compartida.</button><button class="opt">Mediante un API REST.</button><button class="opt">Utilizando un sistema de cola de mensajes.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P10 · banco oficial</span><br>Los contenedores de Docker:</div>
+<div class="opts"><button class="opt">Tienen su propio sistema operativo completo.</button><button class="opt">Requieren más recursos que las máquinas virtuales.</button><button class="opt">Comparten el kernel o núcleo del sistema operativo host.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt2">Tema 2 · Creación de imágenes (Dockerfile)</h3>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T2·P1 · banco oficial</span><br>¿Cómo podemos guardar el estado actual de un contenedor como imagen?:</div>
+<div class="opts"><button class="opt">Utilizando el comando docker commit</button><button class="opt">Utilizando el comando docker build</button><button class="opt">Utilizando la instrucción WORKDIR en el fichero Dockerfile</button><button class="opt">La imagen utilizada se actualiza automáticamente con el estado actual del contenedor.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T2·P2 · banco oficial</span><br>¿Qué hace la instrucción COPY package.tar . definida en un fichero Dockerfile al construir la imagen?:</div>
+<div class="opts"><button class="opt">Copia el fichero package.tar en el directorio de trabajo.</button><button class="opt">Descomprime los ficheros y los copia en el directorio de trabajo.</button><button class="opt">Comprime los ficheros del directorio de trabajo.</button><button class="opt">Genera un error, no se pueden copiar ficheros tar con COPY.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P3 · banco oficial</span><br>¿Qué formato tienen los ficheros Dockerfile?:</div>
+<div class="opts"><button class="opt">YAML.</button><button class="opt">JSON.</button><button class="opt">Texto.</button><button class="opt">XML.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P4 · banco oficial</span><br>¿Cómo podemos crear un registro Docker local?:</div>
+<div class="opts"><button class="opt">Utilizando el comando docker registry créate</button><button class="opt">Utilizando la imagen pública registry de Docker Hub.</button><button class="opt">Descargando la aplicación Docker Registry.</button><button class="opt">No es posible, los registros Docker solo tienen sentido en la nube.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P5 · banco oficial</span><br>El comando docker pull nginx:</div>
+<div class="opts"><button class="opt">Descarga todas las imágenes nginx sea cual sea su etiqueta.</button><button class="opt">Descarga la imagen nginx etiquetada como latest.</button><button class="opt">Descarga la imagen nginx que no esté etiquetada.</button><button class="opt">Genera un error, es obligatorio indicar la etiqueta.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P6 · banco oficial</span><br>¿Qué comando de Docker nos permite generar una imagen?:</div>
+<div class="opts"><button class="opt">docker rebuild</button><button class="opt">docker create</button><button class="opt">docker compile</button><button class="opt">docker build</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P7 · banco oficial</span><br>Hemos empaquetado todo el sistema de ficheros de una máquina virtual existente en un fichero TAR y queremos crear una imagen Docker a partir de él. ¿Cuál sería la primera instrucción de nuestro Dockerfile?:</div>
+<div class="opts"><button class="opt">FROM empty</button><button class="opt">FROM scratch</button><button class="opt">ADD filesystem.tar /</button><button class="opt">No es posible con ficheros Dockerfile</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P8 · banco oficial</span><br>El comando docker rmi myimage:</div>
+<div class="opts"><button class="opt">Elimina todas las imágenes del repositorio «myimage», sea cual sea su etiqueta.</button><button class="opt">Elimina la imagen llamada «myimage» sin etiquetar o con etiqueta vacía.</button><button class="opt">Elimina la imagen del repositorio «myimage» etiquetada como latest.</button><button class="opt">Genera un error, es obligatorio indicar la etiqueta.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P9 · banco oficial</span><br>¿Para qué sirve la instrucción ONBUILD en un fichero Dockerfile?:</div>
+<div class="opts"><button class="opt">Permite indicar un registro en el cual se publicará automáticamente la imagen generada.</button><button class="opt">Define una condición que debe cumplirse para poder generar la imagen.</button><button class="opt">Ejecuta un comando en el host.</button><button class="opt">Permite añadir a la imagen un comando que se ejecutará más adelante, al usar la imagen generada como base en otra construcción.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P10 · banco oficial</span><br>¿Qué comando de Docker nos permite listar las capas que componen una imagen?:</div>
+<div class="opts"><button class="opt">docker images stacks</button><button class="opt">docker image details</button><button class="opt">docker search</button><button class="opt">docker image history</button></div>
+</div>
+<h3 id="bt3">Tema 3 · Almacenamiento y redes</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P1 · banco oficial</span><br>¿Con qué comando podemos copiar ficheros de un contenedor al sistema de ficheros local?:</div>
+<div class="opts"><button class="opt">docker extract</button><button class="opt">docker cp</button><button class="opt">No hace falta, el sistema de ficheros del contenedor siempre está montado en el sistema de ficheros local.</button><button class="opt">No es posible.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P2 · banco oficial</span><br>¿En qué estado queda un contenedor cuando finaliza su ejecución?:</div>
+<div class="opts"><button class="opt">Finalized.</button><button class="opt">Stopped.</button><button class="opt">Removed.</button><button class="opt">Exited.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T3·P3 · banco oficial</span><br>¿Cuál es el controlador de red por defecto cuando creamos una red?:</div>
+<div class="opts"><button class="opt">Host</button><button class="opt">None</button><button class="opt">Bridge</button><button class="opt">Macvlan</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T3·P4 · banco oficial</span><br>Relaciona los siguientes conceptos: Overlay Elegir... Host Elegir... Bridge Elegir... None Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Overlay</b> → Conecta varios hosts/demonios Docker entre sí (Swarm).</div><div class="pair"><b>Host</b> → Usa la pila de red del host directamente, sin aislamiento.</div><div class="pair"><b>Bridge</b> → Red privada interna por defecto dentro de un host.</div><div class="pair"><b>None</b> → Sin red; el contenedor queda aislado.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P5 · banco oficial</span><br>¿Qué comando nos permite eliminar las redes que no están en uso?:</div>
+<div class="opts"><button class="opt">docker network purge</button><button class="opt">docker network prune</button><button class="opt">docker network clean</button><button class="opt">docker network rm --unused</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P6 · banco oficial</span><br>Si ejecutamos un contenedor de la siguiente manera: Figura 7. Código de la pregunta 6. Fuente: elaboración propia.</div>
+<div class="opts"><button class="opt">El contenedor B podrá llegar al A por su nombre y alias, pero no por su IP.</button><button class="opt">El contenedor B podrá llegar al A por su IP, nombre y alias.</button><button class="opt">El contenedor B solo podrá llegar al A si este último también esta enlazado explícitamente con el primero.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P7 · banco oficial</span><br>¿Cómo conectamos un contenedor en ejecución a una red ya existente?:</div>
+<div class="opts"><button class="opt">docker network connect miRed miContenedor</button><button class="opt">docker network link miContenedor miRed</button><button class="opt">Todas las anteriores</button><button class="opt">No es posible, el contenedor ya está en ejecución.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T3·P8 · banco oficial</span><br>Relaciona los siguientes conceptos: Volumes Elegir... Bind mounts Elegir... Tmpfs mounts Elegir... Bind mounts Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Volumes</b> → Gestionados por Docker, persistentes y portables.</div><div class="pair"><b>Bind mounts (1)</b> → Los procesos del anfitrión pueden modificarlos.</div><div class="pair"><b>Bind mounts (2)</b> → Pueden almacenarse en cualquier parte del sistema de ficheros del host.</div><div class="pair"><b>Tmpfs mounts</b> → Viven en memoria RAM; no persisten. (El enunciado duplica la fila Bind mounts: es un fallo del test.)</div></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P9 · banco oficial</span><br>Si ejecutamos un contenedor de la siguiente manera: Figura 8. Código de la pregunta 9. Fuente: elaboración propia.</div>
+<div class="opts"><button class="opt">Montará el volumen de Docker llamado «mis-datos» en la ruta /datos del contenedor.</button><button class="opt">Montará el bind mount llamado «mis-datos» en la ruta /datos del host.</button><button class="opt">Creará un tmpfs mount llamado «mis-datos» y los montará en la ruta /datos del host.</button><button class="opt">Dará un error por no haber indicado el tipo de almacenamiento.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P10 · banco oficial</span><br>¿Qué comando podríamos utilizar para obtener información sobre los procesos en ejecución de un contenedor?:</div>
+<div class="opts"><button class="opt">docker top</button><button class="opt">docker stats</button><button class="opt">docker exec</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt4">Tema 4 · Compose y DevOps</h3>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P1 · banco oficial</span><br>¿Qué hace el comando docker export?:</div>
+<div class="opts"><button class="opt">Exporta la imagen base de un contenedor a un fichero TAR.</button><button class="opt">Exporta una imagen a un fichero TAR.</button><button class="opt">Exporta el sistema de ficheros de un contenedor a un fichero TAR.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P2 · banco oficial</span><br>¿Qué opción de configuración de Compose permite publicar puertos del servicio al host?:</div>
+<div class="opts"><button class="opt">expose</button><button class="opt">ports</button><button class="opt">publish</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P3 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones sobre Docker Hub es correcta?:</div>
+<div class="opts"><button class="opt">Permite construir imágenes automáticamente cada vez que actualicemos un repositorio Git configurado.</button><button class="opt">Actualmente solo soporta repositorios de GitHub y BitBucket.</button><button class="opt">Los webhooks disparan un servicio externo en respuesta a un evento en del repositorio Git configurado.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T4·P4 · banco oficial</span><br>Relaciona los siguientes comandos de Docker con su acción: docker export Elegir... docker import Elegir... docker save Elegir... docker load Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>docker export</b> → Saca el filesystem de un contenedor a un TAR.</div><div class="pair"><b>docker import</b> → Crea una imagen desde ese TAR.</div><div class="pair"><b>docker save</b> → Guarda una imagen con sus capas a TAR.</div><div class="pair"><b>docker load</b> → Carga una imagen desde un TAR.</div></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P5 · banco oficial</span><br>¿Qué acciones puede realizar el comando docker-compose build?:</div>
+<div class="opts"><button class="opt">Genera imágenes a partir de ficheros Dockerfile referenciados con build en Compose.</button><button class="opt">Descarga de un registro las imágenes referenciadas con image en Compose.</button><button class="opt">Crear los contenedores de los servicios sin ejecutarlos.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P6 · banco oficial</span><br>¿Qué sección a nivel raíz de Compose nos permite definir volúmenes con nombre para ser referenciados en los servicios?:</div>
+<div class="opts"><button class="opt">storage.</button><button class="opt">data.</button><button class="opt">volumes.</button><button class="opt">mount.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P7 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones sobre Portainer es correcta?:</div>
+<div class="opts"><button class="opt">Se despliega en contenedores.</button><button class="opt">Ofrece una interfaz web de administración de Docker.</button><button class="opt">Permite conectarse a un demonio de Docker tanto local como remoto.</button><button class="opt">Todas las anteriores</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P8 · banco oficial</span><br>¿Qué hace el comando docker-compose down?:</div>
+<div class="opts"><button class="opt">Detiene un servicio, parando sus contenedores.</button><button class="opt">Elimina un servicio, el cual debe haber sido parando previamente.</button><button class="opt">Pausa los contenedores asociados al servicio.</button><button class="opt">Detiene y elimina un servicio, parando y eliminando los recursos asociados.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P9 · banco oficial</span><br>¿Para qué lenguajes de programación Docker ofrece de manera oficial un SDK?:</div>
+<div class="opts"><button class="opt">Go y Java.</button><button class="opt">Go y Python.</button><button class="opt">Go y Ruby.</button><button class="opt">Docker no ofrece oficialmente ningún SDK.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P10 · banco oficial</span><br>¿Qué opciones de configuración de Compose permiten pasar variables de entorno a los servicios?:</div>
+<div class="opts"><button class="opt">environment y envfile</button><button class="opt">variable y varfile</button><button class="opt">argument y argfile</button><button class="opt">Ninguna. Deben ser definidas en el Dockerfile de la imagen</button></div>
+</div>
+<h3 id="bt5">Tema 5 · Orquestación con Swarm</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P1 · banco oficial</span><br>¿Qué nodos pueden ejecutar tareas en el modo Swarm?:</div>
+<div class="opts"><button class="opt">Solo los nodos tipo worker.</button><button class="opt">Solo los nodos tipo mánager.</button><button class="opt">Todos los nodos del clúster siempre podrán ejecutar tareas.</button><button class="opt">Todos los nodos del clúster, siempre que no tengan disponibilidad drain.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P2 · banco oficial</span><br>¿Qué ocurre con las tareas en ejecución de un nodo cuando ponemos su disponibilidad a drain?:</div>
+<div class="opts"><button class="opt">Las tareas en ejecución de servicios replicados se paran y se planifican en otros nodos. Las tareas de servicios globales siguen ejecutándose.</button><button class="opt">Todas las tareas continúan su ejecución, pero el nodo no admitirá más tareas del planificador.</button><button class="opt">Las tareas son pausadas, pero no se planifican en otros nodos. Se reanudarán cuando el nodo vuelva a estar activo.</button><button class="opt">Las tareas en ejecución de servicios replicados se paran y se planifican en otros nodos. Las tareas de servicios globales simplemente se paran.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P3 · banco oficial</span><br>¿Cómo se transmiten entre los nodos de un clúster en modo Swarm los objetos config y secret?:</div>
+<div class="opts"><button class="opt">Los objetos config se transmiten en claro, los secret encriptados.</button><button class="opt">Los objetos config se transmiten encriptados, pero los secret solo existen en el nodo donde se crearon y no pueden enviarse.</button><button class="opt">Tanto los objetos config como los secret se transmiten encriptados.</button><button class="opt">Ninguno de ellos pueden enviarse entre los nodos.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P4 · banco oficial</span><br>¿Qué ocurre si definimos opciones de configuración build para un servicio en un fichero docker-compose.yaml y lo desplegamos con el comando docker stack deploy?:</div>
+<div class="opts"><button class="opt">Se construirán las imágenes y se publicarán automáticamente en el registro antes de hacer el despliegue.</button><button class="opt">Las imágenes no se construirán, pero si existen se publicarán automáticamente en el registro antes de hacer el despliegue.</button><button class="opt">Dara un error porque la configuración build no está soportada por docker stack.</button><button class="opt">Mostrará un mensaje avisando que al no estar soportada la configuración build será ignorada, y continuará con el despliegue.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P5 · banco oficial</span><br>¿Cómo podemos convertir un nodo worker de un clúster en modo Swarm a nodo mánager?</div>
+<div class="opts"><button class="opt">Con el comando docker node upgrade.</button><button class="opt">Con el comando docker node promote.</button><button class="opt">Con el comando docker swarm update.</button><button class="opt">No es posible convertirlo, habría que eliminarlo del clúster y volver a añadirlo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P6 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones no es correcta?:</div>
+<div class="opts"><button class="opt">Podríamos tener un clúster en modo Swarm sin nodos worker.</button><button class="opt">El modo Swarm está integrado en Docker Engine a partir de la versión 1.12.</button><button class="opt">Se ejecutará una tarea de los servicios globales en cada nodo activo del clúster, ya sea mánager o worker.</button><button class="opt">Todos los nodos del clúster pueden atender llamadas al API de Swarm.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P7 · banco oficial</span><br>¿Qué comando debemos ejecutar en una maquina con Docker instalado para añadirlo como nodo worker a un clúster de Swarm?:</div>
+<div class="opts"><button class="opt">docker swarm join --manager worker</button><button class="opt">docker swarm join-worker</button><button class="opt">El comando los obtendremos al ejecutar docker swarm join worker en un cualquier nodo del clúster.</button><button class="opt">El comando los obtendremos al ejecutar docker swarm join-token worker en un nodo mánager.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P8 · banco oficial</span><br>¿Qué comando nos permite desplegar en un clúster en modo swarm un aplicación definida en un fichero docker-compose.yaml?:</div>
+<div class="opts"><button class="opt">docker-compose up --stack-file docker-compose.yml</button><button class="opt">docker-compose deploy --stack-file docker-compose.yml</button><button class="opt">docker stack up --compose-file docker-compose.yml</button><button class="opt">docker stack deploy --compose-file docker-compose.yml</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P9 · banco oficial</span><br>¿Cómo podemos añadir un objeto secret a un servicio existente en un clúster en modo swarm?:</div>
+<div class="opts"><button class="opt">docker secret add --secret my-secret my-service</button><button class="opt">docker service update --secret-add my-secret my-service</button><button class="opt">docker stack update --secret-add my-secret my-service</button><button class="opt">No es posible añadir secrets a un servicio ya creado</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P10 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones no es correcta?:</div>
+<div class="opts"><button class="opt">Un clúster con N nodos mánager tolera fallos de (N-1)/2 managers como máximo.</button><button class="opt">Los servicios globales se ejecutan en todos los nodos del clúster, ya sean mánager o worker.</button><button class="opt">Los clústeres Swarm utilizan TLS para las comunicaciones entre los nodos.</button><button class="opt">Un nodo que pertenece a un clúster no puede ejecutar contenedores independientes fuera del clúster.</button></div>
+</div>
+<h3 id="bt6">Tema 6 · Introducción a Kubernetes</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P1 · banco oficial</span><br>¿Cuál de los siguientes componentes de Kubernetes pertenecen a un nodo máster?:</div>
+<div class="opts"><button class="opt">Kubelet.</button><button class="opt">Kube-proxy.</button><button class="opt">Container Runtime.</button><button class="opt">Controller Manager.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P2 · banco oficial</span><br>¿Cuál de los siguientes componentes de Kubernetes pertenecen a un nodo worker?:</div>
+<div class="opts"><button class="opt">Kubelet.</button><button class="opt">Controller Manager.</button><button class="opt">Scheduler.</button><button class="opt">API server.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P3 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones no es cierta?:</div>
+<div class="opts"><button class="opt">Los Namespaces permiten crear diferentes entornos de ejecución en el clúster.</button><button class="opt">Los servicios permiten la comunicación con los Pods desde fuera del clúster.</button><button class="opt">Cada Pod ejecutará un único contenedor.</button><button class="opt">El algoritmo de consenso necesita que el número de nodos máster sea impar.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T6·P4 · banco oficial</span><br>Relaciona los siguientes conceptos de Kubernetes: Servicio Elegir... Pod Elegir... etcd Elegir... Scheduler Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Servicio</b> → Expone Pods con IP/nombre estable y balancea la carga.</div><div class="pair"><b>Pod</b> → Unidad mínima: contenedores que comparten red y almacenamiento.</div><div class="pair"><b>etcd</b> → Almacén clave-valor con el estado del clúster.</div><div class="pair"><b>Scheduler</b> → Asigna Pods a nodos.</div></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T6·P5 · banco oficial</span><br>Relacione los siguientes conceptos de Kubernetes: DaemonSets Elegir... StatefulSets Elegir... Deployments Elegir... CronJobs Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>DaemonSets</b> → Una copia del Pod en cada nodo.</div><div class="pair"><b>StatefulSets</b> → Apps con estado: identidad y almacenamiento estables.</div><div class="pair"><b>Deployments</b> → Apps sin estado con rolling update.</div><div class="pair"><b>CronJobs</b> → Jobs programados.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T6·P6 · banco oficial</span><br>¿Qué controlador de Kubernetes está pensado para aplicaciones con estado?:</div>
+<div class="opts"><button class="opt">Deployments</button><button class="opt">StatefulSets</button><button class="opt">DaemonSet</button><button class="opt">CronJob</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P7 · banco oficial</span><br>¿Qué sistema operativo soporta Minikube?:</div>
+<div class="opts"><button class="opt">Windows.</button><button class="opt">Linux.</button><button class="opt">OSX.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P8 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones es falsa?:</div>
+<div class="opts"><button class="opt">Los Namespaces permiten crear diferentes entornos de ejecución en el clúster.</button><button class="opt">Los servicios permiten la comunicación con los Pods desde fuera del clúster.</button><button class="opt">Cada Pod ejecutará un único contenedor.</button><button class="opt">El algoritmo de consenso necesita que el número de nodos máster sea impar.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P9 · banco oficial</span><br>¿Cuál es la herramienta de línea de comandos de Kubernetes?:</div>
+<div class="opts"><button class="opt">Kubeadm</button><button class="opt">Kops</button><button class="opt">Kubectl</button><button class="opt">Kubespray</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P10 · banco oficial</span><br>¿Cuál la principal función de un ReplicaSet?:</div>
+<div class="opts"><button class="opt">Garantizar que nuestra aplicación tiene el numero deseado de Pods.</button><button class="opt">Permitir la ejecución periódica de Pods.</button><button class="opt">Ejecutar un determinado Pod en todos los nodos del clúster.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt7">Tema 7 · Pods y Namespaces</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P1 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones no es correcta?:</div>
+<div class="opts"><button class="opt">Los contenedores de un Pod deben estar en el mismo nodo.</button><button class="opt">Un Pod puede alojar uno o más contenedores.</button><button class="opt">Por defecto, todos los Pods pueden comunicarse a través de su dirección IP interna.</button><button class="opt">Cada contenedor de un mismo Pod tendrá su propia dirección IP.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T7·P2 · banco oficial</span><br>Relacione los siguientes conceptos: Pod Elegir... Label Elegir... Annotation Elegir... Namespace Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Pod</b> → Unidad mínima desplegable.</div><div class="pair"><b>Label</b> → Par clave-valor para identificar/agrupar (lo usan los selectores).</div><div class="pair"><b>Annotation</b> → Metadatos no identificativos.</div><div class="pair"><b>Namespace</b> → División lógica del clúster.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P3 · banco oficial</span><br>¿Para qué sirven los selectores en Kubernetes?:</div>
+<div class="opts"><button class="opt">Abstracción que permite dividir un clúster de Kubernetes en múltiples clústeres virtuales.</button><button class="opt">Permitir filtrar objetos del clúster en base a un conjunto de etiquetas.</button><button class="opt">Permiten seleccionar el Namespace por defecto.</button><button class="opt">Ninguna de las anteriores</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P4 · banco oficial</span><br>¿Cuál de los siguientes Namespaces se crean por defecto en un clúster de Kubernetes?:</div>
+<div class="opts"><button class="opt">default</button><button class="opt">kube-system</button><button class="opt">kube-public</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P5 · banco oficial</span><br>¿En que Namespace se crear los objetos del propio sistema de Kubernetes?:</div>
+<div class="opts"><button class="opt">default</button><button class="opt">kube-service</button><button class="opt">kube-context</button><button class="opt">kube-system</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T7·P6 · banco oficial</span><br>En la definición YAML de un Pod, relacione las siguientes propiedades de la configuración de los contenedores (spec.containers): livenessProbe.exec Elegir... resources.limits Elegir... resources.requests Elegir... ports.containerPort Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>livenessProbe.exec</b> → Comprueba que el contenedor vive ejecutando un comando.</div><div class="pair"><b>resources.limits</b> → Tope máximo de recursos.</div><div class="pair"><b>resources.requests</b> → Recursos mínimos garantizados (los usa el scheduler).</div><div class="pair"><b>ports.containerPort</b> → Puerto que expone el contenedor.</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T7·P7 · banco oficial</span><br>En Kubernetes podemos comprobar que los contenedores de un Pod están funcionando correctamente definiendo una prueba de vida o liveness probe. ¿Cuál de los siguientes no es un método válido?:</div>
+<div class="opts"><button class="opt">Mediante la ejecución de un comando (exec).</button><button class="opt">Realizando una llamada HTTP (httpGet).</button><button class="opt">Conectándose por SSH (sshConnect).</button><button class="opt">Conectándose a un socket TCP (tcpSocket).</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T7·P8 · banco oficial</span><br>Relacione los siguientes comandos de interacción con los Pods: kubectl cp Elegir... kubectl exec Elegir... kubectl logs Elegir... kubectl port-forward Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>kubectl cp</b> → Copia ficheros contenedor ↔ local.</div><div class="pair"><b>kubectl exec</b> → Ejecuta un comando dentro del contenedor.</div><div class="pair"><b>kubectl logs</b> → Muestra los logs.</div><div class="pair"><b>kubectl port-forward</b> → Reenvía un puerto local al Pod.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P9 · banco oficial</span><br>En Kubernetes, ¿cuál de la siguiente información no define un contexto?:</div>
+<div class="opts"><button class="opt">URL del API del clúster.</button><button class="opt">Selector de etiquetas.</button><button class="opt">Credenciales del usuario del clúster.</button><button class="opt">Namespace.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P10 · banco oficial</span><br>En Kubernetes, ¿qué comando nos permite crear un contexto?:</div>
+<div class="opts"><button class="opt">kubectl create context</button><button class="opt">kubectl config set-context</button><button class="opt">kubectl init context</button><button class="opt">kubectl apply context</button></div>
+</div>
+<h3 id="bt8">Tema 8 · Workloads y Services</h3>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P1 · banco oficial</span><br>Al eliminar un ReplicaSet de Kubernetes, ¿cómo podemos evitar que los Pods gestionados por él sean borrados?:</div>
+<div class="opts"><button class="opt">Por defecto no se eliminan los Pods al eliminar el ReplicaSet.</button><button class="opt">No es posible, la vida de los Pods está ligada a la del ReplicaSet.</button><button class="opt">Con la opción --cascade=false del Cliente kubectl.</button><button class="opt">Escalando el ReplicaSet a cero replicas.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T8·P2 · banco oficial</span><br>Relacione los siguientes conceptos de Kubernetes: ReplicaSet Elegir... DaemonSet Elegir... Service Elegir... Ingress Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>ReplicaSet</b> → Mantiene N réplicas de Pods.</div><div class="pair"><b>DaemonSet</b> → Un Pod por nodo.</div><div class="pair"><b>Service</b> → Expone Pods con IP estable y balancea.</div><div class="pair"><b>Ingress</b> → Enrutamiento HTTP externo hacia varios servicios.</div></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P3 · banco oficial</span><br>¿Qué tipo de recurso de Kubernetes se encarga de que un número especificado de réplicas de Pods está ejecutándose en el clúster?:</div>
+<div class="opts"><button class="opt">ReplicaSet.</button><button class="opt">DaemonSet.</button><button class="opt">Service.</button><button class="opt">Ingress.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P4 · banco oficial</span><br>¿Qué tipo de recurso de Kubernetes utiliza reglas de enrutamiento para gestionar el acceso externo a múltiples servicios?:</div>
+<div class="opts"><button class="opt">ReplicaSet.</button><button class="opt">DaemonSet.</button><button class="opt">Service.</button><button class="opt">Ingress.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T8·P5 · banco oficial</span><br>Relaciona los siguientes tipos de servicio de Kubernetes con su función: ExternalName Elegir... NodePort Elegir... ClusterIP Elegir... LoadBalancer Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>ExternalName</b> → Alias DNS (CNAME) a un servicio externo.</div><div class="pair"><b>NodePort</b> → Mismo puerto en la IP de cada nodo.</div><div class="pair"><b>ClusterIP</b> → IP interna del clúster (solo acceso interno).</div><div class="pair"><b>LoadBalancer</b> → Balanceador externo del proveedor cloud.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P6 · banco oficial</span><br>¿Qué tipo de servicio de Kubernetes expone el servicio fuera del clúster a través de la dirección IP de cada nodo, utilizando el mismo puerto en cada uno de ellos?:</div>
+<div class="opts"><button class="opt">ClusterIP.</button><button class="opt">NodePort.</button><button class="opt">ExternalName.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P7 · banco oficial</span><br>¿Cómo podemos seleccionar en que nodos se despliegas los Pods de un DaemonSet?:</div>
+<div class="opts"><button class="opt">No es posible, los Pods de un DaemonSet siempre se desplegarán en todos los nodos.</button><button class="opt">Definiendo la lista de nodos a ignorar en la propiedad ignoreNodes del fichero YAML.</button><button class="opt">Definiendo un selector de nodo basado en etiquetas en la definición del Pod en la propiedad nodeSelector del fichero YAML.</button><button class="opt">Cambiando al nodo de Namespace.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P8 · banco oficial</span><br>¿Qué ocurre con los Pods de un ReplicaSet desplegados en un nodo cuando dicho nodo deja de estar operativo?:</div>
+<div class="opts"><button class="opt">Los Pods quedan en estado «no disponible» hasta que el nodo vuelve a estar operativo.</button><button class="opt">Los Pods son automáticamente replanificados en otros nodos disponibles.</button><button class="opt">El número de replicas configurado en el ReplicaSet es decrementado en el número de Pods.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P9 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones acerca de los tipos de servicio de Kubernetes es falsa?:</div>
+<div class="opts"><button class="opt">NodePort expone el servicio fuera del clúster a través de la dirección IP de cada nodo al utilizar el mismo puerto en cada uno de ellos.</button><button class="opt">LoadBalancer crea un balanceador de carga externo y se asignará una dirección IP fija al servicio.</button><button class="opt">ClusterIP expone el servicio en una dirección IP única externa del clúster, siendo accesible dentro y fuera del clúster.</button><button class="opt">ExternalName expone el servicio a través de un nombre especificado en la definición, asociándolo con un nombre de dominio mediante un registro CNAME.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P10 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones acerca de los recursos Horizontal Pod Autoscaler (HPA) de Kubernetes es falsa?:</div>
+<div class="opts"><button class="opt">Permite modificar automáticamente el número de réplicas de Pods de un ReplicaSet en base a ciertas métricas.</button><button class="opt">Kubernetes nos permite utilizar por defecto el uso de CPU y el consumo de memoria como métricas para el auto escalado de un HPA.</button><button class="opt">El comando kubectl autoscale permite crear de manera imperativa un Horizontal Pod Autoscaler (HPA).</button><button class="opt">No es posible definir métricas personalizadas diferentes a las ofrecidas por Kubernetes.</button></div>
+</div>
+<h3 id="bt9">Tema 9 · Almacenamiento y configuración (K8s)</h3>
+<div class="q">
+<div class="qh"><span class="tag">T9·P1 · banco oficial</span><br>Relacione los siguientes conceptos: emptyDir Elegir... hostPath Elegir... awsElasticBlockStore Elegir... PersistentVolumes Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>emptyDir</b> → Volumen vacío efímero; se borra con el Pod.</div><div class="pair"><b>hostPath</b> → Monta una ruta del nodo.</div><div class="pair"><b>awsElasticBlockStore</b> → Monta un volumen EBS de AWS.</div><div class="pair"><b>PersistentVolumes</b> → Recurso del clúster que desacopla el almacenamiento del Pod.</div></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P2 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones sobre los ConfigMaps es falsa?:</div>
+<div class="opts"><button class="opt">Permiten desacoplar de los Pods sus opciones de configuración</button><button class="opt">Están compuestos por pares clave/valor</button><button class="opt">Se asocian a un Namespace</button><button class="opt">Son globales al clúster.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P3 · banco oficial</span><br>¿Cuál de las siguientes afirmaciones sobre los ConfigMaps es falsa?:</div>
+<div class="opts"><button class="opt">Podemos montar el contenido de los ConfigMaps en un volumen de los Pods.</button><button class="opt">El volumen montado a partir de un ConfigMap se actualizará automáticamente cuando se hagan cambios en este último.</button><button class="opt">Es posible establecer dinámicamente variables de entorno y argumentos del comando de inicio con los valores almacenados en el ConfigMap.</button><button class="opt">Las variables de entorno establecidas a partir de un ConfigMap se actualizarán automáticamente cuando se hagan cambios en este último.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T9·P4 · banco oficial</span><br>Los volúmenes hostPath:</div>
+<div class="opts"><button class="opt">Permiten montar en el Pod un directorio o archivo específico del sistema de ficheros del nodo.</button><button class="opt">Se crean inicialmente vacíos, y serán eliminados cuando el Pod finalice su ejecución.</button><button class="opt">Permiten desacoplar la infraestructura de almacenamiento de la definición del Pod.</button><button class="opt">Están diseñados para inyectar datos de configuración en los Pods.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T9·P5 · banco oficial</span><br>Los volúmenes emptyDir:</div>
+<div class="opts"><button class="opt">Permiten desacoplar la infraestructura de almacenamiento de la definición del Pod.</button><button class="opt">Permiten montar en el Pod un directorio o archivo específico del sistema de ficheros del nodo.</button><button class="opt">Se crean inicialmente vacíos, y serán eliminados cuando el Pod finalice su ejecución.</button><button class="opt">Están diseñados para inyectar datos de configuración en los Pods.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P6 · banco oficial</span><br>Los PersistentVolumes:</div>
+<div class="opts"><button class="opt">Permiten desacoplar la infraestructura de almacenamiento de la definición del Pod.</button><button class="opt">Son recursos globales del clúster. No están asociados a un Namespace específico.</button><button class="opt">Tendrán definidos los modos de acceso permitidos.</button><button class="opt">Todas la anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P7 · banco oficial</span><br>Los PersistentVolumeClaims:</div>
+<div class="opts"><button class="opt">Se utilizan para solicitar almacenamiento.</button><button class="opt">Permiten especificar el modo de acceso requerido al almacenamiento.</button><button class="opt">Pueden definirse referenciando a un StorageClass para permitir el aprovisionamiento dinámico de almacenamiento.</button><button class="opt">Todas la anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P8 · banco oficial</span><br>Las StorageClass:</div>
+<div class="opts"><button class="opt">Definen un tipo de almacenamiento en un proveedor específico.</button><button class="opt">Se utilizan para el aprovisionamiento dinámico de almacenamiento.</button><button class="opt">Se creará un nuevo PersistentVolume cada vez que se solicite almacenamiento referenciando a un objeto StorageClass.</button><button class="opt">Todas la anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T9·P9 · banco oficial</span><br>Los ConfigMaps:</div>
+<div class="opts"><button class="opt">Se almacenan codificados en base64, pero no cifrados.</button><button class="opt">Son recursos globales a todo el clúster.</button><button class="opt">Se crean en un determinado Namespace, pudiendo ser utilizado solo por recursos de este.</button><button class="opt">Solo existen a nivel del Pod, una vez finalice su ejecución, el ConfigMap será eliminado.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P10 · banco oficial</span><br>Los objetos Secrets de Kubernetes:</div>
+<div class="opts"><button class="opt">Se almacenan en etcd y su información estará cifrada.</button><button class="opt">Se almacenan codificados en base64, pero no cifrados.</button><button class="opt">Son recursos globales a todo el clúster.</button><button class="opt">Solo existen a nivel del Pod, una vez finalice su ejecución, el Secret será eliminado.</button></div>
+</div>
+<h3 id="bt10">Tema 10 · Deploy avanzado (K8s)</h3>
+<div class="q">
+<div class="qh"><span class="tag">T10·P1 · banco oficial</span><br>Relaciona los siguientes conceptos: Deployments Elegir... StatefulSets Elegir... Jobs Elegir... CronJobs Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Deployments</b> → Apps sin estado; rolling update y rollback.</div><div class="pair"><b>StatefulSets</b> → Apps con estado; orden e identidad.</div><div class="pair"><b>Jobs</b> → Tarea que se ejecuta hasta completarse.</div><div class="pair"><b>CronJobs</b> → Jobs programados periódicamente.</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P2 · banco oficial</span><br>Los recursos Job de Kubernetes:</div>
+<div class="opts"><button class="opt">Permiten la planificación de los Jobs para su ejecución a una hora concreta o de forma periódica.</button><button class="opt">Soportan estrategias de despliegue progresivo que permiten actualizar la aplicación sin pérdida de servicio.</button><button class="opt">Soportan políticas de reinicio para la gestión de errores en la ejecución.</button><button class="opt">Están diseñados para el despliegue de aplicaciones con estado.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P3 · banco oficial</span><br>Los recursos CronJob de Kubernetes:</div>
+<div class="opts"><button class="opt">Permiten la planificación de los Jobs para su ejecución a una hora concreta o de forma periódica.</button><button class="opt">Soportan estrategias de despliegue progresivo que permiten actualizar la aplicación sin pérdida de servicio.</button><button class="opt">Crean un Replicaset para la gestión de las réplicas.</button><button class="opt">Están diseñados para el despliegue de aplicaciones con estado.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P4 · banco oficial</span><br>Los recursos Deployment de Kubernetes:</div>
+<div class="opts"><button class="opt">Permiten el despliegue progresivo de actualizaciones, realizando el proceso sin pérdida de servicio.</button><button class="opt">Soportan revertir un despliegue de actualizaciones a un estado anterior.</button><button class="opt">Están diseñados para el despliegue de aplicaciones sin estado.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P5 · banco oficial</span><br>Los recursos StatefulSets de Kubernetes:</div>
+<div class="opts"><button class="opt">Los Pods de las réplicas tendrán hostname e IP únicos.</button><button class="opt">Las réplicas se crean y destruyen ordenadamente.</button><button class="opt">Están diseñados para el despliegue de aplicaciones con estado.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P6 · banco oficial</span><br>¿Cuál de los siguientes objetos de Kubernetes crea un Replicaset para gestionar las réplicas?:</div>
+<div class="opts"><button class="opt">Deployments.</button><button class="opt">StatefulSets.</button><button class="opt">Jobs.</button><button class="opt">CronJobs.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T10·P7 · banco oficial</span><br>Relacione los siguientes comandos aplicados a un Deployment de Kubernetes: kubectl rollout status Elegir... kubectil rollout undo Elegir... kubectl rollout pause Elegir... kubectl scale Elegir... <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>kubectl rollout status</b> → Estado del despliegue.</div><div class="pair"><b>kubectl rollout undo</b> → Revierte a la versión anterior.</div><div class="pair"><b>kubectl rollout pause</b> → Pausa el despliegue.</div><div class="pair"><b>kubectl scale</b> → Cambia el número de réplicas.</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P8 · banco oficial</span><br>¿Cuál de las siguientes propiedades de un manifiesto YAML permiten establecer un tiempo límite de ejecución de un Job en Kubernetes?:</div>
+<div class="opts"><button class="opt">spec.backoffLimit</button><button class="opt">spec.completions</button><button class="opt">spec.activeDeadlineSeconds</button><button class="opt">spec.schedule</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P9 · banco oficial</span><br>En Kubernetes los objetos Service de tipo headless:</div>
+<div class="opts"><button class="opt">No realizan balanceo de carga entre los Pods.</button><button class="opt">Devuelven la lista de IPs de los Pods.</button><button class="opt">No tendrán una Cluster IP asociado.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P10 · banco oficial</span><br>¿Cuál de los siguientes objetos de Kubernetes permite la ejecución de un Pod periódicamente?:</div>
+<div class="opts"><button class="opt">Deployments.</button><button class="opt">StatefulSets.</button><button class="opt">Jobs.</button><button class="opt">CronJobs.</button></div>
+</div>
+
+
+<script>
+  const tests=[...document.querySelectorAll('.q[data-c]')];
+  const total=tests.length;
+  let done=0, ok=0;
+  function update(){document.getElementById('bar').textContent=`Test: ${done} / ${total} respondidas · Aciertos: ${ok}`;}
+  update();
+  tests.forEach(q=>{
+    const c=+q.dataset.c, opts=[...q.querySelectorAll('.opt')], exp=q.querySelector('.exp');
+    opts.forEach((o,i)=>o.addEventListener('click',()=>{
+      if(opts[0].disabled) return;
+      opts.forEach(x=>x.disabled=true);
+      opts[c].classList.add('ok');
+      if(i===c) ok++; else o.classList.add('no');
+      if(exp) exp.classList.add('show');
+      done++; update();
+    }));
+  });
+  document.querySelectorAll('.reveal').forEach(b=>b.addEventListener('click',()=>{
+    const m=b.nextElementSibling, shown=m.classList.toggle('show');
+    b.textContent=shown?'Ocultar respuesta':b.dataset.t||'Ver respuesta modelo';
+  }));
+</script>
+
+</body>
+</html>

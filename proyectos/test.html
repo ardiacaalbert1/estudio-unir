@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test · Gestión de Proyectos (DevOps) · UNIR</title>
+<style>
+  :root{
+    --ink:#15222C; --muted:#5B6B73; --bg:#EEF3F4; --surface:#FFFFFF;
+    --teal:#0C8A98; --teal-dark:#0A6E79; --teal-tint:#E1F0F1;
+    --green:#15803D; --green-tint:#E7F4EC;
+    --red:#C0392B; --red-tint:#FBEAE8;
+    --amber:#B45309; --amber-tint:#FBF0E1;
+    --line:#D9E2E4; --radius:14px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--bg);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column; align-items:center;
+    padding:24px 16px 48px;
+  }
+  .wrap{width:100%; max-width:780px}
+
+  /* ---- Cabecera marca ---- */
+  .brand{display:flex; align-items:baseline; gap:10px; margin-bottom:18px}
+  .brand .logo{font-weight:800; font-size:22px; letter-spacing:-.5px; color:var(--ink)}
+  .brand .logo b{color:var(--teal)}
+  .brand .sep{width:1px; height:18px; background:var(--line)}
+  .brand .ctx{font-size:13px; color:var(--muted); letter-spacing:.2px}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:0 1px 2px rgba(20,40,50,.04), 0 12px 30px -22px rgba(20,40,50,.25)}
+
+  /* ---- Pantalla instrucciones ---- */
+  .intro{padding:30px 30px 26px}
+  .intro h1{font-size:27px; line-height:1.18; letter-spacing:-.6px; font-weight:800; margin-bottom:6px}
+  .intro .lead{color:var(--muted); font-size:15px; margin-bottom:22px}
+  .rules{display:grid; gap:14px; margin-bottom:22px}
+  .rule{display:flex; gap:13px; align-items:flex-start}
+  .rule .n{flex:0 0 26px; height:26px; border-radius:8px; background:var(--teal-tint); color:var(--teal-dark);
+    font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; margin-top:1px}
+  .rule p{font-size:14.5px}
+  .rule p b{font-weight:700}
+  .legend{display:flex; flex-wrap:wrap; gap:10px 18px; padding:14px 16px; background:#F6F9F9;
+    border:1px solid var(--line); border-radius:10px; margin-bottom:22px}
+  .legend .item{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted)}
+  .swatch{width:13px; height:13px; border-radius:4px; flex:none}
+  .sw-green{background:var(--green)} .sw-amber{background:var(--amber)} .sw-red{background:var(--red)}
+  .opts-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+  .toggle{display:inline-flex; align-items:center; gap:9px; font-size:14px; color:var(--muted); cursor:pointer; user-select:none}
+  .toggle input{width:16px; height:16px; accent-color:var(--teal)}
+  .kbd{font-size:12.5px; color:var(--muted); margin-top:14px}
+  .kbd kbd{font-family:var(--sans); font-weight:600; font-size:11.5px; background:#EEF2F3;
+    border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 6px; color:var(--ink)}
+
+  .btn{appearance:none; border:none; cursor:pointer; font-family:inherit; font-weight:700;
+    font-size:15px; border-radius:10px; padding:13px 22px; transition:filter .12s, transform .05s}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--teal); color:#fff}
+  .btn-primary:hover{filter:brightness(1.05)}
+  .btn-ghost{background:transparent; color:var(--teal-dark); padding:13px 10px}
+  .btn-ghost:hover{color:var(--teal)}
+  .btn:disabled{opacity:.4; cursor:default}
+  .intro .start{margin-top:18px; width:100%}
+
+  /* ---- Barra superior del cuestionario ---- */
+  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px}
+  .meta{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted)}
+  .badge{font-size:11.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+    padding:3px 9px; border-radius:999px; background:var(--teal-tint); color:var(--teal-dark)}
+  .badge.amp{background:#EDE7F6; color:#5B3FA0}
+  .score{font-size:13px; color:var(--muted)}
+  .score b{color:var(--ink); font-weight:800}
+  .progress{height:6px; background:#E2E9EA; border-radius:999px; overflow:hidden; margin-bottom:20px}
+  .progress > i{display:block; height:100%; background:var(--teal); border-radius:999px; width:0; transition:width .25s ease}
+
+  /* ---- Pregunta ---- */
+  .qcard{padding:26px 26px 24px}
+  .qnum{font-size:12.5px; font-weight:700; letter-spacing:.4px; color:var(--teal-dark); text-transform:uppercase; margin-bottom:8px}
+  .qtext{font-size:19px; line-height:1.35; font-weight:700; letter-spacing:-.2px; margin-bottom:20px}
+  .options{display:grid; gap:10px}
+  .opt{display:flex; gap:13px; align-items:flex-start; text-align:left; width:100%;
+    background:var(--surface); border:1.5px solid var(--line); border-radius:11px; padding:13px 15px;
+    font-family:inherit; font-size:15px; color:var(--ink); cursor:pointer; transition:border-color .12s, background .12s}
+  .opt:hover:not(.locked){border-color:var(--teal); background:#FAFDFD}
+  .opt .key{flex:0 0 26px; height:26px; border-radius:7px; background:#EEF2F3; color:var(--muted);
+    font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; transition:.12s}
+  .opt .txt{padding-top:2px}
+  .opt.locked{cursor:default}
+  .opt.correct{border-color:var(--green); background:var(--green-tint)}
+  .opt.correct .key{background:var(--green); color:#fff}
+  .opt.wrong{border-color:var(--red); background:var(--red-tint)}
+  .opt.wrong .key{background:var(--red); color:#fff}
+  .opt.alt{border-color:var(--amber); background:var(--amber-tint)}
+  .opt.alt .key{background:var(--amber); color:#fff}
+  .tag{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.2px; padding:2px 7px;
+    border-radius:6px; margin-left:8px; vertical-align:middle}
+  .tag.g{background:var(--green); color:#fff}
+  .tag.a{background:var(--amber); color:#fff}
+
+  .feedback{margin-top:18px; font-size:14.5px; display:none}
+  .feedback.show{display:block}
+  .feedback .head{font-weight:800; margin-bottom:4px}
+  .feedback.ok .head{color:var(--green)}
+  .feedback.no .head{color:var(--red)}
+  .note{margin-top:12px; padding:12px 14px; border-left:3px solid var(--amber);
+    background:var(--amber-tint); border-radius:0 9px 9px 0; font-size:13.5px; color:#7a3e08}
+  .note b{color:var(--amber)}
+
+  .nav{display:flex; align-items:center; justify-content:space-between; margin-top:22px; gap:12px}
+
+  /* ---- Resultados ---- */
+  .results{padding:34px 30px; text-align:center}
+  .results h2{font-size:24px; font-weight:800; letter-spacing:-.4px; margin-bottom:6px}
+  .results .big{font-size:54px; font-weight:800; letter-spacing:-1.5px; color:var(--teal); line-height:1; margin:14px 0 6px}
+  .results .pct{color:var(--muted); font-size:15px; margin-bottom:8px}
+  .results .msg{font-size:15px; margin:14px auto 6px; max-width:440px}
+  .results .sub{font-size:13px; color:var(--muted); margin-top:14px; max-width:480px; margin-left:auto; margin-right:auto}
+  .results .again{margin-top:22px}
+
+  .hide{display:none !important}
+
+  @media (max-width:560px){
+    .intro,.qcard,.results{padding-left:20px; padding-right:20px}
+    .intro h1{font-size:23px}
+    .qtext{font-size:17.5px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <span class="ctx">Gestión de Proyectos · Máster en Desarrollo y Operaciones (DevOps)</span>
+  </div>
+
+  <!-- ============ INSTRUCCIONES ============ -->
+  <section id="intro" class="card intro">
+    <h1>Test de práctica:<br>metodologías ágiles y DevOps</h1>
+    <p class="lead">54 preguntas tipo test con corrección inmediata para preparar el examen.</p>
+
+    <div class="rules">
+      <div class="rule"><span class="n">1</span><p>Aparece una pregunta cada vez con sus opciones. Elige una y verás al momento si has acertado. Solo hay una respuesta correcta por pregunta.</p></div>
+      <div class="rule"><span class="n">2</span><p>La corrección sigue la <b>plantilla oficial</b>. Como en el examen real, cada acierto cuenta y los fallos o las preguntas en blanco no penalizan.</p></div>
+      <div class="rule"><span class="n">3</span><p>Algunas preguntas tienen una respuesta discutible. En ellas se marca en verde la opción que da por buena la plantilla y en ámbar la que sería más correcta según el criterio habitual, aunque no esté marcada en la tabla.</p></div>
+    </div>
+
+    <div class="legend">
+      <span class="item"><span class="swatch sw-green"></span>Correcta según la plantilla</span>
+      <span class="item"><span class="swatch sw-amber"></span>Mejor respuesta (no marcada en la tabla)</span>
+      <span class="item"><span class="swatch sw-red"></span>Tu fallo</span>
+    </div>
+
+    <div class="opts-row">
+      <label class="toggle"><input type="checkbox" id="shuffle"> Barajar el orden de las preguntas</label>
+    </div>
+    <p class="kbd">Atajos: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> para responder · <kbd>→</kbd> o <kbd>Enter</kbd> siguiente · <kbd>←</kbd> anterior</p>
+
+    <button class="btn btn-primary start" id="startBtn">Comenzar</button>
+  </section>
+
+  <!-- ============ CUESTIONARIO ============ -->
+  <section id="quiz" class="hide">
+    <div class="top">
+      <div class="meta">
+        <span id="counter">Pregunta 1 de 54</span>
+      </div>
+      <div class="score">Aciertos: <b id="hits">0</b></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+
+    <div class="card qcard">
+      <div class="qnum" id="qnum">Pregunta 1</div>
+      <div class="qtext" id="qtext"></div>
+      <div class="options" id="options"></div>
+
+      <div class="feedback" id="feedback">
+        <div class="head" id="fhead"></div>
+        <div id="fbody"></div>
+        <div class="note hide" id="fnote"></div>
+      </div>
+
+      <div class="nav">
+        <button class="btn btn-ghost" id="prevBtn">← Anterior</button>
+        <button class="btn btn-primary" id="nextBtn">Siguiente →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTADOS ============ -->
+  <section id="results" class="card results hide">
+    <h2>Resultado</h2>
+    <div class="big" id="rBig">0/54</div>
+    <div class="pct" id="rPct"></div>
+    <p class="msg" id="rMsg"></p>
+    <p class="sub" id="rSub"></p>
+    <button class="btn btn-primary again" id="restartBtn">Volver a empezar</button>
+  </section>
+</div>
+
+<script>
+/* ===== Banco de preguntas =====
+   correcta = letra marcada en la plantilla oficial
+   alt      = letra que sería la mejor según el criterio habitual (opcional)
+   nota     = aclaración mostrada al corregir (opcional)            */
+const BANCO = [
+  {q:"¿Qué se hace en la revisión periódica al lanzar el Product Backlog?", correcta:"C", o:{
+    A:"Se refina el Backlog en base a las necesidades de los clientes, que en todo momento puede indicar qué quiere y qué no, independientemente de los valores de negocio y el coste.",
+    B:"Se adapta el Backlog mediante un refinamiento propio de lo que el mercado considere, agrupando elementos a corto y largo plazo.",
+    C:"Se adapta el Backlog mediante un refinamiento adecuado para el proyecto, agrupando elementos a corto y largo plazo.",
+    D:"Se adapta el Backlog en base a las necesidades de los desarrolladores."}},
+  {q:"¿Cómo se define un Sprint en Scrum?", correcta:"B", o:{
+    A:"El Sprint es la fase en la que se lleva a cabo la iteración para establecer lo que el Product Backlog indica, y no puede tener cambios durante dicha iteración.",
+    B:"El Sprint es un contenedor para los diferentes eventos del proyecto, como la planificación, Scrum diario, revisión del propio Sprint y retrospectiva del mismo.",
+    C:"El Sprint es un artefacto de Scrum que lleva información de las reuniones con el cliente para los cambios necesarios.",
+    D:"El Sprint es la meta a la que llega el resultado del proyecto tras las iteraciones finales."}},
+  {q:"Kanban se caracteriza por:", correcta:"B", o:{A:"Iteraciones fijas",B:"Flujo continuo de trabajo",C:"Planificación rígida",D:"Entregas únicas"}},
+  {q:"¿Cuál es la principal ventaja competitiva del paradigma ágil?", correcta:"D", o:{A:"Aumento de documentación",B:"Mayor control jerárquico",C:"Eliminación del cliente",D:"Capacidad de adaptación y rapidez"}},
+  {q:"DevOps se caracteriza por:", correcta:"A", o:{A:"Integración y entrega continua",B:"Eliminación de pruebas",C:"Entregas únicas al final del proyecto",D:"Procesos manuales"}},
+  {q:"La relación entre Agile y DevOps es que:", correcta:"C", o:{A:"Son incompatibles",B:"DevOps sustituye a Agile",C:"DevOps complementa a Agile",D:"Agile depende de DevOps"}},
+  {q:"En el Sprint Planning, una de las actividades clave es:", correcta:"B",
+    nota:"En el examen original las opciones B y C son idénticas («Descomponer historias en tareas»). La plantilla marca la B.",
+    o:{A:"Validar el producto final",B:"Descomponer historias en tareas",C:"Descomponer historias en tareas",D:"Eliminar requisitos"}},
+  {q:"¿Cuáles de las siguientes son funciones del Scrum Master?", correcta:"B", o:{
+    A:"Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el único líder del equipo Scrum, gestionar los problemas y delegar el aseguramiento de los eventos.",
+    B:"Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el líder del equipo Scrum, gestionar los problemas y asegurar la ejecución de los eventos.",
+    C:"Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el líder del equipo Scrum, gestionar los problemas y delegar el aseguramiento de los eventos.",
+    D:"Impulsar la adopción de agilidad, auto-organización, asignar tareas, ser el líder único del equipo Scrum, gestionar los problemas y asegurar la ejecución de los eventos."}},
+  {q:"En Kanban, ¿cuál sería una opción interesante para reflejar quién hace una tarea?", correcta:"D", alt:"A",
+    nota:"La plantilla oficial marca la D. Lo habitual para reflejar al responsable de una tarjeta sería la A (un identificador en la propia tarjeta).",
+    o:{A:"Indicarlo con un número en la tarjeta.",B:"Asignar la tarea al Scrum Master.",C:"Indicarlo al Product Owner, y que decida.",D:"Asignar la tarea al facilitador."}},
+  {q:"En la técnica MoSCoW, los requisitos «Must» son:", correcta:"C", o:{A:"Opcionales",B:"Deseables",C:"Imprescindibles",D:"Eliminables"}},
+  {q:"La reunión de refinamiento tiene como objetivo:", correcta:"C", alt:"D",
+    nota:"La plantilla oficial marca la C. El refinamiento suele orientarse a preparar y dejar listos los elementos del backlog para próximas iteraciones, más próximo a la D.",
+    o:{A:"Ejecutar técnicas de estimación de tareas que refinen la iteración.",B:"Introducir nuevos requisitos solicitados por el cliente en la iteración en curso.",C:"Resolver dudas que puedan surgir durante la iteración.",D:"Determinar cuáles son las tareas necesarias en la siguiente iteración."}},
+  {q:"El éxito de un proyecto se mide principalmente por:", correcta:"C", o:{A:"Cumplir únicamente el presupuesto",B:"Cumplir únicamente el plazo",C:"Cumplir alcance, tiempo y coste",D:"Terminar lo antes posible"}},
+  {q:"¿Cuáles son los principios de Lean?", correcta:"A", o:{
+    A:"Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos pull, flexibilidad, y relación a largo plazo con proveedores.",
+    B:"Valor de cliente y calidad, eliminar desperdicios, mejora integra, procesos push, flexibilidad, y relación a largo plazo con proveedores.",
+    C:"Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos push, flexibilidad, y relación a largo plazo con proveedores.",
+    D:"Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos pull, facilidad, y relación a largo plazo con proveedores."}},
+  {q:"¿Qué significa SDLC (Software Development Life Cycle)?", correcta:"B", o:{A:"Un lenguaje de programación",B:"Un conjunto de modelos para el desarrollo de software",C:"Una metodología ágil",D:"Un tipo de backlog"}},
+  {q:"El burnup chart representa:", correcta:"D", o:{A:"Trabajo pendiente",B:"Trabajo eliminado",C:"Coste del proyecto",D:"Trabajo completado acumulado"}},
+  {q:"Si una iteración está cerca de finalizar y muchas tareas siguen en estados iniciales, esto indica que:", correcta:"A", o:{A:"La iteración probablemente no cumpla objetivos",B:"No tiene importancia",C:"El equipo es eficiente",D:"El proyecto va adelantado"}},
+  {q:"¿Cuáles son los horizontes de planificación ágil?", correcta:"A", o:{
+    A:"Una serie de niveles que llevan a cabo acciones para ir avanzando en los planes de producto, hoja de rutas, entregas e iteraciones.",
+    B:"Un conjunto de pruebas que se realizan para poder realizar los cambios sobre el producto final, considerando la hoja de ruta y las entregas.",
+    C:"Una serie de métodos que se usan para realizar las planificaciones del proyecto ágil.",
+    D:"Una serie de niveles que se usan para llegar al final del producto, entregas y reuniones diarias."}},
+  {q:"La mejor forma para representar un Roadmap es:", correcta:"A", o:{A:"Mediante un mapa visual claro.",B:"Mediante un software adecuado para ello, con un mapeo de historias.",C:"Mediante un Diagrama de Gantt.",D:"Mediante una hoja Excel."}},
+  {q:"La motivación de un equipo ágil se define como:", correcta:"B",
+    nota:"En el examen original esta pregunta solo incluye dos opciones (A y B).",
+    o:{A:"Un vector de fuerzas que impulsan al líder.",B:"Un vector de fuerzas que impulsan al equipo."}},
+  {q:"El principal objetivo del Manifiesto Ágil es:", correcta:"C", o:{A:"Reducir costes de desarrollo",B:"Definir un estándar rígido de trabajo",C:"Establecer valores y principios para desarrollo flexible",D:"Sustituir todas las metodologías tradicionales"}},
+  {q:"Cuando se habla de desarrollo de software ágil y DevOps:", correcta:"B", o:{
+    A:"Se debe analizar si se pueden usar en conjunto, según la finalidad del proyecto.",
+    B:"DevOps apuesta por ciclos de desarrollo cortos alineado con los objetivos de la agilidad.",
+    C:"Sólo puede hacerse uso del agilizo en DevOps cuando se conocen los cambios.",
+    D:"DevOps da la posibilidad al desarrollo software a la gestión continua de los cambios."}},
+  {q:"En el ámbito de desarrollo software, ¿se puede aplicar metodología tradicional y ágil en un mismo proyecto?", correcta:"B", o:{
+    A:"Puede haber empresas que usen ambas metodologías, según el equipo de desarrollo y sus habilidades.",
+    B:"Puede haber empresas que usen ambas metodologías, según el proyecto a desarrollar.",
+    C:"Es difícil que un equipo de desarrollo trabaje en una metodología tradicional y que luego pase a ágil.",
+    D:"En ningún caso se pueden aplicar ambas metodologías en la misma empresa."}},
+  {q:"¿Cuál es la principal diferencia entre la planificación ágil y tradicional?", correcta:"A", o:{
+    A:"La planificación ágil es iterativa, progresiva, y se adapta a cambios, y la tradicional es predictiva y se basa en identificar tareas a priori.",
+    B:"La planificación tradicional es iterativa y se adapta a cambios, y la ágil es predictiva y se basa en identificar tareas a priori.",
+    C:"La planificación ágil es predictiva e iterativa, y la tradicional identifica los cambios.",
+    D:"La planificación ágil es iterativa y se adapta a cambios, y la tradicional es incremental y va adaptándose a situaciones cambiantes sin problemas."}},
+  {q:"¿Qué objetivos tiene la gestión de proyectos?", correcta:"C", o:{
+    A:"Entregar al cliente un producto relativamente viable.",
+    B:"Que las empresas se vean beneficiadas respecto con metodología tradicional.",
+    C:"Realizar un análisis de viabilidad, planificación, ejecución, seguimiento, control y cierre del proyecto.",
+    D:"Llevar a cabo un análisis de requisitos, diseño, implementación, evaluación, pruebas y mantenimiento."}},
+
+  {q:"¿Quién es el responsable de maximizar el valor del producto y de gestionar el Product Backlog?", correcta:"B", o:{A:"El Scrum Master",B:"El Product Owner",C:"El equipo de desarrollo",D:"El cliente final"}},
+  {q:"¿Cuál es la duración máxima recomendada del Daily Scrum?", correcta:"B", o:{A:"5 minutos",B:"15 minutos",C:"30 minutos",D:"1 hora"}},
+  {q:"¿Qué evento de Scrum permite inspeccionar el incremento y adaptar el Product Backlog junto con los interesados?", correcta:"C", o:{A:"La planificación del Sprint",B:"El Scrum diario",C:"La revisión del Sprint",D:"El refinamiento del Backlog"}},
+  {q:"¿Qué evento de Scrum se centra en mejorar el proceso de trabajo del equipo?", correcta:"A", o:{A:"La retrospectiva del Sprint",B:"La revisión del Sprint",C:"La planificación del Sprint",D:"El Scrum diario"}},
+  {q:"¿Cuántas responsabilidades o roles define el marco Scrum?", correcta:"B", o:{A:"Dos",B:"Tres",C:"Cuatro",D:"Cinco"}},
+  {q:"¿Quién decide cuántos elementos del Product Backlog se incluyen en un Sprint?", correcta:"C", o:{A:"El Product Owner",B:"El Scrum Master",C:"Los desarrolladores",D:"El cliente"}},
+  {q:"La Definition of Done (Definición de Terminado) sirve para:", correcta:"B", o:{A:"Priorizar el Product Backlog",B:"Establecer cuándo un incremento cumple la calidad necesaria para considerarse terminado",C:"Estimar el esfuerzo de las historias de usuario",D:"Fijar la duración del Sprint"}},
+  {q:"¿Qué describe mejor el Sprint Backlog?", correcta:"B", o:{A:"La lista completa de requisitos del producto",B:"El objetivo del Sprint, los elementos seleccionados y el plan para entregarlos",C:"El registro de impedimentos del equipo",D:"El conjunto de incrementos ya entregados"}},
+  {q:"El tamaño habitualmente recomendado para el equipo de desarrollo en Scrum es:", correcta:"B", o:{A:"Una sola persona",B:"Entre 3 y 9 personas",C:"Más de 20 personas",D:"No está limitado"}},
+  {q:"¿Qué significa el límite WIP en un tablero Kanban?", correcta:"B", o:{A:"El número máximo de personas del equipo",B:"El número máximo de tareas en curso permitidas en un estado",C:"El tiempo máximo de cada iteración",D:"El número de columnas del tablero"}},
+  {q:"El propósito principal de limitar el WIP en Kanban es:", correcta:"B", o:{A:"Aumentar la documentación",B:"Mejorar el flujo de trabajo y detectar cuellos de botella",C:"Reducir el número de columnas",D:"Eliminar las reuniones"}},
+  {q:"¿Qué métrica de Kanban mide el tiempo que tarda una tarea desde que se empieza hasta que se termina?", correcta:"B", o:{A:"La velocidad",B:"El tiempo de ciclo (cycle time)",C:"El burndown",D:"Los puntos de historia"}},
+  {q:"Una diferencia esencial entre Kanban y Scrum es que:", correcta:"B", o:{A:"Kanban usa sprints de duración fija",B:"Kanban gestiona un flujo continuo sin iteraciones de duración fija",C:"Kanban no permite visualizar el trabajo",D:"Kanban prohíbe los cambios de prioridad"}},
+  {q:"¿Cuántos valores recoge el Manifiesto Ágil?", correcta:"A", o:{A:"Cuatro",B:"Ocho",C:"Diez",D:"Doce"}},
+  {q:"¿Cuántos principios desarrolla el Manifiesto Ágil?", correcta:"C", o:{A:"Cuatro",B:"Siete",C:"Doce",D:"Quince"}},
+  {q:"Uno de los cuatro valores del Manifiesto Ágil prioriza:", correcta:"B", o:{A:"Los procesos y herramientas sobre las personas",B:"Individuos e interacciones sobre procesos y herramientas",C:"La documentación exhaustiva sobre el software funcionando",D:"El contrato sobre la colaboración con el cliente"}},
+  {q:"El desarrollo ágil busca entregar valor:", correcta:"B", o:{A:"Una sola vez, al final del proyecto",B:"De forma incremental y frecuente",C:"Solo cuando el cliente lo exige por contrato",D:"Sin contacto con el cliente"}},
+  {q:"El formato habitual de una historia de usuario es:", correcta:"B", o:{A:"«Si... entonces... si no...»",B:"«Como [rol], quiero [funcionalidad], para [beneficio]»",C:"«Dado... cuando... entonces...»",D:"«Entrada, proceso, salida»"}},
+  {q:"El acrónimo INVEST se utiliza para:", correcta:"B", o:{A:"Estimar la duración de los sprints",B:"Evaluar la calidad de las historias de usuario",C:"Priorizar el Product Backlog por coste",D:"Medir la velocidad del equipo"}},
+  {q:"En INVEST, la «I» hace referencia a que una historia debe ser:", correcta:"B", o:{A:"Imprescindible",B:"Independiente",C:"Inmediata",D:"Inalterable"}},
+  {q:"Los criterios de aceptación de una historia de usuario sirven para:", correcta:"B", o:{A:"Estimar su coste económico",B:"Definir las condiciones que verifican que la historia se ha completado correctamente",C:"Asignar la historia a un desarrollador concreto",D:"Decidir la duración del Sprint"}},
+  {q:"Los puntos de historia (story points) miden principalmente:", correcta:"B", o:{A:"Las horas exactas de trabajo",B:"El esfuerzo y la complejidad relativa de una historia",C:"El coste en euros",D:"El número de desarrolladores necesarios"}},
+  {q:"El planning poker es una técnica de:", correcta:"B", o:{A:"Priorización del backlog",B:"Estimación por consenso del equipo",C:"Resolución de conflictos",D:"Diseño de la arquitectura"}},
+  {q:"La velocidad (velocity) de un equipo ágil indica:", correcta:"B", o:{A:"La rapidez de escritura de código",B:"La cantidad de trabajo (puntos) que el equipo completa por Sprint",C:"El número de reuniones por semana",D:"El tiempo de respuesta del cliente"}},
+  {q:"El burndown chart representa:", correcta:"B", o:{A:"El trabajo completado acumulado",B:"El trabajo pendiente a lo largo del tiempo",C:"El coste del proyecto",D:"El número de defectos"}},
+  {q:"En un burndown chart, que la línea real quede por encima de la ideal indica que:", correcta:"B", o:{A:"El equipo va adelantado",B:"Queda más trabajo pendiente del previsto",C:"El proyecto ya ha terminado",D:"No existe ningún impedimento"}},
+  {q:"La integración continua (CI) consiste en:", correcta:"B", o:{A:"Desplegar solo al final del proyecto",B:"Integrar y probar los cambios de código de forma frecuente y automatizada",C:"Eliminar las pruebas automáticas",D:"Trabajar sin control de versiones"}},
+  {q:"La entrega y el despliegue continuos (CD) tienen como objetivo:", correcta:"B", o:{A:"Reducir la frecuencia de las entregas",B:"Automatizar la puesta del software en producción de forma fiable",C:"Sustituir al Product Owner",D:"Eliminar la fase de pruebas"}},
+  {q:"Un objetivo cultural central de DevOps es:", correcta:"B", o:{A:"Separar por completo desarrollo y operaciones",B:"Fomentar la colaboración entre desarrollo y operaciones",C:"Reducir la automatización",D:"Aumentar el trabajo manual"}},
+  {q:"En la técnica MoSCoW, la categoría «Won’t» (no se hará) significa que el requisito:", correcta:"B", o:{A:"Es imprescindible",B:"Queda fuera del alcance de esta entrega",C:"Debe hacerse antes que los demás",D:"Es deseable pero no imprescindible"}}
+];
+
+/* ===== Estado ===== */
+const LETRAS = ["A","B","C","D"];
+let order = [], cur = 0, answered = [], picked = [], hits = 0;
+
+const $ = id => document.getElementById(id);
+
+function startQuiz(){
+  order = BANCO.map((_,i)=>i);
+  if($("shuffle").checked){
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  }
+  cur=0; hits=0; answered=new Array(BANCO.length).fill(false); picked=new Array(BANCO.length).fill(null);
+  $("intro").classList.add("hide");
+  $("results").classList.add("hide");
+  $("quiz").classList.remove("hide");
+  $("hits").textContent="0";
+  render();
+}
+
+function render(){
+  const qi = order[cur];
+  const Q = BANCO[qi];
+  const keys = LETRAS.filter(k => k in Q.o);
+
+  // cabecera
+  $("counter").textContent = `Pregunta ${cur+1} de ${BANCO.length}`;
+  $("qnum").textContent = `Pregunta ${cur+1}`;
+  $("bar").style.width = ((cur)/(BANCO.length))*100 + "%";
+  $("qtext").textContent = Q.q;
+
+  // opciones
+  const box = $("options"); box.innerHTML="";
+  const isAns = answered[qi];
+  keys.forEach(k=>{
+    const b=document.createElement("button");
+    b.className="opt";
+    b.innerHTML = `<span class="key">${k}</span><span class="txt">${Q.o[k]}</span>`;
+    if(isAns){
+      b.classList.add("locked");
+      if(k===Q.correcta){ b.classList.add("correct"); b.querySelector(".txt").innerHTML += ` <span class="tag g">Correcta</span>`; }
+      else if(Q.alt && k===Q.alt){ b.classList.add("alt"); b.querySelector(".txt").innerHTML += ` <span class="tag a">Mejor respuesta</span>`; }
+      else if(k===picked[qi]){ b.classList.add("wrong"); }
+    } else {
+      b.addEventListener("click",()=>answer(k));
+    }
+    box.appendChild(b);
+  });
+
+  // feedback
+  const fb=$("feedback");
+  if(isAns){ showFeedback(Q,qi); } else { fb.classList.remove("show","ok","no"); $("fnote").classList.add("hide"); }
+
+  // navegación
+  $("prevBtn").disabled = (cur===0);
+  $("nextBtn").textContent = (cur===BANCO.length-1) ? "Ver resultados →" : "Siguiente →";
+}
+
+function answer(k){
+  const qi = order[cur];
+  if(answered[qi]) return;
+  answered[qi]=true; picked[qi]=k;
+  if(k===BANCO[qi].correcta){ hits++; $("hits").textContent=hits; }
+  render();
+}
+
+function showFeedback(Q,qi){
+  const fb=$("feedback"), head=$("fhead"), body=$("fbody"), note=$("fnote");
+  fb.classList.add("show");
+  const sel=picked[qi];
+  if(sel===Q.correcta){
+    fb.classList.add("ok"); fb.classList.remove("no");
+    head.textContent="Correcto";
+    body.textContent = Q.alt
+      ? `Es la opción que da por válida la plantilla. Fíjate en la opción ${Q.alt}, marcada en ámbar.`
+      : "";
+  } else {
+    fb.classList.add("no"); fb.classList.remove("ok");
+    head.textContent="Incorrecto";
+    if(Q.alt && sel===Q.alt){
+      body.textContent = `Has elegido la opción ${Q.alt}, que es la más razonable según el criterio habitual; pero la plantilla oficial da como buena la ${Q.correcta}.`;
+    } else {
+      body.textContent = `La plantilla marca como correcta la opción ${Q.correcta}.`;
+    }
+  }
+  if(Q.nota){ note.classList.remove("hide"); note.innerHTML = `<b>Nota:</b> ${Q.nota}`; }
+  else { note.classList.add("hide"); }
+}
+
+function next(){
+  if(cur===BANCO.length-1){ finish(); }
+  else { cur++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function prev(){ if(cur>0){ cur--; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
+
+function finish(){
+  $("quiz").classList.add("hide");
+  const r=$("results"); r.classList.remove("hide");
+  const total=BANCO.length;
+  const pct=Math.round(hits/total*100);
+  $("rBig").textContent = `${hits}/${total}`;
+  $("rPct").textContent = `${pct}% de aciertos`;
+  let m;
+  if(pct>=90) m="Dominas el temario. Listo para el examen.";
+  else if(pct>=70) m="Buen nivel. Repasa los fallos y lo tendrás.";
+  else if(pct>=50) m="Vas por el camino. Conviene repasar antes del examen.";
+  else m="Toca repasar el temario con calma y volver a intentarlo.";
+  $("rMsg").textContent=m;
+  const respondidas = answered.filter(Boolean).length;
+  $("rSub").textContent = `Has respondido ${respondidas} de ${total} preguntas. La corrección sigue la plantilla oficial; en las preguntas discutibles la opción en ámbar no cuenta como acierto aunque sea la más correcta.`;
+  $("bar").style.width="100%";
+}
+
+/* ===== Eventos ===== */
+$("startBtn").addEventListener("click",startQuiz);
+$("nextBtn").addEventListener("click",next);
+$("prevBtn").addEventListener("click",prev);
+$("restartBtn").addEventListener("click",()=>{ $("results").classList.add("hide"); $("intro").classList.remove("hide"); window.scrollTo({top:0}); });
+
+document.addEventListener("keydown",e=>{
+  if(!$("quiz").classList.contains("hide")){
+    const k=e.key.toUpperCase();
+    if(["A","B","C","D"].includes(k)){ const qi=order[cur]; if(!answered[qi] && (k in BANCO[qi].o)) answer(k); }
+    else if(e.key==="ArrowRight"||e.key==="Enter"){ e.preventDefault(); next(); }
+    else if(e.key==="ArrowLeft"){ prev(); }
+  } else if(!$("intro").classList.contains("hide")){
+    if(e.key==="Enter") startQuiz();
+  }
+});
+</script>
+</body>
+</html>

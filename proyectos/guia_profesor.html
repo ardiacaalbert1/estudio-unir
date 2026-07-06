@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyectos (ágiles) — Guía del profesor (examen y prioridades)</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--red:#c0392b;--amber:#b9770e;--gray:#777;--card:#f7f7f8;--green:#1e8449;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--red:#ff7a6b;--amber:#e0a830;--gray:#999;--card:#272727;--green:#5dbb63;}}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:820px;margin:0 auto;padding:28px 22px;}
+  h1{font-size:1.5rem;margin:0 0 4px;} h2{font-size:1.15rem;margin:28px 0 10px;border-bottom:2px solid var(--line);padding-bottom:5px;}
+  .sub{color:var(--mut);margin:0 0 8px;} .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0;}
+  table{border-collapse:collapse;width:100%;font-size:.92rem;margin:8px 0;} th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top;}
+  th{background:var(--card);} code{background:var(--card);padding:1px 5px;border-radius:5px;font-size:.88em;}
+  .red{color:var(--red);font-weight:600;} .amber{color:var(--amber);font-weight:600;} .gray{color:var(--gray);font-weight:600;} .green{color:var(--green);font-weight:600;}
+  .ts{color:var(--mut);font-variant-numeric:tabular-nums;font-size:.85em;white-space:nowrap;}
+  ul{margin:6px 0 6px 2px;padding-left:20px;} li{margin:3px 0;}
+</style>
+</head>
+<body>
+<h1>Proyectos (ágiles) — Guía del profesor</h1>
+<p class="sub">Destilado de las 14 grabaciones (incluida la <strong>clase de preparación del examen</strong>, 2-jul) + material de <code>Estudio/PreparacionProfe/</code>.</p>
+
+<h2>🎯 Cómo es el examen (DEFINITIVO — clase "Examen")</h2>
+<div class="card">
+<table>
+<tr><th>Parte</th><th>Preguntas</th><th>Puntos</th><th>De dónde salen</th></tr>
+<tr><td><strong>Test</strong></td><td>10 (una sola correcta, <strong>no restan</strong> → responder todas)</td><td>2 (0,2/preg.)</td><td class="green">Del banco de 54 del profe (<code>Estudio/PreparacionProfe/Test_…html</code>)</td></tr>
+<tr><td><strong>Cortas</strong></td><td>4 (1 punto cada una)</td><td>4</td><td class="green">De las 30 del profe (<code>Preguntas_cortas_…html</code>). Literal: <em>"yo me prepararía 30 respuestas"</em></td></tr>
+<tr><td><strong>Casos prácticos</strong></td><td>2 (contexto + 2 preguntas cada uno)</td><td>4 (2+2)</td><td class="green">Calcan los del PDF de casos; solo <strong>cambia el sector</strong> (preparó ~7 sectores distintos, uno por modelo de examen)</td></tr>
+</table>
+<ul>
+<li>Hay <strong>7 modelos de examen</strong> distintos (tu vecino no tendrá tus preguntas).</li>
+<li><span class="red">Tabla de respuestas del test</span>: se corrige automáticamente <strong>solo por lo marcado en la tabla</strong> (con X). Lo anotado en el enunciado no cuenta.</li>
+<li><strong>No se puede dibujar</strong> en la plataforma: los "esquemas" (tablero Kanban, Product Backlog) se describen con texto: columnas, títulos y qué cuelga de cada una.</li>
+<li>Ignora la extensión del hueco (a veces pone 24-32 líneas por error): las cortas se contestan en <strong>~8 líneas</strong>; añadir un pequeño ejemplo suma.</li>
+<li>El profe corrige "a favor": explica el concepto (INVEST, SMART, MoSCoW…) aunque el ejercicio te salga regular y rascas puntos.</li>
+<li><span class="red">Prohibida la IA</span>: el proctoring la detecta → suspenso administrativo automático (pasó a 7-8 alumnos de otro máster).</li>
+<li>Notas ≈ 1 semana tras el último día de examen; revisión solo merece la pena si suspendes.</li>
+</ul>
+</div>
+
+<h2>⚠️ Las 3 preguntas conflictivas del test (dictadas en clase)</h2>
+<div class="card">
+<table>
+<tr><th>Pregunta</th><th>Qué pasa</th><th>Qué marcar</th></tr>
+<tr><td>"En el Sprint Planning, una de las actividades clave es…"</td><td>B y C son idénticas ("descomponer historias en tareas")</td><td class="green">Marcar la <strong>B</strong> (es la de la plantilla automática)</td></tr>
+<tr><td>"En Kanban, ¿cuál sería una opción interesante para reflejar quién hace una tarea?"</td><td>La correcta es la <strong>A</strong>, pero el examen tiene marcada la <strong>D</strong> y está bloqueado (cae seguro en algún modelo)</td><td class="amber">Marcar la <strong>D</strong> (la máquina la da por buena). Si marcas la A tendrá que corregirla a mano</td></tr>
+<tr><td>"La reunión de refinamiento tiene como objetivo…"</td><td>Discutible entre opciones</td><td class="green">Marcar la <strong>C</strong>: "resolver dudas que puedan surgir durante la iteración"</td></tr>
+</table>
+</div>
+
+<h2>✅ Aclaraciones del profe al repasar el test (matices que pillan)</h2>
+<table>
+<tr><th>Pregunta</th><th>Respuesta correcta + matiz</th></tr>
+<tr><td>¿Cómo se define un Sprint?</td><td><strong>Contenedor de los eventos</strong> (planning, daily, review, retro). NO es "una fase" del proyecto — ese es el distractor.</td></tr>
+<tr><td>Evento que inspecciona el incremento y adapta el backlog con los interesados</td><td><strong>Sprint Review</strong>. El "refinamiento del backlog" NO es un evento Scrum como tal — pregunta trampa.</td></tr>
+<tr><td>¿Quién decide cuántos elementos del backlog entran al sprint?</td><td><strong>Los desarrolladores</strong> (hacen el planning poker y conocen su velocidad), no el Product Owner.</td></tr>
+<tr><td>Funciones del Scrum Master</td><td><strong>Asegura</strong> (no delega) la ejecución de los eventos. "Líder del equipo" solo en sentido organizacional, nunca técnico ni único.</td></tr>
+<tr><td>Revisión periódica del Product Backlog</td><td>Refinamiento "<strong>adecuado para el proyecto</strong>", agrupando a corto y largo plazo (no "propio del mercado").</td></tr>
+<tr><td>SDLC</td><td>"<strong>Conjunto de modelos</strong> para el desarrollo de software".</td></tr>
+<tr><td>Manifiesto ágil</td><td><strong>4 valores</strong> (filosofía) y <strong>12 principios</strong> — se preguntan por separado.</td></tr>
+<tr><td>Tradicional + ágil en una empresa</td><td>Pueden convivir "<strong>según el proyecto</strong> a desarrollar" (no "según el equipo").</td></tr>
+<tr><td>Planificación ágil vs tradicional</td><td>La ágil es <strong>iterativa</strong>; el distractor dice "la tradicional es incremental" (falso).</td></tr>
+<tr><td>Métricas</td><td>Tiempo de ciclo = de empezar a terminar una tarea · Velocidad = puntos completados por sprint · Burndown eje Y = trabajo pendiente (línea real por encima = retraso) · Burnup = trabajo completado acumulado.</td></tr>
+<tr><td>Otros fijos</td><td>Daily = 15 min · Equipo 3-9 · Roles = 3 · WIP = nº máx. de tareas en curso por columna (limitar WIP → mejorar flujo y ver cuellos de botella) · Roadmap = "mapa visual claro" · Éxito del proyecto = alcance + tiempo + coste · DevOps <strong>complementa</strong> a Agile · Lean: valor cliente/calidad, eliminar desperdicios, mejora continua, procesos <strong>pull</strong>, flexibilidad, relación a largo plazo con proveedores.</td></tr>
+</table>
+
+<h2>📋 Desglose de los casos prácticos (con puntuación por apartado)</h2>
+<div class="card">
+<p><strong>Caso 1 (tipo "plataforma sanitaria" — cambiará el sector):</strong></p>
+<ul>
+<li><strong>a) Metodología (0,5 pts)</strong>: elegir metodología o combinación y justificarla con los datos del enunciado (tamaño del equipo, incertidumbre, entregas incrementales). No hay respuesta única: Scrum+Lean, Scrum+Kanban… vale cualquiera bien razonada.</li>
+<li><strong>b) Historias de usuario (1,5 pts)</strong>: <strong>2 HU en total</strong> (no por usuario) con formato <em>"Como… quiero… para…"</em> + <strong>3 criterios de aceptación SMART por HU</strong> (6 en total, todos cuantificables: tiempos, %, nº de alternativas). Empieza explicando brevemente qué es INVEST y qué es SMART: puntúa.</li>
+</ul>
+<p><strong>Caso 2 (tipo "citas médicas con Kanban"):</strong></p>
+<ul>
+<li><strong>a) Tablero Kanban (1,25 pts)</strong>: <strong>mínimo 5 columnas</strong> — el profe avisa: nada de "por hacer / en curso / hecho" a secas. Describir columnas con texto y poner <code>(WIP n)</code> entre paréntesis en cada una ("serviría para que yo viese que sabéis lo que es WIP"). Explicar cómo se usa: flujo izq→dcha, si una columna llega al WIP se termina antes de empezar algo nuevo.</li>
+<li><strong>b) Replanificación MoSCoW (0,75 pts)</strong>: reordenar el backlog en Must/Should/Could/Won't con el requisito nuevo y justificar que el cambio lo pide el cliente vía Product Owner y entrega más valor. Se acepta tanto "sustituir" como "insertar" el requisito.</li>
+</ul>
+<p>Solución modelo completa en <code>Estudio/PreparacionProfe/Casos_Practicos_Gestion_Proyectos_DevOps.pdf</code> y el proyecto integrador e-commerce en <code>Clases/Ejemplo Proyecto repaso Temas_1-9.pdf</code>.</p>
+</div>
+
+<h2>🔝 Prioridades (dónde se juega la nota)</h2>
+<div class="card">
+<ul>
+<li><span class="red">Scrum + Lean + Kanban = "buena parte del examen"</span> <span class="ts">(Tema4 04:55)</span>: INVEST, SMART, MoSCoW, tablero + WIP, planning poker.</li>
+<li><strong>El Sprint</strong> = "lo más importante que tenemos" en Scrum <span class="ts">(Tema3 24:49)</span>.</li>
+<li>Las respuestas orientativas de las 30 cortas están hechas con IA y el profe <strong>no las revisó</strong>: contrastar con los apuntes; lo que vale son las preguntas.</li>
+<li>El profe prefiere que lo expliques <strong>con tus palabras</strong> y con un ejemplo propio, no definiciones memorizadas.</li>
+</ul>
+</div>
+
+<h2>📌 Plan de estudio recomendado</h2>
+<div class="card">
+<ul>
+<li>1) Hacer el test interactivo de 54 hasta el 100% (ojo a las 3 conflictivas de arriba).</li>
+<li>2) Preparar las <strong>30 respuestas cortas</strong> (~8 líneas + mini-ejemplo cada una), verificadas contra los PDFs de Teoría.</li>
+<li>3) Ensayar los 2 casos con un sector inventado (banca, logística, petróleo…): 2 HU + 6 criterios SMART y un tablero de 5-6 columnas con WIP en 20-25 min.</li>
+</ul>
+</div>
+
+<p class="sub" style="margin-top:24px">📌 Asignatura cerrada (14/14 clases transcritas). Esta guía incorpora la clase final de preparación del examen y el material oficial del profesor.</p>
+</body>
+</html>

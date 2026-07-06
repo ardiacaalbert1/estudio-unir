@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyectos ágiles — Simulacro ampliado</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;margin:0 0 2px;} h2{font-size:1.15rem;margin:30px 0 8px;border-bottom:2px solid var(--line);padding-bottom:5px;}
+  .sub{color:var(--mut);margin:0 0 6px;font-size:.95rem;}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .qh{font-weight:600;margin:0 0 9px;}
+  .opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;cursor:pointer;font:inherit;transition:.15s;}
+  .opt:hover{border-color:var(--blue);}
+  .opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);font-weight:600;}
+  .opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .opt:disabled{cursor:default;opacity:1;}
+  .exp{display:none;margin-top:10px;padding:10px 12px;border-left:3px solid var(--blue);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .exp.show{display:block;}
+  .reveal{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;}
+  .model{display:none;margin-top:10px;padding:11px 13px;border-left:3px solid var(--green);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .model.show{display:block;}
+  .model ul,.exp ul{margin:6px 0 2px;padding-left:18px;} .model li{margin:3px 0;}
+  code{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:.86em;}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:auto;font-size:.82rem;line-height:1.4;}
+  .tag{font-size:.78rem;color:var(--mut);font-weight:600;}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;margin:6px 0;} th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;}
+
+  h3{font-size:1.02rem;margin:22px 0 4px;color:var(--mut);}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .toc a{border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;color:var(--fg);font-size:.85rem;background:var(--card);}
+  .toc a:hover{border-color:var(--blue);}
+  .pair{margin:5px 0;} .pair b{color:var(--blue);}
+</style>
+</head>
+<body>
+<h1>Proyectos ágiles — Simulacro ampliado</h1>
+<p class="sub">Examen real: <strong>10 test + 4 cortas + 2 casos prácticos</strong> (contexto + 2 preguntas). Parte 1 = práctica · Parte 2 = <strong>banco oficial</strong> (100 preguntas, verificadas 10/10).</p>
+<div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
+
+<h2>Parte 1 · Simulacro de práctica</h2>
+<h2>📝 Tipo test</h2>
+
+<div class="q" data-c="2">
+<div class="qh">1. ¿Cuáles son los <strong>tres roles</strong> de Scrum?</div>
+<div class="opts">
+<button class="opt">Jefe de proyecto, analista y programador.</button>
+<button class="opt">Cliente, proveedor y usuario.</button>
+<button class="opt">Product Owner, Scrum Master y Equipo de Desarrollo (Developers).</button>
+<button class="opt">Sponsor, PMO y stakeholder.</button>
+</div>
+<div class="exp">Scrum define <strong>3 responsabilidades</strong>: <em>Product Owner</em> (maximiza el valor, gestiona el Product Backlog), <em>Scrum Master</em> (facilita, elimina impedimentos) y <em>Developers</em> (construyen el incremento).</div>
+</div>
+
+<div class="q" data-c="1">
+<div class="qh">2. Los <strong>tres artefactos</strong> de Scrum son:</div>
+<div class="opts">
+<button class="opt">Roadmap, Gantt y acta.</button>
+<button class="opt">Product Backlog, Sprint Backlog e Incremento.</button>
+<button class="opt">Épica, historia y tarea.</button>
+<button class="opt">Burndown, Burnup y velocidad.</button>
+</div>
+<div class="exp"><strong>Product Backlog</strong> (todo lo deseado, priorizado), <strong>Sprint Backlog</strong> (lo seleccionado para el sprint + plan) e <strong>Incremento</strong> (producto utilizable al final). Cada uno con su compromiso: Objetivo del Producto, Objetivo del Sprint y Definición de Hecho.</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">3. ¿Cuál de estos NO es un evento de Scrum?</div>
+<div class="opts">
+<button class="opt">Comité de dirección semanal.</button>
+<button class="opt">Sprint Planning.</button>
+<button class="opt">Daily Scrum.</button>
+<button class="opt">Sprint Retrospective.</button>
+</div>
+<div class="exp">Los eventos son: el <strong>Sprint</strong> (contenedor) y dentro Sprint Planning, Daily Scrum, Sprint Review y Sprint Retrospective. El "comité de dirección" no es un evento Scrum.</div>
+</div>
+
+<div class="q" data-c="3">
+<div class="qh">4. ¿Qué es el <strong>Sprint</strong>?</div>
+<div class="opts">
+<button class="opt">Una reunión diaria de 15 minutos.</button>
+<button class="opt">El documento de requisitos del proyecto.</button>
+<button class="opt">El rol que prioriza el backlog.</button>
+<button class="opt">Un periodo corto y de duración fija (timebox, ≤1 mes) en el que se produce un incremento terminado y potencialmente entregable.</button>
+</div>
+<div class="exp">El Sprint es el "corazón" de Scrum: <em>timebox</em> fijo (habitual 1–4 semanas) que contiene los demás eventos. El profe lo marca como "lo más importante que tenemos".</div>
+</div>
+
+<div class="q" data-c="1">
+<div class="qh">5. En Kanban, los <strong>límites WIP</strong> (Work In Progress) sirven para:</div>
+<div class="opts">
+<button class="opt">Fijar la fecha de entrega del proyecto.</button>
+<button class="opt">Limitar cuántas tareas pueden estar a la vez en una columna/etapa, evitando la sobrecarga y revelando cuellos de botella.</button>
+<button class="opt">Establecer el sueldo del equipo.</button>
+<button class="opt">Definir el número de sprints.</button>
+</div>
+<div class="exp">El WIP limita el trabajo en curso por columna. Al "tirar" (pull) solo cuando hay hueco, se reduce el multitasking, baja el <em>lead time</em> y se ven los cuellos de botella donde se acumulan tarjetas.</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">6. Diferencia entre gráfico <strong>Burndown</strong> y <strong>Burnup</strong>:</div>
+<div class="opts">
+<button class="opt">El Burndown muestra el trabajo restante descendiendo hacia 0; el Burnup muestra el trabajo completado subiendo y, además, una línea de <em>alcance</em> total.</button>
+<button class="opt">Son idénticos pero con distinto color.</button>
+<button class="opt">El Burndown mide presupuesto y el Burnup, personas.</button>
+<button class="opt">El Burnup solo se usa en Kanban.</button>
+</div>
+<div class="exp">Ventaja del <strong>Burnup</strong> (lo recalca el profe): al dibujar la línea de <em>alcance</em> aparte de la de trabajo hecho, se ve si los cambios de avance vienen de hacer más o de que el alcance ha crecido (<em>scope creep</em>).</div>
+</div>
+
+<div class="q" data-c="2">
+<div class="qh">7. En <strong>Lean</strong>, el concepto de <em>muda</em> se refiere a:</div>
+<div class="opts">
+<button class="opt">El líder del equipo.</button>
+<button class="opt">La reunión de planificación.</button>
+<button class="opt">El desperdicio: toda actividad que consume recursos sin aportar valor al cliente (hay que eliminarla).</button>
+<button class="opt">El tablero de tareas.</button>
+</div>
+<div class="exp">Lean busca <strong>eliminar el desperdicio</strong> (muda): sobreproducción, esperas, retrabajo, inventario, movimientos innecesarios… Principios: eliminar desperdicio, amplificar el aprendizaje, decidir lo más tarde posible, entregar rápido, dar autonomía al equipo, integrar calidad y ver el todo.</div>
+</div>
+
+<div class="q" data-c="3">
+<div class="qh">8. Una buena <strong>historia de usuario</strong> sigue el patrón:</div>
+<div class="opts">
+<button class="opt">"El sistema deberá cumplir el requisito RF-001…"</button>
+<button class="opt">Un diagrama de Gantt con fechas.</button>
+<button class="opt">Una lista de tareas técnicas del programador.</button>
+<button class="opt">"Como [rol], quiero [funcionalidad] para [beneficio]", con criterios de aceptación (criterios INVEST).</button>
+</div>
+<div class="exp">Formato "Como… quiero… para…", centrado en el valor para el usuario. Criterios <strong>INVEST</strong>: Independiente, Negociable, Valiosa, Estimable, Pequeña (Small) y Testeable.</div>
+</div>
+
+<div class="q" data-c="0">
+<div class="qh">9. La <strong>velocidad</strong> (velocity) del equipo es:</div>
+<div class="opts">
+<button class="opt">La cantidad de trabajo (p. ej. puntos de historia) que el equipo completa por sprint, usada para previsiones.</button>
+<button class="opt">La rapidez con la que se escribe código.</button>
+<button class="opt">El número de personas del equipo.</button>
+<button class="opt">El tiempo de cada Daily.</button>
+</div>
+<div class="exp">Es una métrica empírica: puntos completados por sprint. Sirve para <em>pronosticar</em> cuántos sprints hará falta, no para comparar equipos ni como objetivo de presión.</div>
+</div>
+
+<div class="q" data-c="1">
+<div class="qh">10. ¿Qué valora el <strong>Manifiesto Ágil</strong> por encima de su contrapartida?</div>
+<div class="opts">
+<button class="opt">Procesos y herramientas por encima de las personas.</button>
+<button class="opt">Individuos e interacciones, software funcionando, colaboración con el cliente y respuesta al cambio.</button>
+<button class="opt">Documentación exhaustiva por encima del software funcionando.</button>
+<button class="opt">Seguir el plan por encima de responder al cambio.</button>
+</div>
+<div class="exp">Los 4 valores: <em>individuos e interacciones</em> &gt; procesos/herramientas; <em>software funcionando</em> &gt; documentación extensa; <em>colaboración con el cliente</em> &gt; negociación contractual; <em>respuesta al cambio</em> &gt; seguir un plan. Sin despreciar lo de la derecha, se valora más lo de la izquierda.</div>
+</div>
+
+<h2>✍️ Preguntas cortas / desarrollo</h2>
+
+<div class="q">
+<div class="qh">1. Explica la diferencia entre <strong>Burndown</strong> y <strong>Burnup</strong> y qué aporta el segundo.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+Ambos muestran el progreso de un sprint o release. El <strong>Burndown</strong> dibuja el <em>trabajo restante</em> bajando hacia cero. El <strong>Burnup</strong> dibuja el <em>trabajo completado</em> subiendo y añade una segunda línea con el <em>alcance total</em>. Su ventaja: como separa "hecho" de "alcance", si la línea de alcance sube se detecta el <em>scope creep</em> (entró trabajo nuevo), algo que el burndown esconde porque mezcla ambos efectos en una sola curva.
+</div>
+</div>
+
+<div class="q">
+<div class="qh">2. Enumera y describe brevemente los <strong>3 roles, 3 artefactos</strong> y los eventos de Scrum.</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+<strong>Roles:</strong> Product Owner (gestiona y prioriza el Product Backlog, maximiza valor), Scrum Master (facilita el proceso, elimina impedimentos), Developers (crean el incremento).<br>
+<strong>Artefactos:</strong> Product Backlog (lista priorizada de todo lo deseado), Sprint Backlog (lo elegido para el sprint + plan), Incremento (resultado utilizable).<br>
+<strong>Eventos:</strong> el Sprint (contenedor) y dentro: Sprint Planning (qué y cómo), Daily Scrum (sincronización diaria de 15'), Sprint Review (inspección del incremento con interesados) y Retrospective (mejora del proceso).
+</div>
+</div>
+
+<div class="q">
+<div class="qh">3. <span class="tag">error clásico que marca el profe</span> ¿Por qué es clave la <strong>colaboración cliente–equipo</strong> en Scrum y qué pasa si falla?</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+Scrum es empírico: se inspecciona y adapta con feedback frecuente del cliente (en la Review y a través del PO). Si el cliente no colabora, el equipo prioriza y construye sobre suposiciones, el Product Backlog deja de reflejar el valor real y se entrega algo que no se ajusta a la necesidad. La <strong>no colaboración cliente–equipo</strong> es uno de los errores típicos de aplicación de Scrum: rompe el bucle inspección-adaptación y convierte el método ágil en un mini-cascada encubierto.
+</div>
+</div>
+
+<div class="q">
+<div class="qh">4. ¿Qué son los <strong>límites WIP</strong> en Kanban y qué problema resuelven?</div>
+<button class="reveal">Ver respuesta modelo</button>
+<div class="model">
+Son un tope al número de tarjetas que pueden estar simultáneamente en una columna/etapa. Resuelven la sobrecarga y el multitasking: al no poder "empujar" más trabajo del límite, el equipo termina lo empezado antes de empezar lo nuevo (sistema <em>pull</em>). Efectos: baja el <em>lead time</em>, mejora el flujo y los cuellos de botella se hacen visibles (la columna se llena justo antes de la etapa lenta).
+</div>
+</div>
+
+<h2>🛠️ Casos prácticos</h2>
+
+<div class="q">
+<div class="qh"><span class="tag">CASO 1 · contexto + 2 preguntas — estilo examen</span><br><em>Contexto:</em> un equipo de soporte recibe tareas, las analiza, las desarrolla, las prueba y las despliega. Quieren visualizar el flujo y dejar de empezar más de lo que terminan.<br><strong>(a)</strong> Diseña un tablero <strong>Kanban de 5 columnas</strong>. <strong>(b)</strong> ¿Dónde y por qué pondrías límites WIP?</div>
+<button class="reveal">Ver solución modelo</button>
+<div class="model">
+<strong>(a) Tablero de 5 columnas</strong> (con WIP entre paréntesis):
+<table>
+<tr><th>Por hacer</th><th>En análisis (3)</th><th>En desarrollo (3)</th><th>En pruebas (2)</th><th>Hecho</th></tr>
+<tr><td>backlog priorizado</td><td>refinando</td><td>codificando</td><td>QA/validación</td><td>desplegado</td></tr>
+</table>
+Conviene desdoblar las columnas de trabajo activo en "haciendo / hecho" (p. ej. <em>En desarrollo: en curso | listo</em>) para ver lo que espera a la siguiente etapa.<br>
+<strong>(b) Límites WIP</strong> en las columnas de trabajo activo (análisis, desarrollo, pruebas), <em>no</em> en "Por hacer" ni "Hecho". Motivo: forzar el sistema <em>pull</em> (solo se tira nueva tarea si hay hueco), reducir el multitasking y revelar el cuello de botella: si "En pruebas (2)" se llena y bloquea a desarrollo, el límite ha hecho visible que QA es el cuello de botella.
+</div>
+</div>
+
+<div class="q">
+<div class="qh"><span class="tag">CASO 2 · contexto + 2 preguntas — estilo examen</span><br><em>Contexto:</em> arranca un nuevo producto. El PO tiene un Product Backlog con historias estimadas; el equipo tiene una velocidad histórica de ~20 puntos/sprint de 2 semanas.<br><strong>(a)</strong> Describe cómo pasarías del Product Backlog al Sprint Backlog en la Sprint Planning. <strong>(b)</strong> ¿Qué es la "Definición de Hecho" y por qué importa?</div>
+<button class="reveal">Ver solución modelo</button>
+<div class="model">
+<strong>(a) Sprint Planning:</strong>
+<ul>
+<li>El PO presenta las historias <em>priorizadas</em> y se acuerda un <strong>Objetivo del Sprint</strong>.</li>
+<li>El equipo toma de arriba del Product Backlog las historias que caben en su capacidad (~20 puntos), no más: esas pasan al <strong>Sprint Backlog</strong>.</li>
+<li>El equipo descompone cada historia en <em>tareas</em> y planifica el "cómo". El Sprint Backlog = historias seleccionadas + plan + objetivo.</li>
+<li>Compromiso realista basado en velocidad, no en deseos del cliente.</li>
+</ul>
+<strong>(b) Definición de Hecho (DoD):</strong> criterios de calidad que toda historia debe cumplir para considerarse "terminada" (p. ej. código revisado, pruebas pasando, integrado, documentado, desplegable). Importa porque crea una noción <em>compartida</em> y objetiva de "hecho", evita el trabajo medio terminado que se arrastra entre sprints y garantiza que el incremento sea realmente utilizable.
+</div>
+</div>
+
+<h2 id="banco">🎯 Parte 2 · Banco oficial de la plataforma (100 preguntas)</h2>
+<p class="sub">Preguntas reales de los Test Tema 1–10 del campus, con la respuesta correcta verificada (todos los intentos al 100%). El orden es el del PDF.</p>
+<div class="toc"><a href="#bt1">T1</a><a href="#bt2">T2</a><a href="#bt3">T3</a><a href="#bt4">T4</a><a href="#bt5">T5</a><a href="#bt6">T6</a><a href="#bt7">T7</a><a href="#bt8">T8</a><a href="#bt9">T9</a><a href="#bt10">T10</a></div>
+<h3 id="bt1">Tema 1 · Introducción (tradicional vs ágil)</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P1 · banco oficial</span><br>¿Cuáles son los objetivos de la gestión de proyectos?</div>
+<div class="opts"><button class="opt">Análisis de requisitos, diseño de la arquitectura, implementación del sistema, evaluación y pruebas del resultado final.</button><button class="opt">Beneficiar a las empresas siempre sobre la fase de una metodología tradicional.</button><button class="opt">Entregar al cliente siempre un producto viable y cumpliendo los requisitos, sea cual sea la viabilidad del trabajo.</button><button class="opt">Análisis de viabilidad del proyecto, planificación del trabajo, ejecución del proyecto, seguimiento y control del trabajo, cierre del proyecto.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P2 · banco oficial</span><br>En la gestión de proyectos en la realidad, ¿cuál de las razones siguientes no se puede asegurar?</div>
+<div class="opts"><button class="opt">Los equipos de desarrollo descubren la forma más efectiva de ejecutar el trabajo cuando se realiza la ejecución.</button><button class="opt">Los clientes o usuarios no saben lo que quieren hasta que no ven el software funcionando.</button><button class="opt">Durante el desarrollo del proyecto los requisitos siempre serán los mismos.</button><button class="opt">Cuando se desarrolla el proyecto pueden surgir cambios y hay que adaptarse.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P3 · banco oficial</span><br>Una de las razones del éxito del enfoque ágil es:</div>
+<div class="opts"><button class="opt">El coste mínimo del trabajo del equipo de desarrollo.</button><button class="opt">La mejora en la implementación de un proyecto tradicional.</button><button class="opt">El hecho de tener una comunicación transparente y más abierta entre los equipos.</button><button class="opt">La buena documentación generada.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T1·P4 · banco oficial</span><br>¿En qué tipo de proyectos se recomienda el uso de la metodología ágil?</div>
+<div class="opts"><button class="opt">En los que los requisitos no varíen a lo largo del proyecto.</button><button class="opt">En los que los requisitos y funcionalidades no estén del todo definidos desde el inicio y puedan tener cambios.</button><button class="opt">En los que las funcionalidades varían en un nivel determinado desde el principio.</button><button class="opt">En los que los clientes lo solicitan.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P5 · banco oficial</span><br>En la relación entre el desarrollo de software ágil y DevOps:</div>
+<div class="opts"><button class="opt">Solo puede hacerse uso del agilismo en DevOps cuando se conocen los cambios.</button><button class="opt">En realidad no se deberían usar a la vez, o bien uno u otro paradigma.</button><button class="opt">DevOps le da la posibilidad al desarrollo software a la gestión continua de los cambios.</button><button class="opt">El movimiento DevOps apuesta por ciclos de desarrollo cortos con lanzamientos confiables, alineado con los objetivos de la agilidad.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P6 · banco oficial</span><br>¿Qué tipo de enfoque se centra en un avance iterativo e incremental?</div>
+<div class="opts"><button class="opt">El enfoque ágil.</button><button class="opt">El enfoque tradicional.</button><button class="opt">Una metodología mixta entre enfoque ágil y tradicional.</button><button class="opt">Se puede usar cualquier tipo de enfoque, pues no depende de esto.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P7 · banco oficial</span><br>El número de personas trabajando en un equipo ágil:</div>
+<div class="opts"><button class="opt">Siempre es variable y sin un límite, dependiendo del departamento.</button><button class="opt">Se suele trabajar con equipos pequeños, de entre una y cinco personas, nunca más.</button><button class="opt">Se manejan equipos de trabajos pequeños, normalmente no más de quince personas, dependiendo del proyecto.</button><button class="opt">Se puede usar cualquier tipo de enfoque, pues no depende de esto.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P8 · banco oficial</span><br>La principal diferencia entre el agilismo y DevOps:</div>
+<div class="opts"><button class="opt">Se debe a que no son para nada compatibles entre ellos.</button><button class="opt">Es porque DevOps sólo puede usarse con metodologías tradicionales.</button><button class="opt">Radica en que el agilismo trabaja con equipos reducidos, y DevOps siempre debe tener equipos amplios por la complejidad.</button><button class="opt">Radica en los equipos de trabajo, porque en el agilismo los miembros se adaptan a cambios en el desarrollo y se apoyan, y en DevOps se unen equipo de desarrollo y operaciones.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P9 · banco oficial</span><br>¿Cuándo se obtiene un producto viable mínimo?</div>
+<div class="opts"><button class="opt">Solo cuando se aplican metodologías tradicionales junto con DevOps.</button><button class="opt">Solo cuando se aplican metodologías ágiles junto con DevOps.</button><button class="opt">Cuando se aplican metodologías ágiles, en cada iteración y en plazos cortos.</button><button class="opt">Cuando se desarrolla un proyecto mediante la idea de DevOps se asegura.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P10 · banco oficial</span><br>En DevOps se incluyen una serie de principios o prácticas en las fases de desarrollo, ¿cuáles son algunos de estos?</div>
+<div class="opts"><button class="opt">Desarrollo continuo, integración continua, entrega continua, supervisión continua.</button><button class="opt">Análisis de requisitos, diseño, implementación y pruebas.</button><button class="opt">Los mismos principios que los que tiene el enfoque ágil.</button><button class="opt">Hacer equipos pequeños, reducir costes, no realizar cambios continuos y trabajar con metodología tradicional.</button></div>
+</div>
+<h3 id="bt2">Tema 2 · Metodologías ágiles</h3>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P1 · banco oficial</span><br>El Manifiesto Ágil tiene como objetivo principal:</div>
+<div class="opts"><button class="opt">Realizar un análisis de un proyecto previo al desarrollo.</button><button class="opt">Mejorar la aplicación de la metodología tradicional mediante una herramienta de prueba y error.</button><button class="opt">Establecer un conjunto de valores y principios como guía a seguir para un desarrollo de calidad, rápido y adaptado a requisitos cambiantes.</button><button class="opt">Estudiar la viabilidad de un proyecto desde su inicio hasta el final, y sin considerar cambios en tiempo real.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P2 · banco oficial</span><br>¿Cuál de estos no es uno de los valores del Manifiesto Ágil?</div>
+<div class="opts"><button class="opt">Valorar más a los individuos e interacciones sobre procesos y herramientas.</button><button class="opt">Valorar más la negociación de un contrato con el cliente sobre la colaboración con dicho cliente o usuario final.</button><button class="opt">Valorar más el producto entregable que funciona sobre documentación exhaustiva.</button><button class="opt">Valorar más la respuesta a cambios sobre seguir un plan estricto.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P3 · banco oficial</span><br>Entre los siguientes, ¿cuál no cumple con los principios del Manifiesto Ágil?</div>
+<div class="opts"><button class="opt">Los proyectos se desarrollan con un de individuos motivados.</button><button class="opt">El método más eficiente y efectivo para comunicar información al equipo de desarrollo es el conversar entre ellos.</button><button class="opt">El producto final y funcionando es la medida principal de progreso.</button><button class="opt">Los procesos ágiles no pueden asegurar el desarrollo sostenible.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P4 · banco oficial</span><br>¿Debe una empresa hacer uso de metodología tradicional y ágil al mismo tiempo?</div>
+<div class="opts"><button class="opt">En ningún caso se pueden aplicar ambas metodologías en la misma empresa.</button><button class="opt">Es difícil que un equipo de desarrollo trabaje en una metodología tradicional y que luego pase a ágil.</button><button class="opt">Puede haber empresas que usen ambas metodologías, según el proyecto a desarrollar.</button><button class="opt">Puede haber empresas que usen ambas metodologías, según el equipo de desarrollo y sus habilidades.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T2·P5 · banco oficial</span><br>¿Cuáles son los principios de Scrum?</div>
+<div class="opts"><button class="opt">La transparencia en el avance y comunicación, la inspección con revisiones a corto plazo, y la adaptación cuando surge nueva información.</button><button class="opt">La transparencia en la comunicación, las revisiones cada varias iteraciones, y la adaptación a los cambios que considere el equipo de desarrollo.</button><button class="opt">El obtener resultados lo más rápido posible y adaptándose a cambios, ya sea mediante la aplicación de metodología tradicional o ágil.</button><button class="opt">Los indicados en el Manifiesto Ágil salvo que Scrum tiene su propio esquema de trabajo.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P6 · banco oficial</span><br>Lean es:</div>
+<div class="opts"><button class="opt">Un enfoque ágil enfocado a ser aplicado en fábricas de producción de sistemas físicos.</button><button class="opt">Una metodología ágil que indica paso por paso cómo se puede alcanzar el valor esperado por el cliente.</button><button class="opt">Una síntesis entre un conjunto de principios y un pensamiento para obtener productos diferentes y basados en la metodología ágil.</button><button class="opt">Una metodología que, mediante una serie de pasos a aplicar, da valor al cliente, realiza mejora continua y ayuda a eliminar desperdicio.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P7 · banco oficial</span><br>Kanban no es:</div>
+<div class="opts"><button class="opt">Una metodología que define un conjunto de buenas prácticas usando un desarrollo incremental, con historias de usuario y tareas.</button><button class="opt">Una herramienta para mostrar las tareas que se van desarrollando en un proyecto.</button><button class="opt">Tanto una metodología como una herramienta que permite usar un conjunto de buenas prácticas haciendo uso de un tablero para indicar la evolución del proyecto.</button><button class="opt">Tanto una metodología como una herramienta que automáticamente va mostrando la evolución del proyecto definido.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T2·P8 · banco oficial</span><br>¿Se pueden combinar las metodologías ágiles?</div>
+<div class="opts"><button class="opt">Varios enfoques o metodologías ágiles se pueden usar en conjunto, por ejemplo, Lean y Scrum, junto con Kanban.</button><button class="opt">Siempre que sean enfoques que con la misma filosofía y que no ralenticen el proyecto.</button><button class="opt">La unión de metodologías y enfoques ágiles no aporta valor al proyecto.</button><button class="opt">Solo se podrían combinar en caso de que el cliente lo acepte, pues puede hacer que el proyecto se ralentice.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P9 · banco oficial</span><br>Entre las ventajas de unir diferentes metodologías y enfoque ágiles, se encuentran las siguientes:</div>
+<div class="opts"><button class="opt">Se propone minimizar la documentación, maximizar resultados, no se pueden dar cambios, y hay autogestión de personas y trabajo.</button><button class="opt">Se propone minimizar la documentación, maximizar resultados, se pueden dar cambios, y hay autogestión de personas y trabajo.</button><button class="opt">Se propone maximizar la documentación, maximizar resultados, no se pueden dar cambios, y hay autogestión de personas y trabajo.</button><button class="opt">Se propone minimizar la documentación, maximizar resultados, no se pueden dar cambios, y hay un jefe de proyecto.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P10 · banco oficial</span><br>¿Cuándo se aplica frameworks de escalado ágil?</div>
+<div class="opts"><button class="opt">Cuando existen empresas pequeñas que no pueden aplicar los enfoques ágiles comunes.</button><button class="opt">Cuando existen empresas grandes que no pueden aplicar las metodologías tradicionales.</button><button class="opt">Cuando en un proyecto de grandes dimensiones no se pueden producir cambios en los requisitos.</button><button class="opt">Cuando en un proyecto de grandes dimensiones no se pueden resolver ciertos aspectos con los enfoques ágiles, como la predictibilidad, la comercialización, la calidad y la visibilidad.</button></div>
+</div>
+<h3 id="bt3">Tema 3 · Marco Scrum</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P1 · banco oficial</span><br>¿Cómo se origina Scrum?</div>
+<div class="opts"><button class="opt">Scrum se origina tras el poco éxito de Lean, en el que se apoya para poder aplicar la metodología ágil.</button><button class="opt">Se origina como marco de trabajo ágil fundamental con aprendizaje empírico y autogestión, y se basa en el pensamiento Lean, centrándose en lo esencial.</button><button class="opt">Surge después de los errores continuos en los que incurrían los proyectos desarrollados con metodología tradicional.</button><button class="opt">Scrum se origina por la necesidad de cubrir algunos principios que no estaban incluidos en el Manifiesto Ágil.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P2 · banco oficial</span><br>¿Qué tipo de errores se producen en algunas organizaciones al aplicar Scrum?</div>
+<div class="opts"><button class="opt">No se mantiene colaboración cliente y equipo de desarrollo, hay falta de liderazgo, no hay empatía, el equipo no es maduro.</button><button class="opt">No se establece un liderazgo en el equipo de desarrollo con un jefe de proyecto.</button><button class="opt">La implementación no se basa en el diseño que se genera durante el proceso de desarrollo.</button><button class="opt">No hay una evaluación de producto final por parte del jefe de proyecto líder.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P3 · banco oficial</span><br>En LaGuía de Scrum 2020 se han realizado algunos cambios respecto a la de 2017, entre los que se incluyen estos aspectos:</div>
+<div class="opts"><button class="opt">Ya no se habla de Scrum Master sino de Scrum Lider.</button><button class="opt">Ahora se habla de autoorganización y equipo se centra en el cliente.</button><button class="opt">Se ha reducido la guía y se ha añadido un cambio de filosofía, y el Sprint se centra en el Por qué.</button><button class="opt">Se ha hecho la guía menos prescriptiva, se habla de autogestión en vez de autoorganización, y en la planificación del Sprint se añade el por qué, además de qué y cómo.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P4 · banco oficial</span><br>¿Cuáles son los pilares empíricos de Scrum?</div>
+<div class="opts"><button class="opt">Transparencia, inspección y adaptación.</button><button class="opt">Transparencia, inspección e interoperabilidad.</button><button class="opt">Transparencia, velocidad e interoperabilidad.</button><button class="opt">Transparencia, inspección y gestión de análisis.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T3·P5 · banco oficial</span><br>¿Cuáles son los valores de Scrum?</div>
+<div class="opts"><button class="opt">Compromiso, visibilidad, sinceridad, respeto y rapidez.</button><button class="opt">Compromiso, enfoque, sinceridad, respeto y rapidez.</button><button class="opt">Compromiso, enfoque, sinceridad, respeto y coraje.</button><button class="opt">Compromiso, enfoque, visibilidad, respeto y coraje.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P6 · banco oficial</span><br>Cuando se habla de los roles de Scrum, se considera:</div>
+<div class="opts"><button class="opt">El Product Owner, el Scrum Master y el equipo DevOps.</button><button class="opt">Uno de los cambios fundamentales en la Guía de Scrum 2020 ha sido que se sustituye roles directamente por responsabilidades.</button><button class="opt">Uno de los cambios fundamentales en la Guía de Scrum 2020 ha sido que se sustituye responsabilidades y se habla de roles.</button><button class="opt">Se habla de responsabilidades, y serían el Product Owner, el Scrum Lider y los Desarrolladores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P7 · banco oficial</span><br>Entre las funciones principales del Scrum Master, se encuentran la siguientes:</div>
+<div class="opts"><button class="opt">Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el líder del equipo Scrum, gestionar los problemas y delegar el aseguramiento de los eventos.</button><button class="opt">Impulsar la adopción de agilidad, autoorganización, asignar tareas, ser el líder único del equipo Scrum, gestionar los problemas y asegurar la ejecución de los eventos.</button><button class="opt">Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el único líder del equipo Scrum, gestionar los problemas y delegar el aseguramiento de los eventos.</button><button class="opt">Impulsar la adopción de agilidad, autogestión, multifuncionalidad, ser el líder del equipo Scrum, gestionar los problemas y asegurar la ejecución de los eventos.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P8 · banco oficial</span><br>¿Qué es un Sprint en Scrum?</div>
+<div class="opts"><button class="opt">El Sprint es un contenedor para los diferentes eventos del proyecto, como la planificación, Scrum diario, revisión del propio Sprint y retrospectiva de este.</button><button class="opt">El Sprint es un artefacto de Scrum que lleva información de las reuniones con el cliente para los cambios necesarios.</button><button class="opt">El Sprint es la fase en la que se lleva a cabo la iteración para establecer lo que el Product Backlog indica, y no puede tener cambios durante dicha iteración.</button><button class="opt">El Sprint es la meta a la que llega el resultado del proyecto tras las iteraciones finales.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P9 · banco oficial</span><br>¿Qué son los artefactos en Scrum y cuáles son?</div>
+<div class="opts"><button class="opt">Son la guía de autogestión del desarrollo, y anota los requisitos del proyecto que se van a implementar. Se tienen el Product Backlog, el Sprint Backlog y la Retrospectiva.</button><button class="opt">Son los elementos que forman la base de la productividad y calidad del proyecto. Se tienen el Product Backlog, el Sprint Backlog y el Incremento.</button><button class="opt">Son los elementos funcionales que establecen los intereses de los clientes. Se tienen el Product Backlog, el Sprint y la Retrospectiva.</button><button class="opt">Son un conjunto de componentes del proyecto que deben ser asignados a cada miembro del equipo de desarrollo. Se tienen el Product Backlog, el Sprint y la Iteración.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P10 · banco oficial</span><br>Entre los compromisos del Product Backlog, se tiene:</div>
+<div class="opts"><button class="opt">Desarrollo de entrega continua y seguimiento de iteraciones.</button><button class="opt">Análisis y gestión de los requisitos en cada iteración.</button><button class="opt">Describe un estado futuro del producto como objetivo a largo plazo y que, si no se cumple, se puede cambiar el requisito correspondiente.</button><button class="opt">Describe un estado futuro del producto como objetivo a largo plazo y que se debe cumplir antes de continuar.</button></div>
+</div>
+<h3 id="bt4">Tema 4 · Lean y Kanban</h3>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P1 · banco oficial</span><br>Lean es una filosofía que consiste en:</div>
+<div class="opts"><button class="opt">Que todo negocio debe maximizar el valor dado al cliente y reducir las incidencias o despilfarros.</button><button class="opt">Que toda organización debe minimizar el valor dado al cliente y garantizar que no haya incidencias o despilfarros.</button><button class="opt">Que todo negocio debe implicar al cliente, cubrir sus necesidades y aplicar la metodología tradicional o ágil que sea necesaria.</button><button class="opt">Que todo negocio debe maximizar el valor que se le da al cliente, cubrir sus necesidades y aplicar la metodología tradicional o ágil que sea necesaria.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P2 · banco oficial</span><br>¿Cuál es la diferencia entre Lean Management y Lean Manufacturing?</div>
+<div class="opts"><button class="opt">Lean Management se refiere a la aplicación de las técnicas de producción y Lean Manufacturing a la gestión de implantar Lean.</button><button class="opt">Lean Management se refiere a gestión de implantar Lean y Lean Manufacturing a la aplicación de las técnicas de implementación de los sistemas en caliente.</button><button class="opt">Lean Management se refiere a gestión de implantar Lean y Lean Manufacturing a la aplicación de las técnicas de producción.</button><button class="opt">Lean Management se refiere a gestión de evaluar Lean y Lean Manufacturing a la aplicación de las técnicas de producción.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P3 · banco oficial</span><br>Entre los aspectos que suponen despilfarros o desperdicios en Lean, algunos son los siguientes:</div>
+<div class="opts"><button class="opt">Sobreproducción, porque se abarquen más requisitos de lo que se puede desarrollar, y transporte porque la logística sea complicada.</button><button class="opt">Exceso de inventario, porque se generan productos que no llegan a usarse por los clientes, y esperas porque se requiera de respuestas o acciones de otros miembros del equipo para continuar.</button><button class="opt">Costes innecesarios, por tener que trasladarse a departamentos o buscar continuamente herramientas, y esperas porque se requiera de respuestas o acciones de otros miembros del equipo para continuar.</button><button class="opt">Defectos de producción, por no tener en consideración la opinión del cliente y generar productos defectuosos, y desaprovechamiento del talento por no escuchar esas ideas buenas del cliente.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P4 · banco oficial</span><br>¿Cuáles son los principios de Lean?</div>
+<div class="opts"><button class="opt">Valor de cliente y calidad, eliminar desperdicios, mejora integra, procesos push, flexibilidad, y relación a largo plazo con proveedores.</button><button class="opt">Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos push, flexibilidad, y relación a largo plazo con proveedores.</button><button class="opt">Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos pull, flexibilidad, y relación a largo plazo con proveedores.</button><button class="opt">Valor de cliente y calidad, eliminar desperdicios, mejora continua, procesos pull, facilidad, y relación a largo plazo con proveedores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P5 · banco oficial</span><br>Imaginemos que una empresa quiere implantar Lean en su modelo de trabajo, ¿qué aspectos debería tener en cuenta?</div>
+<div class="opts"><button class="opt">Compromiso de la dirección y los clientes, darles valor a los requisitos pedidos por el cliente, y trabajo continuo.</button><button class="opt">Compromiso de la dirección, localizar el valor del producto, implicar a la gente al trabajo de coste mínimo, y pensamiento de procesos.</button><button class="opt">Compromiso de la dirección, localizar el valor de la colaboración entre la dirección y el equipo de desarrollo, implicar a la gente al trabajo real, y pensamiento de procesos.</button><button class="opt">Compromiso de la dirección, localizar el valor del cliente y la calidad, implicar a la gente al trabajo real, y pensamiento de procesos.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P6 · banco oficial</span><br>¿Puede ser un Kanban utilizado sobre una herramienta digital?</div>
+<div class="opts"><button class="opt">Siempre debe ser sobre tablero físico.</button><button class="opt">Sí, en el caso que participen pocas personas, para llevar mejor control.</button><button class="opt">Solo en caso de usar herramientas con licencia para usar Kanban.</button><button class="opt">Sí, se puede hacer tanto físico como digital.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P7 · banco oficial</span><br>Los principios en los que se fundamenta Kanban incluyen:</div>
+<div class="opts"><button class="opt">Objetivos de cambios incrementales, cada miembro es líder, mejora continua y colaborativa, proceso claro, virtualizar y gestionar el flujo de trabajo.</button><button class="opt">Objetivos de cambios iterativos, cada miembro tiene un jefe como líder, mejora continua y colaborativa, proceso claro, virtualizar y gestionar los requisitos dados por el cliente.</button><button class="opt">Objetivos de cambios incrementales, cada miembro es líder, mejora colaborativa, proceso claro, virtualizar y gestionar los requisitos dados por el cliente.</button><button class="opt">Objetivos de cambios incrementales, cada miembro tiene un jefe como líder, mejora continua y colaborativa, proceso claro, virtualizar y gestionar el flujo de trabajo.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P8 · banco oficial</span><br>¿Qué aspectos debe considerar un tablero Kanban con un buen diseño?</div>
+<div class="opts"><button class="opt">Que indique las diferentes tareas que se deben realizar, que use bastantes colores para identificarlas y que se ponga información de los tiempos de ejecución de las tareas.</button><button class="opt">Se pueden usar colores, pero no de manera excesiva, pues puede dar lugar a confusión.</button><button class="opt">Un buen diseño puede ser estructurado, con la información que sea fácil de leer, visible, entendible, que no use excesiva cantidad de colores y que se identifique bien las asignaciones a miembros. (No hay una regla única para un buen diseño, sobretodo se alcanza con la práctica, pero sí que se puede considerar evitar algunos aspectos como los indicados).</button><button class="opt">Identificar claramente quién hace cada tarea y quién es el responsable de cada miembro del equipo de desarrollo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P9 · banco oficial</span><br>¿Cuál de las siguientes opciones puede ser la mejor para reflejar quién está haciendo una tarea en Kanban?</div>
+<div class="opts"><button class="opt">Asignar la tarea al Scrum Master.</button><button class="opt">Indicarlo con un número en la tarjeta.</button><button class="opt">Indicarlo al Product Owner, y que decida.</button><button class="opt">Asignar la tarea al facilitador.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P10 · banco oficial</span><br>En relación con el uso de kanban en un proyecto, ¿cuál de estas opciones incluye buenas prácticas?</div>
+<div class="opts"><button class="opt">Una tarea solo se asigna a una persona, las tareas se mueven hacia la derecha, pocas tareas en cada columna y no más de tres o cuatro personas asignadas a la vez a una tarea.</button><button class="opt">No se pueden producir cambios dentro de un Timebox una vez comience una iteración, aunque las tareas se pueden distribuir en tantas personas del equipo como miembros haya trabajado en el proyecto, para agilizar el proceso.</button><button class="opt">Debe haber pocas tareas asignadas por persona simultáneamente, y las tareas pueden ir hacia la derecha, o retroceder si ocurren errores o inconvenientes.</button><button class="opt">Una tarea solo se asigna a una persona en principio, si esta no puede llevarla a cabo entonces se coge al siguiente en la lista y se le asigna, mientras todo se queda bloqueado.</button></div>
+</div>
+<h3 id="bt5">Tema 5 · Visión y requisitos</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P1 · banco oficial</span><br>Cuando hablamos de gestión ágil de proyectos, hay que plantear una visión que considera una serie de aspectos, entre los que se encuentran:</div>
+<div class="opts"><button class="opt">Se trata de una visión relativa a cada uno de los miembros de equipo, que analiza cada detalle y va argumentando por qué considera que hay que hacer un cambio.</button><button class="opt">Se habla de una visión unificada del proyecto, en la que se analiza y comprende el por qué se lleva a cabo cada tarea, priorizando los requisitos, y por qué se aporta valor de negocio.</button><button class="opt">Es una visión única, en la que se analiza y comprende por qué el cliente siempre tiene la razón en sus propuestas de cambio.</button><button class="opt">Se trata de una visión clara, concreta y muy concisa, por la que todo debe queda claro en la reunión inicial con el cliente.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P2 · banco oficial</span><br>¿A qué nos referimos con el Product Box?</div>
+<div class="opts"><button class="opt">Es el diseño técnico que se establece para un producto.</button><button class="opt">Se trata del desglose de los costes que tiene desarrollar el producto en una caja.</button><button class="opt">Es una técnica que se usar para transmitir la visión unificada del proyecto.</button><button class="opt">Es la pila de requisitos, que debe venir priorizada.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P3 · banco oficial</span><br>Las historias de usuario se usan:</div>
+<div class="opts"><button class="opt">Tanto en proyectos con enfoque ágil como tradicional.</button><button class="opt">Solo en proyectos de enfoque tradicional, cuando se pueden conocer las funcionalidades del sistema a priori.</button><button class="opt">En marcos de metodologías ágiles como Scrum y Kanban.</button><button class="opt">Para que los clientes sepan cuáles van a ser los requisitos que el equipo de desarrollo ha decidido implementar.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P4 · banco oficial</span><br>¿Qué son las Personas cuando trabajamos en la gestión de proyectos?</div>
+<div class="opts"><button class="opt">Son los usuarios finales que tomarán las decisiones de qué se debe implementar.</button><button class="opt">Es un grupo de usuarios del producto final, también considerados como un arquetipo.</button><button class="opt">Son los patrocinadores del proyecto y, por tanto, hay que considerarlos como los propietarios.</button><button class="opt">Son un conjunto de personas que establecen las decisiones de la priorización de requisitos.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P5 · banco oficial</span><br>Sobre los criterios de aceptación de un requisito:</div>
+<div class="opts"><button class="opt">Es preferible el no tener que indicarlos, y poder desarrollar directamente un documento de análisis y diseño de requisitos funcionales.</button><button class="opt">Se deben considerar en base a unos planes de validación y pruebas del sistema.</button><button class="opt">Deben tener una respuesta directa y clara sobre si están bien cubiertos o no.</button><button class="opt">Se deben poder analizar de forma subjetiva por parte del responsable de negocio.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P6 · banco oficial</span><br>¿Cuáles son los niveles de priorización del modelo Kano?</div>
+<div class="opts"><button class="opt">Elementos lineales, básicos, seductores.</button><button class="opt">Elementos requeridos, básicos, atractivos, además de poder considerar neutros e inversos.</button><button class="opt">Elementos requeridos, básicos, neutros.</button><button class="opt">Elementos requeridos, básicos, atractivos, además de poder considerar anversos y reversos.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T5·P7 · banco oficial</span><br>Cuando se trabaja en las historias de usuario, pueden surgir las épicas, ¿qué son exactamente?</div>
+<div class="opts"><button class="opt">Son historias de usuario demasiado grandes.</button><button class="opt">Son historias de usuario relacionadas con un conjunto de historias más pequeñas y juntas tienen más fuerza en el valor de negocio.</button><button class="opt">Son requisitos que no se escriben como historias de usuario.</button><button class="opt">Son historias de usuario que suponen un atractivo muy interesante para el proyecto.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P8 · banco oficial</span><br>A la hora de priorizar las historias de usuarios, se pueden emplear una serie de técnicas, tales como:</div>
+<div class="opts"><button class="opt">La técnica de Moscú, Kamper y el árbol caído.</button><button class="opt">La técnica de MoSCow, Kano y priorización por árboles.</button><button class="opt">La técnica de MoSCoW, Kamper y priorización por ranking.</button><button class="opt">La técnica de MoSCow, Kano y priorización por ranking.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P9 · banco oficial</span><br>En caso de que aparezca un nuevo requisito que sea más prioritario que los ya registrados en el Backlog durante el transcurso del proyecto, ¿cómo debe considerarse?</div>
+<div class="opts"><button class="opt">Hay que incluirlo al final de la pila de requisitos, y así poder finalizar antes los que ya están registrados.</button><button class="opt">No se debería incluir en ningún momento, ya que el proyecto ya está iniciado.</button><button class="opt">Se deberá incluir en el Backlog como primer requisito para ser ejecutado de manera inmediata.</button><button class="opt">Hay que incluirlo en el Backlog como los responsables de negocio puedan determinar, en base a la prioridad y las dependencias técnicas.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P10 · banco oficial</span><br>Cuando ya se pone en marcha el Product Backlog, se debe realizar una revisión periódica, en la que:</div>
+<div class="opts"><button class="opt">Se adapta el Backlog en base a las necesidades de los desarrolladores.</button><button class="opt">Se refina el Backlog en base a las necesidades de los clientes, que en todo momento puede indicar qué quiere y qué no, independientemente de los valores de negocio y el coste.</button><button class="opt">Se adapta el Backlog mediante un refinamiento adecuado para el proyecto, agrupando elementos a corto y largo plazo.</button><button class="opt">Se adapta el Backlog mediante un refinamiento propio de lo que el mercado considere, agrupando elementos a corto y largo plazo.</button></div>
+</div>
+<h3 id="bt6">Tema 6 · Estimación y planificación</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P1 · banco oficial</span><br>La estimación y la planificación ágil:</div>
+<div class="opts"><button class="opt">Son exactamente lo mismo, sólo que con nombres diferentes.</button><button class="opt">La estimación sirve para estimar las horas y el coste del desarrollo, y la planificación para ver quién realizará las tareas.</button><button class="opt">Son dos conceptos que no están nada relacionados.</button><button class="opt">La estimación permite asignar puntos de historia como medidas de esfuerzo relativo, y la planificación plantea iteraciones basadas en los objetivos, de manera iterativa e incremental.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T6·P2 · banco oficial</span><br>En un punto de historia, el número de horas asignadas:</div>
+<div class="opts"><button class="opt">Siempre es el mismo para todos los proyectos relacionados.</button><button class="opt">Puede ser distinto en cada proyecto.</button><button class="opt">Nunca puede relacionarse un punto de historia con tiempo en horas.</button><button class="opt">Siempre es el mismo cuando son proyectos de una misma empresa.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P3 · banco oficial</span><br>¿Quién es el responsable de llevar a cabo la estimación ágil de requisitos?</div>
+<div class="opts"><button class="opt">El jefe de proyecto junto con el cliente.</button><button class="opt">Un responsable que actúa como líder ágil habla con el Product Owner y lo transmite al equipo.</button><button class="opt">El Product Owner junto con el líder ágil y el equipo, refinando el Product Backlog.</button><button class="opt">Un responsable que será el jefe de proyecto, junto con el Product Owner y el equipo.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P4 · banco oficial</span><br>La técnica Planning Poker sirve para:</div>
+<div class="opts"><button class="opt">Realizar una estimación ágil haciendo uso de puntos de historia, estimando la dificultad de la tarea.</button><button class="opt">Realizar una planificación ágil haciendo uso de puntos de historia, estimando la dificultad de la tarea.</button><button class="opt">Realizar una estimación ágil haciendo uso de historias de usuario, estimando la dificultad de la tarea.</button><button class="opt">Realizar una planificación ágil haciendo uso de historias de usuario, estimando la dificultad de la tarea.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P5 · banco oficial</span><br>¿En qué consiste el método The Bucket System?</div>
+<div class="opts"><button class="opt">En colocar valores diferentes de los puntos de historia en una tabla, metiendo cada historia de usuario en un cubo, en base a la estimación.</button><button class="opt">En indicar el tamaño relativo diferente para cada historia de usuario.</button><button class="opt">En usar un tablero Kanban para indicar las historias de usuario preferidas.</button><button class="opt">En colocar valores diferentes de las historias de usuario en una tabla, metiendo cada punto de historia en un cubo, en base a la estimación.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P6 · banco oficial</span><br>Entre los beneficios de la estimación ágil, podemos encontrar:</div>
+<div class="opts"><button class="opt">Adaptabilidad, habilidad requerida, bajo coste, calidad y time-to-market.</button><button class="opt">Adaptabilidad en grandes empresas, innovación, bajo coste, calidad y time-to-market.</button><button class="opt">Adaptabilidad, interoperabilidad, bajo coste, calidad y time-to-market.</button><button class="opt">Adaptabilidad, innovación, bajo coste, calidad y time-to-market.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T6·P7 · banco oficial</span><br>¿Cuál es la principal diferencia entre la planificación ágil y la tradicional?</div>
+<div class="opts"><button class="opt">La planificación ágil es predictiva e iterativa, y la tradicional identifica los cambios.</button><button class="opt">La planificación ágil es iterativa, progresiva, y se adapta a cambios, y la tradicional es predictiva y se basa en identificar tareas a priori.</button><button class="opt">La planificación tradicional es iterativa y se adapta a cambios, y la ágil es predictiva y se basa en identificar tareas a priori.</button><button class="opt">La planificación ágil es iterativa y se adapta a cambios, y la tradicional es incremental y va adaptándose a situaciones cambiantes sin problemas.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P8 · banco oficial</span><br>Los horizontes de planificación ágil son:</div>
+<div class="opts"><button class="opt">Una serie de niveles que se usan para llegar al final del producto, entregas y reuniones diarias.</button><button class="opt">Un conjunto de pruebas que se realizan para poder realizar los cambios sobre el producto final, considerando la hoja de ruta y las entregas.</button><button class="opt">Una serie de niveles que llevan a cabo acciones para ir avanzando en los planes de producto, hoja de rutas, entregas e iteraciones.</button><button class="opt">Una serie de métodos que se usan para realizar las planificaciones del proyecto ágil.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P9 · banco oficial</span><br>La creación de una hoja de ruta o Roadmap, se puede dividir en estos pasos:</div>
+<div class="opts"><button class="opt">Asegurar la estrategia y tecnología, identificar los requisitos desde el Product Backlog, organizar los temas y entregas y determinar líneas de tiempo a bajo nivel.</button><button class="opt">Asegurar la estrategia y tecnología, identificar los requisitos desde el Release Plan, organizar los temas y entregas y determinar líneas de tiempo a alto nivel.</button><button class="opt">Asegurar la estrategia y objetivos, identificar los requisitos desde el Release Plan, organizar los temas y entregas y determinar líneas de tiempo a bajo nivel.</button><button class="opt">Asegurar la estrategia y tecnología, identificar los requisitos desde el Product Backlog, organizar los temas y entregas y determinar líneas de tiempo a alto nivel.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T6·P10 · banco oficial</span><br>¿Cuándo se realiza la planificación de las entregas o Release Plan?</div>
+<div class="opts"><button class="opt">Cuando estamos listos para estimar los requisitos.</button><button class="opt">Cuando se deben hacer las entregas de los incrementos del producto.</button><button class="opt">Cuando se deben hacer los requisitos con de manera iterativa y alcanzar el producto.</button><button class="opt">Cuando se deben hacer las entregas finales del producto.</button></div>
+</div>
+<h3 id="bt7">Tema 7 · Roadmap y entregas</h3>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P1 · banco oficial</span><br>¿Qué información viene reflejada en el Roadmap de producto?</div>
+<div class="opts"><button class="opt">Se determina el número de iteraciones del proyecto y de las entregas.</button><button class="opt">Las prioridades de negocio tanto en los requisitos como las iteraciones.</button><button class="opt">Al ser un panel de tareas, se añaden las tarjetas para comprobar el trabajo diario del equipo.</button><button class="opt">Las tareas y características útiles para poder hacer las entregas del producto.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P2 · banco oficial</span><br>La mejor forma para representar un Roadmap es:</div>
+<div class="opts"><button class="opt">Mediante un Diagrama de Gantt.</button><button class="opt">Mediante un mapa visual claro.</button><button class="opt">Mediante una hoja Excel.</button><button class="opt">Mediante un software adecuado para ello, con un mapeo de historias.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P3 · banco oficial</span><br>¿Por qué es necesario que un proyecto ágil mantenga las iteraciones con la misma duración durante la vida del proyecto?</div>
+<div class="opts"><button class="opt">Porque así se puede medir y comparar la velocidad entre las diferentes iteraciones.</button><button class="opt">Porque así se puede medir y comparar el Timebox y Tailoring entre las diferentes iteraciones.</button><button class="opt">Porque se desarrollan a partir de los mismos requisitos y en el mismo entorno.</button><button class="opt">Porque el Roadmap lo indica en su estructura y estrategia.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P4 · banco oficial</span><br>¿Cuántas iteraciones tiene un proyecto ágil respecto a uno tradicional?</div>
+<div class="opts"><button class="opt">Tienen las mismas, no varía el enfoque.</button><button class="opt">Tienen una iteración por cada entrega del proyecto.</button><button class="opt">Se hace una entrega al mes, por tanto, una iteración al mes.</button><button class="opt">Es algo que depende del proyecto, y se identifica en el Roadmap.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P5 · banco oficial</span><br>¿Cuál es la principal diferencia entre el Roadmap y el Release Plan?</div>
+<div class="opts"><button class="opt">Que son horizontes de planificación diferentes, y su plan de ejecución es distinto.</button><button class="opt">Que el Roadmap comunica una descripción de la estrategia de producto, y el Release Plan describe el proceso de ejecución por iteraciones.</button><button class="opt">Que son horizontes de planificación incluidos en el mismo nivel, pero generando un plan de ejecución distinto.</button><button class="opt">Que el Roadmap comunica una descripción de la visión de producto a nivel de entregas, y el Release Plan describe el proceso de ejecución por requisitos.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T7·P6 · banco oficial</span><br>La planificación de entregas se representa mediante:</div>
+<div class="opts"><button class="opt">Un mapa visual que indica los puntos de historia por iteración.</button><button class="opt">Un tablero Kanban que determina los hitos a ser ejecutados por iteración.</button><button class="opt">Un mapa de historias que indican las que se llevan a cabo por iteración.</button><button class="opt">Una herramienta digital que identifique la planificación de la pila de requisitos.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P7 · banco oficial</span><br>¿En qué consiste la técnica del Timebox en la planificación ágil?</div>
+<div class="opts"><button class="opt">Sirve para fijar las horas que tardan las iteraciones.</button><button class="opt">Consiste en fijar el tiempo mínimo que debe superarse para conseguir un objetivo, o realizar una tarea, en una iteración.</button><button class="opt">Sirve para priorizar y tomar la decisión de qué tarea se debe hacer primero.</button><button class="opt">Consiste en fijar el tiempo máximo que debe no debe superarse para conseguir un objetivo, o realizar una tarea, en una iteración.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P8 · banco oficial</span><br>En la gestión ágil del cambio, la velocidad ágil se refiere a:</div>
+<div class="opts"><button class="opt">La cantidad de puntos de historia que el equipo de trabajo puede ser capaz de cumplir en cada iteración.</button><button class="opt">La cantidad de historias de requisitos que el equipo de trabajo puede ser capaz de cumplir en cada iteración.</button><button class="opt">La cantidad entregas que el equipo de trabajo puede ser capaz de cumplir en cada iteración.</button><button class="opt">La cantidad de reuniones que da tiempo a que el equipo de trabajo puede tener durante cada iteración.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P9 · banco oficial</span><br>En el enfoque ágil, se buscan tiempos de ciclo:</div>
+<div class="opts"><button class="opt">Grandes, para así que de tiempo a poder ejecutar todas las tareas.</button><button class="opt">Cortos.</button><button class="opt">Medios.</button><button class="opt">En períodos de trimestre.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P10 · banco oficial</span><br>El valor ganado del proyecto es:</div>
+<div class="opts"><button class="opt">La estrategia usada para conocer el valor de negocio real que genera un proyecto a los usuarios.</button><button class="opt">Es el valor que se gana cuando el proyecto se ha alcanzado a tiempo.</button><button class="opt">La estrategia usada para conocer el valor relativo que tienen las entregas en base a las necesidades, aunque no se cumplan todos los requisitos.</button><button class="opt">Es el presupuesto en base al contrato del proyecto con el cliente.</button></div>
+</div>
+<h3 id="bt8">Tema 8 · Desarrollo del proyecto</h3>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P1 · banco oficial</span><br>¿Cuándo termina el desarrollo de un proyecto, Definition of Done?</div>
+<div class="opts"><button class="opt">Cuando el cliente lo decide.</button><button class="opt">Cuando se agota el presupuesto, aunque se haya planificado continuar.</button><button class="opt">Cuando el contenido planificado se ha completado satisfactoriamente, sin necesidad de que se cumpla la fecha de entrega.</button><button class="opt">Cuando los requisitos han quedado desarrollados, independientemente de si se han finalizado satisfactoriamente.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P2 · banco oficial</span><br>La definición de listo, Ready:</div>
+<div class="opts"><button class="opt">Muestra el camino a seguir sólo para cada iteración.</button><button class="opt">Marca el momento de salida de la implementación de un proyecto.</button><button class="opt">Muestra el camino que tiene que llevar a cabo un requisito.</button><button class="opt">Marca el momento de salida tanto para un requisito, iteración o proyecto.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P3 · banco oficial</span><br>Cuando se va a comenzar una iteración:</div>
+<div class="opts"><button class="opt">No es necesario disponer de un Roadmap para el proyecto.</button><button class="opt">Se planifica el detalle de todas las iteraciones siguientes.</button><button class="opt">Se determinan los requisitos que se implementarán en dicha iteración.</button><button class="opt">No están determinados aún los requisitos a ser implementados en la iteración.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P4 · banco oficial</span><br>¿Cuál es el resultado de llevar a cabo el proceso de planificación de una iteración?</div>
+<div class="opts"><button class="opt">Se establece un panel o tablero de tareas que resuelve todos los requisitos de una iteración, cada una con las horas estimadas.</button><button class="opt">Se obtiene el Release Plan.</button><button class="opt">Se genera el Roadmap que será usado durante la planificación de iteraciones.</button><button class="opt">Se establece un panel o tablero que resuelve todos los requisitos de una iteración, contados en puntos de historia.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P5 · banco oficial</span><br>Una buena práctica para indicar el contenido de una iteración:</div>
+<div class="opts"><button class="opt">Es aplicar una estrategia de estimación a posteriori.</button><button class="opt">Es establecer el tiempo que tarda cada miembro del equipo en hacer una tarea.</button><button class="opt">Es crear tantas tareas para cada requisito como condiciones tenga la definición de hecho o Done.</button><button class="opt">Es establecer la duración de cada tarea en base a los puntos de historia.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P6 · banco oficial</span><br>¿Cómo se calcula el avance de un proyecto ágil?</div>
+<div class="opts"><button class="opt">Según el número de puntos completados.</button><button class="opt">Según el presupuesto y facturación.</button><button class="opt">Según el número de horas que se tarda.</button><button class="opt">Según las tareas finalizadas o hechas.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P7 · banco oficial</span><br>En un proyecto ágil, ¿qué variable de entrada es fundamental para planificar: el número de personas o la fecha máxima?</div>
+<div class="opts"><button class="opt">El número de personas.</button><button class="opt">La fecha máxima.</button><button class="opt">Ninguna de las dos.</button><button class="opt">Ambas.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P8 · banco oficial</span><br>¿Cuánto dura la reunión diaria o Daily stand-up?</div>
+<div class="opts"><button class="opt">Quince minutos como mínimo.</button><button class="opt">Quince minutos como máximo.</button><button class="opt">Lo que sea necesario.</button><button class="opt">Dos minutos por cada miembro.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P9 · banco oficial</span><br>Entre los beneficios de la reunión de retrospectiva, se encuentran:</div>
+<div class="opts"><button class="opt">Reflexionar sobre el proceso, encontrar formas de mejorar la productividad y actualizar la definición de hecho.</button><button class="opt">Mejorar y evolucionar, y construir de manera individual.</button><button class="opt">Reflexionar sobre el proceso, encontrar formas de minimizar la productividad y actualizar la definición de hecho.</button><button class="opt">Mejorar y preguntar todo al cliente, y construir como equipo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P10 · banco oficial</span><br>¿Cuál es el objetivo de la reunión de refinamiento?</div>
+<div class="opts"><button class="opt">Determinar cuáles son las tareas necesarias en la siguiente iteración.</button><button class="opt">Introducir nuevos requisitos solicitados por el cliente en la iteración en curso.</button><button class="opt">Ejecutar técnicas de estimación de tareas que refinen la iteración.</button><button class="opt">Resolver dudas que puedan surgir durante la iteración.</button></div>
+</div>
+<h3 id="bt9">Tema 9 · Seguimiento</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P1 · banco oficial</span><br>La técnica de valor ganado en los proyectos ágiles es:</div>
+<div class="opts"><button class="opt">La estrategia donde se hace lo que el cliente indica con el valor adecuado y real del proyecto ágil.</button><button class="opt">La estrategia que se usa para conocer el valor de negocio del proyecto y es del 100 % real en proyectos ágiles.</button><button class="opt">La estrategia que define si los productos entregados en cada iteración ágil se terminan a tiempo.</button><button class="opt">La estrategia de análisis aplicando la velocidad al valor económico de cada persona del equipo ágil.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P2 · banco oficial</span><br>Cuando se habla del estado global del proyecto ágil:</div>
+<div class="opts"><button class="opt">Se valora el estado respecto a un alcance determinado.</button><button class="opt">Se valora el estado desde el punto de vista del valor generado.</button><button class="opt">Se valora el estado respecto a los puntos de historia prioritarios.</button><button class="opt">Se valora el estado respecto a las tareas asignadas a las personas.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P3 · banco oficial</span><br>¿Qué suele representar el burndown de una Release?</div>
+<div class="opts"><button class="opt">El número de requisitos a realizar, según los previstos en la Release.</button><button class="opt">El número de horas que quedan aún por realizar, de los previstos en la Release.</button><button class="opt">El número de tareas que queda por realizar, de las previstas en la Release.</button><button class="opt">El número de puntos de historia que quedan por realizar, según las previstas en la Release.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P4 · banco oficial</span><br>Un gráfico de burnup de una reléase representa:</div>
+<div class="opts"><button class="opt">El número de requisitos que se han realizado ya, según los previstos en la Release.</button><button class="opt">El número de puntos de historia que se han realizado ya, según las previstas en la release.</button><button class="opt">El número de tareas que se han realizado ya, de las previstas en la release.</button><button class="opt">El número de horas que se han realizado ya, de los previstos en la release.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P5 · banco oficial</span><br>¿Cómo se deben disponer las tarjetas en un radiador de información?</div>
+<div class="opts"><button class="opt">No importa mucho el orden mientras sea importante lo que se informa.</button><button class="opt">Se puede ir rellenando todo el espacio físico disponible.</button><button class="opt">Se debe ocupar el mínimo espacio posible.</button><button class="opt">De forma ordenada y limpia.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T9·P6 · banco oficial</span><br>Los atributos de autoorganización y autodirección de los equipos ágiles:</div>
+<div class="opts"><button class="opt">Son objetivos del enfoque ágil a medio plazo.</button><button class="opt">Son estados del enfoque ágil a medio plazo.</button><button class="opt">Son objetivos del enfoque ágil a largo plazo.</button><button class="opt">Son estados del enfoque ágil a corto plazo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P7 · banco oficial</span><br>Comúnmente, un equipo ágil autoorganizado:</div>
+<div class="opts"><button class="opt">Se mantiene al mismo nivel de principio a fin.</button><button class="opt">Arranca como equipo de alto rendimiento.</button><button class="opt">Empeora su rendimiento con el tiempo.</button><button class="opt">Arranca como equipo inmaduro e irá mejorando.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T9·P8 · banco oficial</span><br>El estilo de liderazgo de proyecto para el empoderamiento de un equipo ágil es:</div>
+<div class="opts"><button class="opt">Facilitador.</button><button class="opt">Centralizado.</button><button class="opt">De orden y mando.</button><button class="opt">De estilo directivo.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T9·P9 · banco oficial</span><br>¿Cómo puede ser definida la motivación de un equipo ágil?</div>
+<div class="opts"><button class="opt">Como un conjunto de acciones en común por parte del equipo.</button><button class="opt">Como un vector de fuerzas impulsadas por el líder.</button><button class="opt">Como un vector de fuerzas que impulsan al equipo.</button><button class="opt">Como un conjunto de tareas al unísono, siempre con un enfoque estático.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P10 · banco oficial</span><br>¿En qué momento se deben registrar las lecciones aprendidas?</div>
+<div class="opts"><button class="opt">Siempre al inicio del proyecto.</button><button class="opt">Durante la ejecución del proyecto.</button><button class="opt">Siempre al final de proyecto.</button><button class="opt">Entre una iteración y la reunión de retrospectiva.</button></div>
+</div>
+<h3 id="bt10">Tema 10 · Evolución</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P1 · banco oficial</span><br>¿Cuál de las siguientes es una posible desventaja del enfoque ágil?</div>
+<div class="opts"><button class="opt">Se requieren más personas para realizar el trabajo.</button><button class="opt">Suele implicar un coste superior para poder completar el proyecto.</button><button class="opt">Se requiere aplicar una tecnología más versátil.</button><button class="opt">Suele implicar el no tener tan claro qué se debe hacer a largo plazo.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P2 · banco oficial</span><br>¿Cuál es la actitud más adecuada respecto a los cambios en los proyectos?</div>
+<div class="opts"><button class="opt">Se debe entender que son necesarios y beneficiosos.</button><button class="opt">Se debe replanificar cuando se produzca una petición de cambio, al instante.</button><button class="opt">No se debe establecer líneas base, ya que los cambios harán que no sean útiles.</button><button class="opt">Se deben evitar los cambios si no mejoran nada, según prevea el equipo.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P3 · banco oficial</span><br>El enfoque tradicional pierde importancia respecto al ágil, debido a:</div>
+<div class="opts"><button class="opt">Que el enfoque tradicional resulta más caro de poner en marcha que el ágil.</button><button class="opt">Que se requieren más personas en el equipo de trabajo del tradicional.</button><button class="opt">Que el enfoque tradicional es menos adaptable.</button><button class="opt">Que hay más personas formadas en el enfoque ágil.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P4 · banco oficial</span><br>¿Cuál es la característica principal del enfoque ágil respecto al tradicional?</div>
+<div class="opts"><button class="opt">El enfoque ágil resulta más económico de aplicar que el tradicional.</button><button class="opt">El enfoque ágil requiere una tecnología más avanzada.</button><button class="opt">El enfoque ágil requiere menos perfiles técnicos que el tradicional.</button><button class="opt">El enfoque ágil implica menos planificación detallada al inicio.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P5 · banco oficial</span><br>La planificación de un proyecto debe ser:</div>
+<div class="opts"><button class="opt">Lo más realista posible.</button><button class="opt">Lo más comprimida posible.</button><button class="opt">Lo más detallada y concreta posible.</button><button class="opt">Lo más técnica posible, con uso de herramientas software.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P6 · banco oficial</span><br>¿Cuál es la evolución del riesgo en un proyecto ágil respecto al tradicional?</div>
+<div class="opts"><button class="opt">En el enfoque ágil se mantiene el riesgo en niveles más elevados que el tradicional.</button><button class="opt">En el enfoque ágil no hay riesgos durante el ciclo de vida del proyecto.</button><button class="opt">En el enfoque ágil se reduce el riesgo con mayor medida que el tradicional.</button><button class="opt">En el enfoque ágil se aumenta el riesgo cuando hay que hacer cambios.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T10·P7 · banco oficial</span><br>¿Cuál de las siguientes alternativas es más importante como centro fundamental en la gestión de proyectos con enfoque ágil?</div>
+<div class="opts"><button class="opt">El cumplir la planificación del proyecto aprobada por el cliente.</button><button class="opt">El valor del resultado desde el punto de vista de negocio.</button><button class="opt">El cumplir la restricción de tiempo, coste y alcance del proyecto.</button><button class="opt">El valor del resultado desde el punto de vista del contrato.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P8 · banco oficial</span><br>¿Cuáles de estos son modelos o métodos SDLC (Software Development Life Cycle)?</div>
+<div class="opts"><button class="opt">Tradicional, iterativo, DevOps y orientación a aspectos.</button><button class="opt">Los modelos centralizados y distribuidos.</button><button class="opt">Tradicional, prototipo, iterativo y espiral.</button><button class="opt">Tradicional, prototipo, iterativo y orientación a objetos.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T10·P9 · banco oficial</span><br>El objetivo de DevOps es:</div>
+<div class="opts"><button class="opt">Aumentar la técnica y calidad del desarrollo de sistemas, mejorando la metodología tradicional.</button><button class="opt">Reducir el ciclo de vida del desarrollo de sistemas y proporcionar una entrega continua, siendo complementario a lo que se hace en la metodología ágil.</button><button class="opt">Mejorar la entrega de los productos, gracias a la entrega continua y planificarlo desde el inicio.</button><button class="opt">Reducir el ciclo de vida del desarrollo de sistemas y proporcionar una entrega continua, siendo opuesto a lo que se hace en la metodología tradicional.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P10 · banco oficial</span><br>¿Cuáles son las características básicas de RUP (Rational Unified Process)?</div>
+<div class="opts"><button class="opt">El tener cinco fases en el desarrollo del proyecto: inicio, elaboración, diseño, desarrollo, y cierre.</button><button class="opt">El hecho de emplearse junto con UML, que lo hace de importancia en el uso del desarrollo de proyectos.</button><button class="opt">El tener cuatro fases dentro de cada iteración: requisitos, análisis, planificación, diseño, e implementación.</button><button class="opt">El estar dirigido por casos de uso, centrado en la arquitectura y ser iterativo e incremental.</button></div>
+</div>
+
+
+<script>
+  const tests=[...document.querySelectorAll('.q[data-c]')];
+  const total=tests.length;
+  let done=0, ok=0;
+  function update(){document.getElementById('bar').textContent=`Test: ${done} / ${total} respondidas · Aciertos: ${ok}`;}
+  update();
+  tests.forEach(q=>{
+    const c=+q.dataset.c, opts=[...q.querySelectorAll('.opt')], exp=q.querySelector('.exp');
+    opts.forEach((o,i)=>o.addEventListener('click',()=>{
+      if(opts[0].disabled) return;
+      opts.forEach(x=>x.disabled=true);
+      opts[c].classList.add('ok');
+      if(i===c) ok++; else o.classList.add('no');
+      if(exp) exp.classList.add('show');
+      done++; update();
+    }));
+  });
+  document.querySelectorAll('.reveal').forEach(b=>b.addEventListener('click',()=>{
+    const m=b.nextElementSibling, shown=m.classList.toggle('show');
+    b.textContent=shown?'Ocultar respuesta':b.dataset.t||'Ver respuesta modelo';
+  }));
+</script>
+
+</body>
+</html>
