@@ -36,7 +36,7 @@
 </head>
 <body>
 <h1>Contenedores — Preguntas y respuestas</h1>
-<p class="sub">Todo en un sitio: <strong>cortas</strong>, <strong>largas</strong> y el contenido de las flashcards (<strong>conceptos</strong>, <strong>banco test</strong> y <strong>relacionar</strong>), en formato pregunta → respuesta. Haz clic en una pregunta para desplegar la respuesta. Filtra por grupo o tema. El grueso es Kubernetes (temas 6-10) sobre Docker (1-5).</p>
+<p class="sub"><strong>Cortas</strong>, <strong>largas</strong> y <strong>conceptos</strong>, en formato pregunta → respuesta. Haz clic en una pregunta para desplegar la respuesta. Filtra por grupo o tema. El grueso es Kubernetes (temas 6-10) sobre Docker (1-5). Los <em>test</em> y los ejercicios de <em>relacionar</em> están en «Test completo».</p>
 <div class="filters" id="grupoFilters"></div>
 <div class="filters" id="temaFilters"></div>
 <div class="tools">
@@ -56,8 +56,6 @@ const GRUPOS = [
   {key:"corta",     lab:"Cortas",     cls:"corta"},
   {key:"larga",     lab:"Largas",     cls:"larga"},
   {key:"Conceptos", lab:"Conceptos",  cls:"concepto"},
-  {key:"Banco test",lab:"Banco test", cls:"test"},
-  {key:"Relacionar",lab:"Relacionar", cls:"relacionar"},
 ];
 const CLS = Object.fromEntries(GRUPOS.map(g=>[g.key,g.cls]));
 const LAB = Object.fromEntries(GRUPOS.map(g=>[g.key,g.lab]));
@@ -65,7 +63,7 @@ const LAB = Object.fromEntries(GRUPOS.map(g=>[g.key,g.lab]));
 /* Normaliza todo a {grupo, tema, q, a}. tema "" (p.ej. «qué NO entra») -> 0 = «General». */
 const ITEMS = [
   ...(window.BANCO||[]).map(x=>({grupo:x.tipo, tema:x.tema, q:x.q, a:x.a})),
-  ...CARDS.map(c=>({grupo:c.cat, tema:(c.tema===""||c.tema==null)?0:c.tema, q:c.q, a:c.a})),
+  ...CARDS.filter(c=>c.cat==="Conceptos").map(c=>({grupo:c.cat, tema:(c.tema===""||c.tema==null)?0:c.tema, q:c.q, a:c.a})),
 ];
 
 const TEMAS = [...new Set(ITEMS.map(x=>x.tema))].sort((a,b)=>a-b);
@@ -105,7 +103,7 @@ function render(){
   const cont = c => items.filter(x=>x.grupo===c).length;
   $('bar').textContent = items.length+' preguntas · '+
     cont("corta")+' cortas · '+cont("larga")+' largas · '+
-    cont("Conceptos")+' conceptos · '+cont("Banco test")+' test · '+cont("Relacionar")+' relacionar';
+    cont("Conceptos")+' conceptos';
   const l=$('list'); l.innerHTML='';
   items.forEach(x=>{
     const d=document.createElement('div');

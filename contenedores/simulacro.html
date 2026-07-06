@@ -34,15 +34,22 @@
   .toc a{border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;color:var(--fg);font-size:.85rem;background:var(--card);}
   .toc a:hover{border-color:var(--blue);}
   .pair{margin:5px 0;} .pair b{color:var(--blue);}
+  .match{margin:10px 0 4px;}
+  .mrow{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap;}
+  .mterm{font-weight:600;min-width:150px;color:var(--blue);}
+  .msel{flex:1;min-width:190px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;}
+  .msel.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 13%,transparent);}
+  .msel.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .mcorr{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;margin-right:8px;}
+  .mfb{font-weight:600;font-size:.9rem;color:var(--mut);}
 </style>
 </head>
 <body>
 <h1>Contenedores — Test completo</h1>
-<p class="sub">Examen real: test + cortas + <strong>casos prácticos</strong> (como las actividades). Los test del examen salen de una base que <em>incluye</em> estos de la plataforma. Parte 1 = práctica · Parte 2 = <strong>banco oficial</strong> (100 preguntas, verificadas 10/10).</p>
+<p class="sub">Solo <strong>test</strong> y <strong>relacionar</strong>. Parte 1 = test de práctica · Parte 2 = <strong>banco oficial</strong> de la plataforma (verificado 10/10). En las de <em>relacionar</em>, asigna a cada concepto su definición con los desplegables y pulsa <strong>Corregir</strong>. (Las cortas y largas están en «Preguntas y respuestas».)</p>
 <div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
 
-<h2>Parte 1 · Simulacro de práctica</h2>
-<h2>📝 Tipo test</h2>
+<h2>📝 Parte 1 · Test de práctica</h2>
 
 <div class="q" data-c="2">
 <div class="qh">1. En un <code>Dockerfile</code>, ¿qué diferencia hay entre <code>CMD</code> y <code>ENTRYPOINT</code>?</div>
@@ -152,129 +159,6 @@
 <button class="opt">Balancear el tráfico entre nodos.</button>
 </div>
 <div class="exp">Un <strong>Job</strong> ejecuta una tarea hasta completarse; un <strong>CronJob</strong> lanza Jobs según un horario cron (<code>"0 2 * * *"</code> = cada día a las 2:00). El profe avisó: posible pregunta corta sobre CronJobs.</div>
-</div>
-
-<h2>✍️ Preguntas cortas / desarrollo</h2>
-
-<div class="q">
-<div class="qh">1. Explica la diferencia entre <code>CMD</code> y <code>ENTRYPOINT</code> con un ejemplo.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-<code>ENTRYPOINT</code> fija el ejecutable; <code>CMD</code> aporta argumentos por defecto sobrescribibles.
-<pre>ENTRYPOINT ["ping"]
-CMD ["localhost"]</pre>
-<code>docker run img</code> → <code>ping localhost</code>. <code>docker run img google.com</code> → <code>ping google.com</code> (se sustituye el <code>CMD</code>, no el <code>ENTRYPOINT</code>). Patrón habitual: <code>ENTRYPOINT</code> = comando fijo, <code>CMD</code> = parámetros por defecto.
-</div>
-</div>
-
-<div class="q">
-<div class="qh">2. <strong>Liveness</strong> vs <strong>Readiness probe</strong>: para qué sirve cada una.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-<ul>
-<li><strong>Liveness</strong>: comprueba si el contenedor sigue funcionando. Si falla repetidamente, K8s lo <em>reinicia</em>. Detecta cuelgues/deadlocks.</li>
-<li><strong>Readiness</strong>: comprueba si el Pod está listo para atender peticiones. Si falla, K8s lo <em>quita de los endpoints</em> del Service (deja de enviarle tráfico) pero no lo reinicia. Útil al arrancar o ante dependencias temporalmente caídas.</li>
-</ul>
-(Existe además la <em>startup probe</em> para arranques lentos.)
-</div>
-</div>
-
-<div class="q">
-<div class="qh">3. <span class="tag">la marcó el profe</span> Explica el uso de los <strong>CronJobs</strong> en Kubernetes. Pon un ejemplo.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-Un CronJob ejecuta <strong>Jobs de forma periódica</strong> según una expresión cron. Sirve para tareas recurrentes: copias de seguridad, limpieza, informes, sincronizaciones.
-<pre>apiVersion: batch/v1
-kind: CronJob
-metadata: { name: backup }
-spec:
-  schedule: "0 2 * * *"        # cada día a las 02:00
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          restartPolicy: OnFailure
-          containers:
-          - name: backup
-            image: alpine
-            command: ["sh","-c","echo haciendo backup"]</pre>
-Campos clave: <code>schedule</code> (cron), <code>jobTemplate</code> (el Job a lanzar) y <code>restartPolicy</code> (<code>OnFailure</code>/<code>Never</code>).
-</div>
-</div>
-
-<div class="q">
-<div class="qh">4. Tipos de <strong>Service</strong> en Kubernetes y cuándo usar cada uno.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-<ul>
-<li><strong>ClusterIP</strong> (por defecto): IP interna; comunicación entre Pods dentro del clúster.</li>
-<li><strong>NodePort</strong>: abre el mismo puerto en todos los nodos; acceso externo básico (pruebas).</li>
-<li><strong>LoadBalancer</strong>: balanceador externo del proveedor cloud; exposición a internet.</li>
-<li><strong>ExternalName</strong>: alias DNS a un servicio externo.</li>
-</ul>
-Para HTTP/HTTPS con rutas y dominios se suele poner un <strong>Ingress</strong> delante de Services ClusterIP.
-</div>
-</div>
-
-<h2>🛠️ Casos prácticos</h2>
-
-<div class="q">
-<div class="qh"><span class="tag">CASO 1 · Dockerfile</span><br>Escribe un Dockerfile <em>multi-stage</em> para una app Node: compila en una etapa y deja una imagen final ligera que ejecute <code>node dist/server.js</code>.</div>
-<button class="reveal">Ver solución modelo</button>
-<div class="model">
-<pre># Etapa de build
-FROM node:20 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci                 # deps primero → mejor caché
-COPY . .
-RUN npm run build          # genera /app/dist
-
-# Etapa final ligera
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY --from=build /app/dist ./dist
-EXPOSE 3000
-CMD ["node", "dist/server.js"]</pre>
-Claves: <em>multi-stage</em> para no arrastrar herramientas de build, <code>COPY package*.json</code> antes que el código (caché), imagen final <code>-alpine</code> y solo dependencias de producción.
-</div>
-</div>
-
-<div class="q">
-<div class="qh"><span class="tag">CASO 2 · estilo Práctica 3</span><br>Despliega en Kubernetes una app web con 3 réplicas y exponla dentro del clúster. Escribe el <code>Deployment</code> y el <code>Service</code>.</div>
-<button class="reveal">Ver solución modelo</button>
-<div class="model">
-<pre>apiVersion: apps/v1
-kind: Deployment
-metadata: { name: web }
-spec:
-  replicas: 3
-  selector:
-    matchLabels: { app: web }     # casa con el label del Pod
-  template:
-    metadata:
-      labels: { app: web }
-    spec:
-      containers:
-      - name: web
-        image: nginx:1.27
-        ports: [{ containerPort: 80 }]
-        readinessProbe:
-          httpGet: { path: /, port: 80 }
----
-apiVersion: v1
-kind: Service
-metadata: { name: web-svc }
-spec:
-  selector: { app: web }          # enruta a los Pods con app=web
-  ports:
-  - port: 80
-    targetPort: 80
-  type: ClusterIP</pre>
-Claves que valora el profe: el <code>selector</code> del Service y el <code>matchLabels</code> del Deployment deben coincidir con las <em>labels</em> del Pod; <code>replicas: 3</code>; una <em>readiness probe</em> para no enrutar a Pods no listos.
-</div>
 </div>
 
 <h2 id="banco">🎯 Parte 2 · Banco oficial de la plataforma (100 preguntas)</h2>
@@ -727,6 +611,55 @@ Claves que valora el profe: el <code>selector</code> del Service y el <code>matc
     const m=b.nextElementSibling, shown=m.classList.toggle('show');
     b.textContent=shown?'Ocultar respuesta':b.dataset.t||'Ver respuesta modelo';
   }));
+
+  // ---- Relacionar interactivo: asigna a cada concepto su definición ----
+  document.querySelectorAll('.q').forEach(q=>{
+    const model=q.querySelector('.model');
+    if(!model) return;
+    const pairs=[...model.querySelectorAll('.pair')];
+    if(!pairs.length) return;                 // solo las de relacionar tienen .pair
+    const data=pairs.map(p=>{
+      const term=p.querySelector('b').textContent.trim();
+      const t=p.textContent, i=t.indexOf('→');
+      return {term, def:(i>=0?t.slice(i+1):t).trim()};
+    });
+    const qh=q.querySelector('.qh');
+    const tag=qh.querySelector('.tag');
+    const raw=[...qh.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join(' ');
+    const ci=raw.indexOf(':');
+    const instr=ci>0?raw.slice(0,ci+1).trim():'Relaciona cada concepto con su definición:';
+    qh.innerHTML='';
+    if(tag){ qh.appendChild(tag); qh.appendChild(document.createElement('br')); }
+    qh.appendChild(document.createTextNode(instr));
+
+    const defs=data.map(d=>d.def);
+    for(let i=defs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[defs[i],defs[j]]=[defs[j],defs[i]];}
+
+    const wrap=document.createElement('div'); wrap.className='match';
+    data.forEach(d=>{
+      const row=document.createElement('div'); row.className='mrow';
+      const lab=document.createElement('span'); lab.className='mterm'; lab.textContent=d.term;
+      const sel=document.createElement('select'); sel.className='msel'; sel.dataset.correct=d.def;
+      const o0=document.createElement('option'); o0.value=''; o0.textContent='Elegir…'; sel.appendChild(o0);
+      defs.forEach(df=>{const o=document.createElement('option'); o.value=df; o.textContent=df; sel.appendChild(o);});
+      row.appendChild(lab); row.appendChild(sel); wrap.appendChild(row);
+    });
+    const btn=document.createElement('button'); btn.className='mcorr'; btn.textContent='Corregir';
+    const fb=document.createElement('span'); fb.className='mfb';
+    const revealBtn=q.querySelector('.reveal');
+    q.insertBefore(wrap, revealBtn);
+    q.insertBefore(btn, revealBtn);
+    q.insertBefore(fb, revealBtn);
+    btn.addEventListener('click',()=>{
+      let good=0;
+      wrap.querySelectorAll('.msel').forEach(s=>{
+        s.classList.remove('ok','no');
+        if(s.value && s.value===s.dataset.correct){s.classList.add('ok');good++;}
+        else s.classList.add('no');
+      });
+      fb.textContent=` ${good}/${data.length} correctas`;
+    });
+  });
 </script>
 
 </body>
