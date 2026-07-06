@@ -16,13 +16,14 @@
   header{text-align:center; padding:26px 0 10px}
   h1{font-size:1.5rem; margin:0 0 4px}
   header p{color:var(--muted); margin:0; font-size:.9rem}
-  .wrap{max-width:720px; margin:0 auto}
-  .subject{margin-top:26px}
+  .wrap{max-width:1080px; margin:0 auto}
+  .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start}
+  @media (max-width:760px){ .cols{grid-template-columns:1fr} }
+  .subject{margin-top:20px}
   .subject h2{display:flex; align-items:center; gap:8px; font-size:1.05rem; margin:0 0 12px;
               padding-bottom:8px; border-bottom:1px solid #334155}
   .dot{width:11px; height:11px; border-radius:50%}
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  @media (max-width:480px){ .grid{grid-template-columns:1fr} }
+  .grid{display:grid; grid-template-columns:1fr; gap:10px}
   a.card{display:block; background:var(--card); border:1px solid #334155; border-radius:14px;
          padding:14px 15px; text-decoration:none; color:var(--ink); transition:.15s}
   a.card:active{background:var(--card2); transform:scale(.98)}
@@ -35,16 +36,17 @@
 <div class="wrap">
   <header>
     <h1>📚 Estudio UNIR</h1>
-    <p>Guías, simulacros y flashcards · abre cualquiera desde el móvil</p>
+    <p>Guías, preguntas, test y simulacros · abre cualquiera desde el móvil</p>
   </header>
 
+  <div class="cols">
   <section class="subject">
     <h2><span class="dot" style="background:var(--cont)"></span> Contenedores</h2>
     <div class="grid">
       <a class="card" href="contenedores/guia_profesor.html"><div class="t">🎯 Guía del profesor</div><div class="s">Examen y prioridades</div></a>
+      <a class="card" href="contenedores/cortas_largas_estudio.html"><div class="t">📖 Preguntas y respuestas</div><div class="s">Cortas, largas, conceptos y test</div></a>
       <a class="card" href="contenedores/examen_practica.html"><div class="t">📝 Simulacro de examen</div><div class="s">Práctica</div></a>
       <a class="card" href="contenedores/simulacro.html"><div class="t">📝 Simulacro ampliado</div><div class="s">Más preguntas</div></a>
-      <a class="card" href="contenedores/cortas_largas_estudio.html"><div class="t">📖 Preguntas y respuestas</div><div class="s">Cortas, largas, conceptos y test</div></a>
     </div>
   </section>
 
@@ -56,7 +58,6 @@
       <a class="card" href="cicd/resumen_temas.html"><div class="t">📖 Resumen por temas</div><div class="s">T1–T10</div></a>
       <a class="card" href="cicd/examen_practica.html"><div class="t">📝 Simulacro de examen</div><div class="s">Práctica</div></a>
       <a class="card" href="cicd/simulacro.html"><div class="t">📝 Simulacro ampliado</div><div class="s">Más preguntas</div></a>
-      <a class="card" href="cicd/flashcards.html"><div class="t">🃏 Flashcards</div><div class="s">Repaso activo</div></a>
     </div>
   </section>
 
@@ -64,12 +65,12 @@
     <h2><span class="dot" style="background:var(--proy)"></span> Proyectos ágiles</h2>
     <div class="grid">
       <a class="card" href="proyectos/guia_profesor.html"><div class="t">🎯 Guía del profesor</div><div class="s">Examen y prioridades</div></a>
-      <a class="card" href="proyectos/test.html"><div class="t">✅ Test (PreparaciónProfe)</div><div class="s">Plantilla oficial</div></a>
       <a class="card" href="proyectos/cortas_largas_estudio.html"><div class="t">📖 Preguntas y respuestas</div><div class="s">Las 30 cortas y largas del profe</div></a>
+      <a class="card" href="proyectos/test.html"><div class="t">✅ Test (PreparaciónProfe)</div><div class="s">54 preguntas · plantilla oficial</div></a>
       <a class="card" href="proyectos/simulacro.html"><div class="t">📝 Simulacro ampliado</div><div class="s">Más preguntas</div></a>
-      <a class="card" href="proyectos/flashcards.html"><div class="t">🃏 Flashcards</div><div class="s">Repaso activo</div></a>
     </div>
   </section>
+  </div>
 
   <footer>Añade esta página a la pantalla de inicio del móvil para acceso directo.</footer>
 </div>

@@ -1,207 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test · Gestión de Proyectos (DevOps) · UNIR</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyectos — Test (PreparaciónProfe)</title>
 <style>
-  :root{
-    --ink:#15222C; --muted:#5B6B73; --bg:#EEF3F4; --surface:#FFFFFF;
-    --teal:#0C8A98; --teal-dark:#0A6E79; --teal-tint:#E1F0F1;
-    --green:#15803D; --green-tint:#E7F4EC;
-    --red:#C0392B; --red-tint:#FBEAE8;
-    --amber:#B45309; --amber-tint:#FBF0E1;
-    --line:#D9E2E4; --radius:14px;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:var(--sans); color:var(--ink); background:var(--bg);
-    line-height:1.5; -webkit-font-smoothing:antialiased;
-    display:flex; flex-direction:column; align-items:center;
-    padding:24px 16px 48px;
-  }
-  .wrap{width:100%; max-width:780px}
-
-  /* ---- Cabecera marca ---- */
-  .brand{display:flex; align-items:baseline; gap:10px; margin-bottom:18px}
-  .brand .logo{font-weight:800; font-size:22px; letter-spacing:-.5px; color:var(--ink)}
-  .brand .logo b{color:var(--teal)}
-  .brand .sep{width:1px; height:18px; background:var(--line)}
-  .brand .ctx{font-size:13px; color:var(--muted); letter-spacing:.2px}
-
-  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:0 1px 2px rgba(20,40,50,.04), 0 12px 30px -22px rgba(20,40,50,.25)}
-
-  /* ---- Pantalla instrucciones ---- */
-  .intro{padding:30px 30px 26px}
-  .intro h1{font-size:27px; line-height:1.18; letter-spacing:-.6px; font-weight:800; margin-bottom:6px}
-  .intro .lead{color:var(--muted); font-size:15px; margin-bottom:22px}
-  .rules{display:grid; gap:14px; margin-bottom:22px}
-  .rule{display:flex; gap:13px; align-items:flex-start}
-  .rule .n{flex:0 0 26px; height:26px; border-radius:8px; background:var(--teal-tint); color:var(--teal-dark);
-    font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; margin-top:1px}
-  .rule p{font-size:14.5px}
-  .rule p b{font-weight:700}
-  .legend{display:flex; flex-wrap:wrap; gap:10px 18px; padding:14px 16px; background:#F6F9F9;
-    border:1px solid var(--line); border-radius:10px; margin-bottom:22px}
-  .legend .item{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--muted)}
-  .swatch{width:13px; height:13px; border-radius:4px; flex:none}
-  .sw-green{background:var(--green)} .sw-amber{background:var(--amber)} .sw-red{background:var(--red)}
-  .opts-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:6px}
-  .toggle{display:inline-flex; align-items:center; gap:9px; font-size:14px; color:var(--muted); cursor:pointer; user-select:none}
-  .toggle input{width:16px; height:16px; accent-color:var(--teal)}
-  .kbd{font-size:12.5px; color:var(--muted); margin-top:14px}
-  .kbd kbd{font-family:var(--sans); font-weight:600; font-size:11.5px; background:#EEF2F3;
-    border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 6px; color:var(--ink)}
-
-  .btn{appearance:none; border:none; cursor:pointer; font-family:inherit; font-weight:700;
-    font-size:15px; border-radius:10px; padding:13px 22px; transition:filter .12s, transform .05s}
-  .btn:active{transform:translateY(1px)}
-  .btn-primary{background:var(--teal); color:#fff}
-  .btn-primary:hover{filter:brightness(1.05)}
-  .btn-ghost{background:transparent; color:var(--teal-dark); padding:13px 10px}
-  .btn-ghost:hover{color:var(--teal)}
-  .btn:disabled{opacity:.4; cursor:default}
-  .intro .start{margin-top:18px; width:100%}
-
-  /* ---- Barra superior del cuestionario ---- */
-  .top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px}
-  .meta{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted)}
-  .badge{font-size:11.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
-    padding:3px 9px; border-radius:999px; background:var(--teal-tint); color:var(--teal-dark)}
-  .badge.amp{background:#EDE7F6; color:#5B3FA0}
-  .score{font-size:13px; color:var(--muted)}
-  .score b{color:var(--ink); font-weight:800}
-  .progress{height:6px; background:#E2E9EA; border-radius:999px; overflow:hidden; margin-bottom:20px}
-  .progress > i{display:block; height:100%; background:var(--teal); border-radius:999px; width:0; transition:width .25s ease}
-
-  /* ---- Pregunta ---- */
-  .qcard{padding:26px 26px 24px}
-  .qnum{font-size:12.5px; font-weight:700; letter-spacing:.4px; color:var(--teal-dark); text-transform:uppercase; margin-bottom:8px}
-  .qtext{font-size:19px; line-height:1.35; font-weight:700; letter-spacing:-.2px; margin-bottom:20px}
-  .options{display:grid; gap:10px}
-  .opt{display:flex; gap:13px; align-items:flex-start; text-align:left; width:100%;
-    background:var(--surface); border:1.5px solid var(--line); border-radius:11px; padding:13px 15px;
-    font-family:inherit; font-size:15px; color:var(--ink); cursor:pointer; transition:border-color .12s, background .12s}
-  .opt:hover:not(.locked){border-color:var(--teal); background:#FAFDFD}
-  .opt .key{flex:0 0 26px; height:26px; border-radius:7px; background:#EEF2F3; color:var(--muted);
-    font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; transition:.12s}
-  .opt .txt{padding-top:2px}
-  .opt.locked{cursor:default}
-  .opt.correct{border-color:var(--green); background:var(--green-tint)}
-  .opt.correct .key{background:var(--green); color:#fff}
-  .opt.wrong{border-color:var(--red); background:var(--red-tint)}
-  .opt.wrong .key{background:var(--red); color:#fff}
-  .opt.alt{border-color:var(--amber); background:var(--amber-tint)}
-  .opt.alt .key{background:var(--amber); color:#fff}
-  .tag{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.2px; padding:2px 7px;
-    border-radius:6px; margin-left:8px; vertical-align:middle}
-  .tag.g{background:var(--green); color:#fff}
-  .tag.a{background:var(--amber); color:#fff}
-
-  .feedback{margin-top:18px; font-size:14.5px; display:none}
-  .feedback.show{display:block}
-  .feedback .head{font-weight:800; margin-bottom:4px}
-  .feedback.ok .head{color:var(--green)}
-  .feedback.no .head{color:var(--red)}
-  .note{margin-top:12px; padding:12px 14px; border-left:3px solid var(--amber);
-    background:var(--amber-tint); border-radius:0 9px 9px 0; font-size:13.5px; color:#7a3e08}
-  .note b{color:var(--amber)}
-
-  .nav{display:flex; align-items:center; justify-content:space-between; margin-top:22px; gap:12px}
-
-  /* ---- Resultados ---- */
-  .results{padding:34px 30px; text-align:center}
-  .results h2{font-size:24px; font-weight:800; letter-spacing:-.4px; margin-bottom:6px}
-  .results .big{font-size:54px; font-weight:800; letter-spacing:-1.5px; color:var(--teal); line-height:1; margin:14px 0 6px}
-  .results .pct{color:var(--muted); font-size:15px; margin-bottom:8px}
-  .results .msg{font-size:15px; margin:14px auto 6px; max-width:440px}
-  .results .sub{font-size:13px; color:var(--muted); margin-top:14px; max-width:480px; margin-left:auto; margin-right:auto}
-  .results .again{margin-top:22px}
-
-  .hide{display:none !important}
-
-  @media (max-width:560px){
-    .intro,.qcard,.results{padding-left:20px; padding-right:20px}
-    .intro h1{font-size:23px}
-    .qtext{font-size:17.5px}
-  }
-  @media (prefers-reduced-motion:reduce){
-    *{transition:none !important}
-  }
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;margin:0 0 2px;}
+  .sub{color:var(--mut);margin:0 0 6px;font-size:.95rem;}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px;}
+  .btn{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;}
+  .btn:hover{border-color:var(--blue);}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .qh{font-weight:600;margin:0 0 9px;}
+  .qh .num{color:var(--mut);}
+  .opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;cursor:pointer;font:inherit;transition:.15s;}
+  .opt:hover{border-color:var(--blue);}
+  .opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);font-weight:600;}
+  .opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .opt:disabled{cursor:default;opacity:1;}
+  .opt .l{font-weight:700;color:var(--mut);margin-right:4px;}
+  .nota{display:none;margin-top:10px;padding:10px 12px;border-left:3px solid var(--amber);background:color-mix(in srgb,var(--amber) 10%,transparent);border-radius:0 8px 8px 0;font-size:.9rem;}
+  .nota.show{display:block;}
+  .nota::before{content:"⚠️ ";}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="brand">
-    <span class="ctx">Gestión de Proyectos · Máster en Desarrollo y Operaciones (DevOps)</span>
-  </div>
-
-  <!-- ============ INSTRUCCIONES ============ -->
-  <section id="intro" class="card intro">
-    <h1>Test de práctica:<br>metodologías ágiles y DevOps</h1>
-    <p class="lead">54 preguntas tipo test con corrección inmediata para preparar el examen.</p>
-
-    <div class="rules">
-      <div class="rule"><span class="n">1</span><p>Aparece una pregunta cada vez con sus opciones. Elige una y verás al momento si has acertado. Solo hay una respuesta correcta por pregunta.</p></div>
-      <div class="rule"><span class="n">2</span><p>La corrección sigue la <b>plantilla oficial</b>. Como en el examen real, cada acierto cuenta y los fallos o las preguntas en blanco no penalizan.</p></div>
-      <div class="rule"><span class="n">3</span><p>Algunas preguntas tienen una respuesta discutible. En ellas se marca en verde la opción que da por buena la plantilla y en ámbar la que sería más correcta según el criterio habitual, aunque no esté marcada en la tabla.</p></div>
-    </div>
-
-    <div class="legend">
-      <span class="item"><span class="swatch sw-green"></span>Correcta según la plantilla</span>
-      <span class="item"><span class="swatch sw-amber"></span>Mejor respuesta (no marcada en la tabla)</span>
-      <span class="item"><span class="swatch sw-red"></span>Tu fallo</span>
-    </div>
-
-    <div class="opts-row">
-      <label class="toggle"><input type="checkbox" id="shuffle"> Barajar el orden de las preguntas</label>
-    </div>
-    <p class="kbd">Atajos: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> para responder · <kbd>→</kbd> o <kbd>Enter</kbd> siguiente · <kbd>←</kbd> anterior</p>
-
-    <button class="btn btn-primary start" id="startBtn">Comenzar</button>
-  </section>
-
-  <!-- ============ CUESTIONARIO ============ -->
-  <section id="quiz" class="hide">
-    <div class="top">
-      <div class="meta">
-        <span id="counter">Pregunta 1 de 54</span>
-      </div>
-      <div class="score">Aciertos: <b id="hits">0</b></div>
-    </div>
-    <div class="progress"><i id="bar"></i></div>
-
-    <div class="card qcard">
-      <div class="qnum" id="qnum">Pregunta 1</div>
-      <div class="qtext" id="qtext"></div>
-      <div class="options" id="options"></div>
-
-      <div class="feedback" id="feedback">
-        <div class="head" id="fhead"></div>
-        <div id="fbody"></div>
-        <div class="note hide" id="fnote"></div>
-      </div>
-
-      <div class="nav">
-        <button class="btn btn-ghost" id="prevBtn">← Anterior</button>
-        <button class="btn btn-primary" id="nextBtn">Siguiente →</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ RESULTADOS ============ -->
-  <section id="results" class="card results hide">
-    <h2>Resultado</h2>
-    <div class="big" id="rBig">0/54</div>
-    <div class="pct" id="rPct"></div>
-    <p class="msg" id="rMsg"></p>
-    <p class="sub" id="rSub"></p>
-    <button class="btn btn-primary again" id="restartBtn">Volver a empezar</button>
-  </section>
+<h1>Proyectos — Test (PreparaciónProfe)</h1>
+<p class="sub">Las <strong>54 preguntas</strong> del banco del profe con la <strong>plantilla oficial de corrección</strong>, todas a la vista y en orden. Pulsa una opción para ver la correcta (verde) y las aclaraciones. En el examen salen <strong>10 test = 2 pts</strong> y se corrigen solo por la X de la tabla.</p>
+<div class="tools">
+  <button class="btn" id="revealAll">👁️ Marcar todas las correctas</button>
+  <button class="btn" id="reset">↺ Reiniciar</button>
 </div>
+<div class="bar" id="bar">Test: 0 / 54 respondidas · Aciertos: 0</div>
+<div id="list"></div>
 
 <script>
 /* ===== Banco de preguntas =====
@@ -277,7 +113,6 @@ const BANCO = [
     B:"Que las empresas se vean beneficiadas respecto con metodología tradicional.",
     C:"Realizar un análisis de viabilidad, planificación, ejecución, seguimiento, control y cierre del proyecto.",
     D:"Llevar a cabo un análisis de requisitos, diseño, implementación, evaluación, pruebas y mantenimiento."}},
-
   {q:"¿Quién es el responsable de maximizar el valor del producto y de gestionar el Product Backlog?", correcta:"B", o:{A:"El Scrum Master",B:"El Product Owner",C:"El equipo de desarrollo",D:"El cliente final"}},
   {q:"¿Cuál es la duración máxima recomendada del Daily Scrum?", correcta:"B", o:{A:"5 minutos",B:"15 minutos",C:"30 minutos",D:"1 hora"}},
   {q:"¿Qué evento de Scrum permite inspeccionar el incremento y adaptar el Product Backlog junto con los interesados?", correcta:"C", o:{A:"La planificación del Sprint",B:"El Scrum diario",C:"La revisión del Sprint",D:"El refinamiento del Backlog"}},
@@ -310,134 +145,49 @@ const BANCO = [
   {q:"En la técnica MoSCoW, la categoría «Won’t» (no se hará) significa que el requisito:", correcta:"B", o:{A:"Es imprescindible",B:"Queda fuera del alcance de esta entrega",C:"Debe hacerse antes que los demás",D:"Es deseable pero no imprescindible"}}
 ];
 
-/* ===== Estado ===== */
+/* ===== Render: todas a la vista, en orden ===== */
 const LETRAS = ["A","B","C","D"];
-let order = [], cur = 0, answered = [], picked = [], hits = 0;
-
+const total = BANCO.length;
+let done = 0, hits = 0;
 const $ = id => document.getElementById(id);
+function updateBar(){ $("bar").textContent = `Test: ${done} / ${total} respondidas · Aciertos: ${hits}`; }
 
-function startQuiz(){
-  order = BANCO.map((_,i)=>i);
-  if($("shuffle").checked){
-    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
-  }
-  cur=0; hits=0; answered=new Array(BANCO.length).fill(false); picked=new Array(BANCO.length).fill(null);
-  $("intro").classList.add("hide");
-  $("results").classList.add("hide");
-  $("quiz").classList.remove("hide");
-  $("hits").textContent="0";
-  render();
-}
-
-function render(){
-  const qi = order[cur];
-  const Q = BANCO[qi];
-  const keys = LETRAS.filter(k => k in Q.o);
-
-  // cabecera
-  $("counter").textContent = `Pregunta ${cur+1} de ${BANCO.length}`;
-  $("qnum").textContent = `Pregunta ${cur+1}`;
-  $("bar").style.width = ((cur)/(BANCO.length))*100 + "%";
-  $("qtext").textContent = Q.q;
-
-  // opciones
-  const box = $("options"); box.innerHTML="";
-  const isAns = answered[qi];
-  keys.forEach(k=>{
-    const b=document.createElement("button");
-    b.className="opt";
-    b.innerHTML = `<span class="key">${k}</span><span class="txt">${Q.o[k]}</span>`;
-    if(isAns){
-      b.classList.add("locked");
-      if(k===Q.correcta){ b.classList.add("correct"); b.querySelector(".txt").innerHTML += ` <span class="tag g">Correcta</span>`; }
-      else if(Q.alt && k===Q.alt){ b.classList.add("alt"); b.querySelector(".txt").innerHTML += ` <span class="tag a">Mejor respuesta</span>`; }
-      else if(k===picked[qi]){ b.classList.add("wrong"); }
-    } else {
-      b.addEventListener("click",()=>answer(k));
-    }
-    box.appendChild(b);
+function build(){
+  done=0; hits=0;
+  const list=$("list"); list.innerHTML="";
+  BANCO.forEach((Q,idx)=>{
+    const d=document.createElement("div"); d.className="q";
+    let html='<div class="qh"><span class="num">'+(idx+1)+'.</span> '+Q.q+'</div>';
+    LETRAS.filter(l=>Q.o[l]!==undefined).forEach(l=>{
+      html+='<button class="opt" data-l="'+l+'"><span class="l">'+l+')</span>'+Q.o[l]+'</button>';
+    });
+    if(Q.nota) html+='<div class="nota">'+Q.nota+'</div>';
+    d.innerHTML=html;
+    const opts=[...d.querySelectorAll(".opt")], nota=d.querySelector(".nota");
+    opts.forEach(o=>o.addEventListener("click",()=>{
+      if(opts[0].disabled) return;
+      opts.forEach(x=>x.disabled=true);
+      const picked=o.dataset.l;
+      d.querySelector('.opt[data-l="'+Q.correcta+'"]').classList.add("ok");
+      if(picked===Q.correcta) hits++; else o.classList.add("no");
+      if(nota) nota.classList.add("show");
+      done++; updateBar();
+    }));
+    list.appendChild(d);
   });
-
-  // feedback
-  const fb=$("feedback");
-  if(isAns){ showFeedback(Q,qi); } else { fb.classList.remove("show","ok","no"); $("fnote").classList.add("hide"); }
-
-  // navegación
-  $("prevBtn").disabled = (cur===0);
-  $("nextBtn").textContent = (cur===BANCO.length-1) ? "Ver resultados →" : "Siguiente →";
+  updateBar();
 }
-
-function answer(k){
-  const qi = order[cur];
-  if(answered[qi]) return;
-  answered[qi]=true; picked[qi]=k;
-  if(k===BANCO[qi].correcta){ hits++; $("hits").textContent=hits; }
-  render();
-}
-
-function showFeedback(Q,qi){
-  const fb=$("feedback"), head=$("fhead"), body=$("fbody"), note=$("fnote");
-  fb.classList.add("show");
-  const sel=picked[qi];
-  if(sel===Q.correcta){
-    fb.classList.add("ok"); fb.classList.remove("no");
-    head.textContent="Correcto";
-    body.textContent = Q.alt
-      ? `Es la opción que da por válida la plantilla. Fíjate en la opción ${Q.alt}, marcada en ámbar.`
-      : "";
-  } else {
-    fb.classList.add("no"); fb.classList.remove("ok");
-    head.textContent="Incorrecto";
-    if(Q.alt && sel===Q.alt){
-      body.textContent = `Has elegido la opción ${Q.alt}, que es la más razonable según el criterio habitual; pero la plantilla oficial da como buena la ${Q.correcta}.`;
-    } else {
-      body.textContent = `La plantilla marca como correcta la opción ${Q.correcta}.`;
-    }
-  }
-  if(Q.nota){ note.classList.remove("hide"); note.innerHTML = `<b>Nota:</b> ${Q.nota}`; }
-  else { note.classList.add("hide"); }
-}
-
-function next(){
-  if(cur===BANCO.length-1){ finish(); }
-  else { cur++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
-}
-function prev(){ if(cur>0){ cur--; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
-
-function finish(){
-  $("quiz").classList.add("hide");
-  const r=$("results"); r.classList.remove("hide");
-  const total=BANCO.length;
-  const pct=Math.round(hits/total*100);
-  $("rBig").textContent = `${hits}/${total}`;
-  $("rPct").textContent = `${pct}% de aciertos`;
-  let m;
-  if(pct>=90) m="Dominas el temario. Listo para el examen.";
-  else if(pct>=70) m="Buen nivel. Repasa los fallos y lo tendrás.";
-  else if(pct>=50) m="Vas por el camino. Conviene repasar antes del examen.";
-  else m="Toca repasar el temario con calma y volver a intentarlo.";
-  $("rMsg").textContent=m;
-  const respondidas = answered.filter(Boolean).length;
-  $("rSub").textContent = `Has respondido ${respondidas} de ${total} preguntas. La corrección sigue la plantilla oficial; en las preguntas discutibles la opción en ámbar no cuenta como acierto aunque sea la más correcta.`;
-  $("bar").style.width="100%";
-}
-
-/* ===== Eventos ===== */
-$("startBtn").addEventListener("click",startQuiz);
-$("nextBtn").addEventListener("click",next);
-$("prevBtn").addEventListener("click",prev);
-$("restartBtn").addEventListener("click",()=>{ $("results").classList.add("hide"); $("intro").classList.remove("hide"); window.scrollTo({top:0}); });
-
-document.addEventListener("keydown",e=>{
-  if(!$("quiz").classList.contains("hide")){
-    const k=e.key.toUpperCase();
-    if(["A","B","C","D"].includes(k)){ const qi=order[cur]; if(!answered[qi] && (k in BANCO[qi].o)) answer(k); }
-    else if(e.key==="ArrowRight"||e.key==="Enter"){ e.preventDefault(); next(); }
-    else if(e.key==="ArrowLeft"){ prev(); }
-  } else if(!$("intro").classList.contains("hide")){
-    if(e.key==="Enter") startQuiz();
-  }
+$("revealAll").addEventListener("click",()=>{
+  document.querySelectorAll(".q").forEach((d,idx)=>{
+    const opts=[...d.querySelectorAll(".opt")]; if(opts[0].disabled) return;
+    opts.forEach(x=>x.disabled=true);
+    d.querySelector('.opt[data-l="'+BANCO[idx].correcta+'"]').classList.add("ok");
+    const nota=d.querySelector(".nota"); if(nota) nota.classList.add("show");
+  });
+  done=total; updateBar();
 });
+$("reset").addEventListener("click",build);
+build();
 </script>
 </body>
 </html>
