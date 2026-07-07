@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Proyectos — Cortas y largas (estudiar)</title>
 <style>
-  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
-  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;--purp:#7c3aed;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;--purp:#b794f6;}}
   *{box-sizing:border-box}
   body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:860px;margin:0 auto;padding:24px 20px 80px;}
   h1{font-size:1.5rem;margin:0 0 2px;} .sub{color:var(--mut);margin:0 0 14px;font-size:.95rem;}
@@ -20,6 +20,8 @@
   .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
   .q.larga{border-left:4px solid var(--amber);}
   .q.corta{border-left:4px solid var(--blue);}
+  .q.desarrollo{border-left:4px solid var(--purp);}
+  .q.caso{border-left:4px solid var(--green);}
   .tag{font-size:.75rem;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.03em;}
   .qh{font-weight:600;margin:5px 0 0;cursor:pointer;display:flex;gap:8px;align-items:baseline;}
   .qh .arrow{color:var(--mut);font-size:.8rem;transition:transform .15s;flex:none;}
@@ -38,7 +40,7 @@
 </head>
 <body>
 <h1>Proyectos — Preguntas cortas y largas</h1>
-<p class="sub">Versión para <strong>estudiar</strong>: haz clic en una pregunta para desplegar la respuesta. Filtra por tipo o bloque. Son las <strong>30 cortas del profe</strong> (en el examen caen 4, 1 pt c/u); respóndelas en <strong>~8 líneas + un ejemplo propio</strong>. El tipo <span style="color:var(--amber)">larga</span> marca las de mayor extensión (1 cara / 24 líneas).</p>
+<p class="sub">Versión para <strong>estudiar</strong>: haz clic en una pregunta para desplegar la respuesta. Filtra por tipo o bloque. Incluye las <strong>30 cortas del profe</strong> (en el examen caen 4, 1 pt c/u; ~8 líneas + ejemplo), las <strong>largas</strong>, las de <strong>desarrollo</strong> y los <strong>casos prácticos</strong> (movidos aquí desde «Test completo»).</p>
 <div class="filters" id="tipoFilters"></div>
 <div class="filters" id="bloqueFilters"></div>
 <div class="tools">
@@ -52,8 +54,11 @@
 <script>
 const B = window.BANCO;
 const NOM = window.BLOQUES;
+const TIPO_LAB = {corta:"Cortas", larga:"Largas", desarrollo:"Desarrollo", caso:"Casos"};
+const TAG_LAB  = {corta:"Corta", larga:"Larga", desarrollo:"Desarrollo", caso:"Caso"};
+const TIPOS = ["corta","larga","desarrollo","caso"].filter(t=>B.some(x=>x.tipo===t));
 const BLOQUES = [...new Set(B.map(x=>x.bloque))].sort((a,b)=>a-b);
-let fTipo = "todas";              // todas | corta | larga
+let fTipo = "todas";              // todas | corta | larga | desarrollo | caso
 let fBloque = new Set(BLOQUES);   // bloques activos
 const $ = id => document.getElementById(id);
 
@@ -64,7 +69,7 @@ function chip(label,on,onclick){
 }
 function buildFilters(){
   const tf=$('tipoFilters'); tf.innerHTML='';
-  [["todas","Todas"],["corta","Cortas"],["larga","Largas"]].forEach(([k,lab])=>{
+  [["todas","Todas"], ...TIPOS.map(t=>[t,TIPO_LAB[t]])].forEach(([k,lab])=>{
     const n = k==="todas"?B.length:B.filter(x=>x.tipo===k).length;
     tf.appendChild(chip(lab+' ('+n+')', fTipo===k, ()=>{fTipo=k;render();}));
   });
@@ -84,13 +89,12 @@ function render(){
   buildFilters();
   const items=visible();
   $('bar').textContent = items.length+' preguntas · '+
-    items.filter(x=>x.tipo==="corta").length+' cortas · '+
-    items.filter(x=>x.tipo==="larga").length+' largas';
+    TIPOS.map(t=>items.filter(x=>x.tipo===t).length+' '+TIPO_LAB[t].toLowerCase()).join(' · ');
   const l=$('list'); l.innerHTML='';
   items.forEach(x=>{
     const d=document.createElement('div');
     d.className='q '+x.tipo;
-    d.innerHTML='<span class="tag">'+(x.tipo==="corta"?"Corta":"Larga")+' · '+NOM[x.bloque]+' · '+x.ext+' · nº'+x.n+'</span>'+
+    d.innerHTML='<span class="tag">'+(TAG_LAB[x.tipo]||x.tipo)+' · '+NOM[x.bloque]+' · '+x.ext+(x.n?' · nº'+x.n:'')+'</span>'+
       '<div class="qh"><span class="arrow">▶</span><span>'+x.q+'</span></div>'+
       '<div class="a">'+x.a+'</div>';
     d.querySelector('.qh').onclick=()=>d.classList.toggle('open');

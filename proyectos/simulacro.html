@@ -39,10 +39,10 @@
 </head>
 <body>
 <h1>Proyectos ágiles — Test completo</h1>
-<p class="sub">Examen real: <strong>10 test + 4 cortas + 2 casos prácticos</strong> (contexto + 2 preguntas). Parte 1 = práctica · Parte 2 = <strong>banco oficial</strong> (100 preguntas, verificadas 10/10).</p>
+<p class="sub">Solo <strong>tipo test</strong>. Parte 1 = test de práctica · Parte 2 = <strong>banco oficial</strong> de la plataforma (verificado 10/10). Las <strong>cortas, desarrollo y casos prácticos</strong> están ahora en «Preguntas y respuestas».</p>
 <div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
 
-<h2>Parte 1 · Simulacro de práctica</h2>
+<h2>📝 Parte 1 · Test de práctica</h2>
 <h2>📝 Tipo test</h2>
 
 <div class="q" data-c="2">
@@ -153,73 +153,6 @@
 <button class="opt">Seguir el plan por encima de responder al cambio.</button>
 </div>
 <div class="exp">Los 4 valores: <em>individuos e interacciones</em> &gt; procesos/herramientas; <em>software funcionando</em> &gt; documentación extensa; <em>colaboración con el cliente</em> &gt; negociación contractual; <em>respuesta al cambio</em> &gt; seguir un plan. Sin despreciar lo de la derecha, se valora más lo de la izquierda.</div>
-</div>
-
-<h2>✍️ Preguntas cortas / desarrollo</h2>
-
-<div class="q">
-<div class="qh">1. Explica la diferencia entre <strong>Burndown</strong> y <strong>Burnup</strong> y qué aporta el segundo.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-Ambos muestran el progreso de un sprint o release. El <strong>Burndown</strong> dibuja el <em>trabajo restante</em> bajando hacia cero. El <strong>Burnup</strong> dibuja el <em>trabajo completado</em> subiendo y añade una segunda línea con el <em>alcance total</em>. Su ventaja: como separa "hecho" de "alcance", si la línea de alcance sube se detecta el <em>scope creep</em> (entró trabajo nuevo), algo que el burndown esconde porque mezcla ambos efectos en una sola curva.
-</div>
-</div>
-
-<div class="q">
-<div class="qh">2. Enumera y describe brevemente los <strong>3 roles, 3 artefactos</strong> y los eventos de Scrum.</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-<strong>Roles:</strong> Product Owner (gestiona y prioriza el Product Backlog, maximiza valor), Scrum Master (facilita el proceso, elimina impedimentos), Developers (crean el incremento).<br>
-<strong>Artefactos:</strong> Product Backlog (lista priorizada de todo lo deseado), Sprint Backlog (lo elegido para el sprint + plan), Incremento (resultado utilizable).<br>
-<strong>Eventos:</strong> el Sprint (contenedor) y dentro: Sprint Planning (qué y cómo), Daily Scrum (sincronización diaria de 15'), Sprint Review (inspección del incremento con interesados) y Retrospective (mejora del proceso).
-</div>
-</div>
-
-<div class="q">
-<div class="qh">3. <span class="tag">error clásico que marca el profe</span> ¿Por qué es clave la <strong>colaboración cliente–equipo</strong> en Scrum y qué pasa si falla?</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-Scrum es empírico: se inspecciona y adapta con feedback frecuente del cliente (en la Review y a través del PO). Si el cliente no colabora, el equipo prioriza y construye sobre suposiciones, el Product Backlog deja de reflejar el valor real y se entrega algo que no se ajusta a la necesidad. La <strong>no colaboración cliente–equipo</strong> es uno de los errores típicos de aplicación de Scrum: rompe el bucle inspección-adaptación y convierte el método ágil en un mini-cascada encubierto.
-</div>
-</div>
-
-<div class="q">
-<div class="qh">4. ¿Qué son los <strong>límites WIP</strong> en Kanban y qué problema resuelven?</div>
-<button class="reveal">Ver respuesta modelo</button>
-<div class="model">
-Son un tope al número de tarjetas que pueden estar simultáneamente en una columna/etapa. Resuelven la sobrecarga y el multitasking: al no poder "empujar" más trabajo del límite, el equipo termina lo empezado antes de empezar lo nuevo (sistema <em>pull</em>). Efectos: baja el <em>lead time</em>, mejora el flujo y los cuellos de botella se hacen visibles (la columna se llena justo antes de la etapa lenta).
-</div>
-</div>
-
-<h2>🛠️ Casos prácticos</h2>
-
-<div class="q">
-<div class="qh"><span class="tag">CASO 1 · contexto + 2 preguntas — estilo examen</span><br><em>Contexto:</em> un equipo de soporte recibe tareas, las analiza, las desarrolla, las prueba y las despliega. Quieren visualizar el flujo y dejar de empezar más de lo que terminan.<br><strong>(a)</strong> Diseña un tablero <strong>Kanban de 5 columnas</strong>. <strong>(b)</strong> ¿Dónde y por qué pondrías límites WIP?</div>
-<button class="reveal">Ver solución modelo</button>
-<div class="model">
-<strong>(a) Tablero de 5 columnas</strong> (con WIP entre paréntesis):
-<table>
-<tr><th>Por hacer</th><th>En análisis (3)</th><th>En desarrollo (3)</th><th>En pruebas (2)</th><th>Hecho</th></tr>
-<tr><td>backlog priorizado</td><td>refinando</td><td>codificando</td><td>QA/validación</td><td>desplegado</td></tr>
-</table>
-Conviene desdoblar las columnas de trabajo activo en "haciendo / hecho" (p. ej. <em>En desarrollo: en curso | listo</em>) para ver lo que espera a la siguiente etapa.<br>
-<strong>(b) Límites WIP</strong> en las columnas de trabajo activo (análisis, desarrollo, pruebas), <em>no</em> en "Por hacer" ni "Hecho". Motivo: forzar el sistema <em>pull</em> (solo se tira nueva tarea si hay hueco), reducir el multitasking y revelar el cuello de botella: si "En pruebas (2)" se llena y bloquea a desarrollo, el límite ha hecho visible que QA es el cuello de botella.
-</div>
-</div>
-
-<div class="q">
-<div class="qh"><span class="tag">CASO 2 · contexto + 2 preguntas — estilo examen</span><br><em>Contexto:</em> arranca un nuevo producto. El PO tiene un Product Backlog con historias estimadas; el equipo tiene una velocidad histórica de ~20 puntos/sprint de 2 semanas.<br><strong>(a)</strong> Describe cómo pasarías del Product Backlog al Sprint Backlog en la Sprint Planning. <strong>(b)</strong> ¿Qué es la "Definición de Hecho" y por qué importa?</div>
-<button class="reveal">Ver solución modelo</button>
-<div class="model">
-<strong>(a) Sprint Planning:</strong>
-<ul>
-<li>El PO presenta las historias <em>priorizadas</em> y se acuerda un <strong>Objetivo del Sprint</strong>.</li>
-<li>El equipo toma de arriba del Product Backlog las historias que caben en su capacidad (~20 puntos), no más: esas pasan al <strong>Sprint Backlog</strong>.</li>
-<li>El equipo descompone cada historia en <em>tareas</em> y planifica el "cómo". El Sprint Backlog = historias seleccionadas + plan + objetivo.</li>
-<li>Compromiso realista basado en velocidad, no en deseos del cliente.</li>
-</ul>
-<strong>(b) Definición de Hecho (DoD):</strong> criterios de calidad que toda historia debe cumplir para considerarse "terminada" (p. ej. código revisado, pruebas pasando, integrado, documentado, desplegable). Importa porque crea una noción <em>compartida</em> y objetiva de "hecho", evita el trabajo medio terminado que se arrastra entre sprints y garantiza que el incremento sea realmente utilizable.
-</div>
 </div>
 
 <h2 id="banco">🎯 Parte 2 · Banco oficial de la plataforma (100 preguntas)</h2>

@@ -185,6 +185,41 @@ window.BANCO = [
 
 {tipo:"corta",bloque:4,n:30,ext:"8 líneas",q:"¿Qué aporta la cultura DevOps a una organización?",
  a:"<p>Una <strong>forma de trabajar</strong> en la que <strong>desarrollo y operaciones colaboran</strong> con un <strong>objetivo común</strong>, en lugar de funcionar como <strong>compartimentos separados</strong> (rompe los silos).</p>"+
-   "<p>Fomenta la <strong>automatización</strong>, la <strong>responsabilidad compartida</strong> sobre el producto en producción, la <strong>medición continua</strong> y el <strong>aprendizaje a partir de los fallos</strong>. El resultado: software <strong>más rápido, con más calidad y mayor estabilidad</strong>.</p>"}
+   "<p>Fomenta la <strong>automatización</strong>, la <strong>responsabilidad compartida</strong> sobre el producto en producción, la <strong>medición continua</strong> y el <strong>aprendizaje a partir de los fallos</strong>. El resultado: software <strong>más rápido, con más calidad y mayor estabilidad</strong>.</p>"},
+
+/* =============== DESARROLLO (venían del simulacro) =============== */
+{tipo:"desarrollo",bloque:2,ext:"desarrollo",q:"Explica la diferencia entre Burndown y Burnup y qué aporta el segundo.",
+ a:"<p>Ambos muestran el progreso de un sprint o release. El <strong>Burndown</strong> dibuja el <em>trabajo restante</em> bajando hacia cero. El <strong>Burnup</strong> dibuja el <em>trabajo completado</em> subiendo y añade una segunda línea con el <em>alcance total</em>.</p>"+
+   "<p>Su ventaja: como separa «hecho» de «alcance», si la línea de alcance sube se detecta el <em>scope creep</em> (entró trabajo nuevo), algo que el burndown esconde porque mezcla ambos efectos en una sola curva.</p>"},
+
+{tipo:"desarrollo",bloque:2,ext:"desarrollo",q:"Enumera y describe brevemente los 3 roles, 3 artefactos y los eventos de Scrum.",
+ a:"<p><strong>Roles:</strong> Product Owner (gestiona y prioriza el Product Backlog, maximiza valor), Scrum Master (facilita el proceso, elimina impedimentos), Developers (crean el incremento).</p>"+
+   "<p><strong>Artefactos:</strong> Product Backlog (lista priorizada de todo lo deseado), Sprint Backlog (lo elegido para el sprint + plan), Incremento (resultado utilizable).</p>"+
+   "<p><strong>Eventos:</strong> el Sprint (contenedor) y dentro: Sprint Planning (qué y cómo), Daily Scrum (sincronización diaria de 15'), Sprint Review (inspección del incremento con interesados) y Retrospective (mejora del proceso).</p>"},
+
+{tipo:"desarrollo",bloque:2,ext:"desarrollo",q:"¿Por qué es clave la colaboración cliente–equipo en Scrum y qué pasa si falla?",
+ a:"<p>Scrum es empírico: se inspecciona y adapta con feedback frecuente del cliente (en la Review y a través del PO). Si el cliente no colabora, el equipo prioriza y construye sobre suposiciones, el Product Backlog deja de reflejar el valor real y se entrega algo que no se ajusta a la necesidad.</p>"+
+   "<p>La <strong>no colaboración cliente–equipo</strong> es uno de los errores típicos de aplicación de Scrum: rompe el bucle inspección-adaptación y convierte el método ágil en un mini-cascada encubierto.</p>"+
+   "<div class='mz'>Error clásico que marca el profe.</div>"},
+
+{tipo:"desarrollo",bloque:3,ext:"desarrollo",q:"¿Qué son los límites WIP en Kanban y qué problema resuelven?",
+ a:"<p>Son un tope al número de tarjetas que pueden estar simultáneamente en una columna/etapa. Resuelven la sobrecarga y el multitasking: al no poder «empujar» más trabajo del límite, el equipo termina lo empezado antes de empezar lo nuevo (sistema <em>pull</em>).</p>"+
+   "<p>Efectos: baja el <em>lead time</em>, mejora el flujo y los cuellos de botella se hacen visibles (la columna se llena justo antes de la etapa lenta).</p>"},
+
+/* =============== CASOS PRÁCTICOS (venían del simulacro) =============== */
+{tipo:"caso",bloque:3,ext:"caso práctico",q:"CASO 1 · Un equipo de soporte quiere visualizar su flujo (analizar → desarrollar → probar → desplegar) y dejar de empezar más de lo que termina. (a) Diseña un tablero Kanban de 5 columnas. (b) ¿Dónde y por qué pondrías límites WIP?",
+ a:"<p><strong>(a) Tablero de 5 columnas</strong> (con WIP entre paréntesis):</p>"+
+   "<table><tr><th>Por hacer</th><th>En análisis (3)</th><th>En desarrollo (3)</th><th>En pruebas (2)</th><th>Hecho</th></tr>"+
+   "<tr><td>backlog priorizado</td><td>refinando</td><td>codificando</td><td>QA/validación</td><td>desplegado</td></tr></table>"+
+   "<p>Conviene desdoblar las columnas de trabajo activo en «haciendo / hecho» (p. ej. <em>En desarrollo: en curso | listo</em>) para ver lo que espera a la siguiente etapa.</p>"+
+   "<p><strong>(b) Límites WIP</strong> en las columnas de trabajo activo (análisis, desarrollo, pruebas), <em>no</em> en «Por hacer» ni «Hecho». Motivo: forzar el sistema <em>pull</em> (solo se tira nueva tarea si hay hueco), reducir el multitasking y revelar el cuello de botella: si «En pruebas (2)» se llena y bloquea a desarrollo, el límite ha hecho visible que QA es el cuello de botella.</p>"},
+
+{tipo:"caso",bloque:2,ext:"caso práctico",q:"CASO 2 · Arranca un producto nuevo. El PO tiene un Product Backlog con historias estimadas; el equipo tiene una velocidad histórica de ~20 puntos/sprint de 2 semanas. (a) ¿Cómo pasarías del Product Backlog al Sprint Backlog en la Sprint Planning? (b) ¿Qué es la Definición de Hecho y por qué importa?",
+ a:"<p><strong>(a) Sprint Planning:</strong></p>"+
+   "<ul><li>El PO presenta las historias <em>priorizadas</em> y se acuerda un <strong>Objetivo del Sprint</strong>.</li>"+
+   "<li>El equipo toma de arriba del Product Backlog las historias que caben en su capacidad (~20 puntos), no más: esas pasan al <strong>Sprint Backlog</strong>.</li>"+
+   "<li>El equipo descompone cada historia en <em>tareas</em> y planifica el «cómo». El Sprint Backlog = historias seleccionadas + plan + objetivo.</li>"+
+   "<li>Compromiso realista basado en velocidad, no en deseos del cliente.</li></ul>"+
+   "<p><strong>(b) Definición de Hecho (DoD):</strong> criterios de calidad que toda historia debe cumplir para considerarse «terminada» (código revisado, pruebas pasando, integrado, documentado, desplegable). Importa porque crea una noción <em>compartida</em> y objetiva de «hecho», evita el trabajo medio terminado que se arrastra entre sprints y garantiza que el incremento sea realmente utilizable.</p>"}
 
 ];
