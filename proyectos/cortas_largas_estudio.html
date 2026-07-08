@@ -85,6 +85,16 @@ function visible(){
   return B.map((x,i)=>({...x,i}))
           .filter(x=>(fTipo==="todas"||x.tipo===fTipo)&&fBloque.has(x.bloque));
 }
+/* Convierte respuestas escritas como enumeración plana ("a · b · c") en bullets.
+   Deja intactas las que ya traen bloques (ul/ol/li/pre/p/div). */
+function fmt(html){
+  const s=(html||'').trim();
+  if(/<(ul|ol|li|pre|p|div)\b/i.test(s)) return s;
+  if(s.indexOf(' · ')===-1) return s;
+  const items=s.split(' · ').map(t=>t.trim()).filter(Boolean)
+    .map(t=>'<li>'+t.replace(/\.$/,'')+'</li>').join('');
+  return '<ul>'+items+'</ul>';
+}
 function render(){
   buildFilters();
   const items=visible();
@@ -96,7 +106,7 @@ function render(){
     d.className='q '+x.tipo;
     d.innerHTML='<span class="tag">'+(TAG_LAB[x.tipo]||x.tipo)+' · '+NOM[x.bloque]+' · '+x.ext+(x.n?' · nº'+x.n:'')+'</span>'+
       '<div class="qh"><span class="arrow">▶</span><span>'+x.q+'</span></div>'+
-      '<div class="a">'+x.a+'</div>';
+      '<div class="a">'+fmt(x.a)+'</div>';
     d.querySelector('.qh').onclick=()=>d.classList.toggle('open');
     l.appendChild(d);
   });

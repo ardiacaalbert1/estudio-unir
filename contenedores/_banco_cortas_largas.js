@@ -5,69 +5,89 @@
 window.BANCO = [
 /* ===================== CORTAS ===================== */
 {tipo:"corta",tema:1,q:"¿Qué diferencia a un contenedor de una máquina virtual?",
- a:"El contenedor <strong>comparte el kernel</strong> del SO host (virtualización a nivel de sistema operativo); la VM lleva un SO invitado completo sobre un hypervisor. Por eso el contenedor es más ligero, arranca en segundos y aprovecha mejor el hardware."},
+ a:"<ul><li>El <strong>contenedor</strong> comparte el kernel del SO host (virtualización a nivel de sistema operativo)</li>"+
+   "<li>La <strong>VM</strong> lleva un SO invitado completo sobre un hypervisor</li></ul>"+
+   "Por eso el contenedor es más ligero, arranca en segundos y aprovecha mejor el hardware."},
 {tipo:"corta",tema:1,q:"Enumera las tecnologías del kernel en que se apoya Docker y su función.",
  a:"<strong>namespaces</strong> = aislamiento (cada contenedor su vista de recursos) · <strong>cgroups</strong> = límite/control de CPU y memoria · <strong>unionfs</strong> = filesystem por capas · <strong>libcontainer</strong> = runtime nativo que habla con el kernel."},
 {tipo:"corta",tema:1,q:"¿Cómo se comunica el cliente de Docker con el demonio? ¿En qué lenguaje está escrito Docker?",
- a:"Mediante una <strong>API REST</strong> (socket Unix o TCP). Docker está escrito en <strong>Go</strong>."},
+ a:"Mediante una <strong>API REST</strong> (socket Unix o TCP) · Docker está escrito en <strong>Go</strong>."},
 {tipo:"corta",tema:2,q:"Diferencia entre imagen y contenedor.",
- a:"La <strong>imagen</strong> es la plantilla inmutable, construida por capas. El <strong>contenedor</strong> es una instancia en ejecución de la imagen, con su capa de escritura <em>copy-on-write</em> encima."},
+ a:"La <strong>imagen</strong> es la plantilla inmutable, construida por capas · El <strong>contenedor</strong> es una instancia en ejecución de la imagen, con su capa de escritura <em>copy-on-write</em> encima."},
 {tipo:"corta",tema:2,q:"CMD vs ENTRYPOINT en un Dockerfile.",
- a:"<code>ENTRYPOINT</code> fija el ejecutable que siempre corre; <code>CMD</code> da los argumentos por defecto, que se sobrescriben al pasar argumentos en <code>docker run</code>."},
+ a:"<code>ENTRYPOINT</code> fija el ejecutable que siempre corre · <code>CMD</code> da los argumentos por defecto, que se sobrescriben al pasar argumentos en <code>docker run</code>."},
 {tipo:"corta",tema:2,q:"¿Para qué sirve docker commit? ¿Y ONBUILD?",
- a:"<code>docker commit</code> guarda el estado actual de un contenedor como una <strong>nueva imagen</strong>. <code>ONBUILD</code> registra un comando que se ejecutará más adelante, cuando esa imagen se use como base (<code>FROM</code>) en otra construcción."},
+ a:"<code>docker commit</code> guarda el estado actual de un contenedor como una <strong>nueva imagen</strong> · <code>ONBUILD</code> registra un comando que se ejecutará más adelante, cuando esa imagen se use como base (<code>FROM</code>) en otra construcción."},
 {tipo:"corta",tema:2,q:"¿Por qué importa el orden de las instrucciones del Dockerfile?",
  a:"Cada instrucción crea una <strong>capa cacheable</strong>. Si una capa cambia, invalida la caché de todas las siguientes; por eso se instalan primero las dependencias (que cambian poco) y se copia el código al final."},
 {tipo:"corta",tema:2,q:"¿Qué comando lista las capas de una imagen? ¿Y cuál genera la imagen?",
- a:"<code>docker image history</code> lista las capas. <code>docker build</code> genera la imagen a partir del Dockerfile. Para partir de cero: <code>FROM scratch</code>."},
+ a:"<code>docker image history</code> lista las capas · <code>docker build</code> genera la imagen a partir del Dockerfile · Para partir de cero: <code>FROM scratch</code>."},
 {tipo:"corta",tema:3,q:"Tipos de almacenamiento en Docker.",
- a:"<strong>Volumes</strong>: gestionados por Docker, persistentes y portables. <strong>Bind mounts</strong>: montan una ruta concreta del host (el host puede modificarlos). <strong>Tmpfs</strong>: en RAM, no persisten."},
+ a:"<strong>Volumes</strong>: gestionados por Docker, persistentes y portables · <strong>Bind mounts</strong>: montan una ruta concreta del host (el host puede modificarlos) · <strong>Tmpfs</strong>: en RAM, no persisten."},
 {tipo:"corta",tema:3,q:"Los cuatro drivers de red de Docker.",
  a:"<strong>bridge</strong>: red privada interna por defecto de un host · <strong>host</strong>: usa la pila de red del host sin aislamiento · <strong>overlay</strong>: conecta varios hosts (Swarm) · <strong>none</strong>: sin red, aislado."},
 {tipo:"corta",tema:3,q:"¿Qué hace docker cp? ¿En qué estado queda un contenedor al terminar?",
- a:"<code>docker cp</code> copia ficheros entre host y contenedor en <strong>ambos sentidos</strong>. Al finalizar su ejecución el contenedor queda en estado <strong>Exited</strong>."},
+ a:"<code>docker cp</code> copia ficheros entre host y contenedor en <strong>ambos sentidos</strong> · Al finalizar su ejecución el contenedor queda en estado <strong>Exited</strong>."},
 {tipo:"corta",tema:4,q:"docker export/import vs docker save/load.",
- a:"<code>export/import</code> mueve el <strong>filesystem de un CONTENEDOR</strong> a/desde un TAR (pierde capas y metadatos). <code>save/load</code> mueve una <strong>IMAGEN completa con sus capas</strong> a/desde TAR."},
+ a:"<code>export/import</code> mueve el <strong>filesystem de un CONTENEDOR</strong> a/desde un TAR (pierde capas y metadatos) · <code>save/load</code> mueve una <strong>IMAGEN completa con sus capas</strong> a/desde TAR."},
 {tipo:"corta",tema:4,q:"¿Qué es Docker Compose y para qué se usa?",
  a:"Herramienta para <strong>definir y levantar aplicaciones multi-contenedor</strong> con un fichero <code>docker-compose.yml</code> (secciones <code>services</code>, <code>networks</code>, <code>volumes</code>) mediante <code>docker compose up</code>."},
 {tipo:"corta",tema:5,q:"Nodos manager vs worker en Swarm.",
- a:"<strong>Manager</strong>: mantienen el estado del clúster (algoritmo <em>raft</em>) y planifican tareas. <strong>Worker</strong>: solo ejecutan tareas. Se añaden con el <code>join-token</code>; <code>docker node promote</code> convierte un worker en manager."},
+ a:"<ul><li><strong>Manager</strong>: mantienen el estado del clúster (algoritmo <em>raft</em>) y planifican tareas</li>"+
+   "<li><strong>Worker</strong>: solo ejecutan tareas</li></ul>"+
+   "Se añaden con el <code>join-token</code>; <code>docker node promote</code> convierte un worker en manager."},
 {tipo:"corta",tema:5,q:"Servicio replicado vs global y qué hace 'drain' en Swarm.",
- a:"<strong>Replicado</strong>: N réplicas repartidas por el clúster. <strong>Global</strong>: una tarea por nodo. Poner un nodo en <strong>drain</strong> lo saca de la planificación: las tareas replicadas se <em>replanifican</em> en otros nodos y las globales simplemente se paran."},
+ a:"<ul><li><strong>Replicado</strong>: N réplicas repartidas por el clúster</li>"+
+   "<li><strong>Global</strong>: una tarea por nodo</li></ul>"+
+   "Poner un nodo en <strong>drain</strong> lo saca de la planificación: las tareas replicadas se <em>replanifican</em> en otros nodos y las globales simplemente se paran."},
 {tipo:"corta",tema:5,q:"¿Cómo se transmiten los objetos config y secret en Swarm?",
- a:"Ambos se transmiten entre nodos <strong>cifrados</strong>. Se añaden a un servicio existente con <code>docker service update --secret-add ...</code>."},
+ a:"Ambos se transmiten entre nodos <strong>cifrados</strong> · Se añaden a un servicio existente con <code>docker service update --secret-add ...</code>."},
 {tipo:"corta",tema:6,q:"Componentes del Control Plane de Kubernetes (y del nodo worker).",
- a:"Control plane: <strong>API server</strong> (punto de entrada), <strong>etcd</strong> (almacén clave-valor con el estado), <strong>Scheduler</strong> (asigna Pods a nodos) y <strong>Controller Manager</strong>. En cada nodo worker: <strong>kubelet</strong> y <strong>kube-proxy</strong>."},
+ a:"<strong>Control plane</strong> (cerebro del clúster):<ul>"+
+   "<li><strong>API server</strong> — punto de entrada al clúster</li>"+
+   "<li><strong>etcd</strong> — almacén clave-valor con el estado</li>"+
+   "<li><strong>Scheduler</strong> — asigna Pods a nodos</li>"+
+   "<li><strong>Controller Manager</strong> — ejecuta los controladores</li></ul>"+
+   "En cada <strong>nodo worker</strong>:<ul>"+
+   "<li><strong>kubelet</strong> — agente que habla con el control plane</li>"+
+   "<li><strong>kube-proxy</strong> — gestiona la red/reglas de tráfico del nodo</li></ul>"},
 {tipo:"corta",tema:6,q:"¿Qué es un Pod y qué garantiza un ReplicaSet?",
- a:"El <strong>Pod</strong> es la unidad mínima desplegable: uno o más contenedores que comparten IP, red y almacenamiento. El <strong>ReplicaSet</strong> garantiza que haya siempre el número deseado de réplicas (replanifica los Pods si cae un nodo)."},
+ a:"El <strong>Pod</strong> es la unidad mínima desplegable: uno o más contenedores que comparten IP, red y almacenamiento · El <strong>ReplicaSet</strong> garantiza que haya siempre el número deseado de réplicas (replanifica los Pods si cae un nodo)."},
 {tipo:"corta",tema:7,q:"Labels vs Annotations.",
- a:"<strong>Labels</strong>: pares clave-valor <em>identificativos</em> que usan los selectores para agrupar/seleccionar objetos. <strong>Annotations</strong>: metadatos <em>no identificativos</em> (información extra que no se usa para seleccionar)."},
+ a:"<strong>Labels</strong>: pares clave-valor <em>identificativos</em> que usan los selectores para agrupar/seleccionar objetos · <strong>Annotations</strong>: metadatos <em>no identificativos</em> (información extra que no se usa para seleccionar)."},
 {tipo:"corta",tema:7,q:"Liveness probe vs Readiness probe.",
- a:"Si falla la <strong>liveness</strong>, K8s <em>reinicia</em> el contenedor (detecta cuelgues). Si falla la <strong>readiness</strong>, K8s lo <em>saca de los endpoints</em> del Service (deja de enviarle tráfico) sin reiniciarlo. Métodos: <code>exec</code>, <code>httpGet</code>, <code>tcpSocket</code>."},
+ a:"<ul><li>Si falla la <strong>liveness</strong>, K8s <em>reinicia</em> el contenedor (detecta cuelgues)</li>"+
+   "<li>Si falla la <strong>readiness</strong>, K8s lo <em>saca de los endpoints</em> del Service (deja de enviarle tráfico) sin reiniciarlo</li></ul>"+
+   "Métodos: <code>exec</code>, <code>httpGet</code>, <code>tcpSocket</code>."},
 {tipo:"corta",tema:7,q:"requests vs limits.",
- a:"<code>resources.requests</code>: mínimo garantizado que el <strong>scheduler</strong> usa para decidir el nodo. <code>resources.limits</code>: tope máximo que el contenedor puede consumir."},
+ a:"<code>resources.requests</code>: mínimo garantizado que el <strong>scheduler</strong> usa para decidir el nodo · <code>resources.limits</code>: tope máximo que el contenedor puede consumir."},
 {tipo:"corta",tema:7,q:"¿Qué es un Namespace y para qué sirven los selectores?",
- a:"El <strong>Namespace</strong> es una división lógica del clúster para aislar/organizar recursos (los del sistema van en <code>kube-system</code>). Los <strong>selectores</strong> filtran objetos según sus labels."},
+ a:"El <strong>Namespace</strong> es una división lógica del clúster para aislar/organizar recursos (los del sistema van en <code>kube-system</code>) · Los <strong>selectores</strong> filtran objetos según sus labels."},
 {tipo:"corta",tema:8,q:"Tipos de Service en Kubernetes.",
  a:"<strong>ClusterIP</strong>: IP interna (solo dentro del clúster, por defecto) · <strong>NodePort</strong>: mismo puerto en la IP de cada nodo · <strong>LoadBalancer</strong>: balanceador externo del cloud · <strong>ExternalName</strong>: alias DNS (CNAME) a un servicio externo."},
 {tipo:"corta",tema:8,q:"¿Qué es un Ingress? ¿Y un DaemonSet?",
- a:"<strong>Ingress</strong>: enrutamiento HTTP/L7 externo por reglas (host/path) hacia varios Services. <strong>DaemonSet</strong>: ejecuta una copia del Pod en cada nodo (o en los que casen un <code>nodeSelector</code>)."},
+ a:"<strong>Ingress</strong>: enrutamiento HTTP/L7 externo por reglas (host/path) hacia varios Services · <strong>DaemonSet</strong>: ejecuta una copia del Pod en cada nodo (o en los que casen un <code>nodeSelector</code>)."},
 {tipo:"corta",tema:8,q:"¿Qué pasa con los Pods de un ReplicaSet si su nodo deja de estar operativo?",
- a:"Son <strong>replanificados automáticamente</strong> en otros nodos disponibles. Al borrar un ReplicaSet, <code>--cascade=false</code> evita que se borren sus Pods."},
+ a:"Son <strong>replanificados automáticamente</strong> en otros nodos disponibles · Al borrar un ReplicaSet, <code>--cascade=false</code> evita que se borren sus Pods."},
 {tipo:"corta",tema:9,q:"emptyDir vs hostPath.",
- a:"<strong>emptyDir</strong>: volumen efímero, se crea vacío y se borra al terminar el Pod. <strong>hostPath</strong>: monta un directorio o fichero concreto del sistema de ficheros del nodo."},
+ a:"<strong>emptyDir</strong>: volumen efímero, se crea vacío y se borra al terminar el Pod · <strong>hostPath</strong>: monta un directorio o fichero concreto del sistema de ficheros del nodo."},
 {tipo:"corta",tema:9,q:"PV, PVC y StorageClass.",
- a:"<strong>PersistentVolume (PV)</strong>: recurso del clúster que desacopla el almacenamiento del Pod. <strong>PersistentVolumeClaim (PVC)</strong>: la petición con la que un Pod reclama un PV. <strong>StorageClass</strong>: aprovisiona PV de forma <em>dinámica</em>."},
+ a:"<strong>PersistentVolume (PV)</strong>: recurso del clúster que desacopla el almacenamiento del Pod · <strong>PersistentVolumeClaim (PVC)</strong>: la petición con la que un Pod reclama un PV · <strong>StorageClass</strong>: aprovisiona PV de forma <em>dinámica</em>."},
 {tipo:"corta",tema:9,q:"ConfigMap vs Secret (y el 'ojo' del curso).",
- a:"Ambos inyectan configuración como variables de entorno o como volumen. El <strong>Secret</strong> se guarda en <strong>base64</strong> (codificado, no cifrado). Ambos son <em>namespaced</em>. OJO: el curso da por <strong>FALSA</strong> la afirmación «el volumen montado de un ConfigMap se actualiza automáticamente»."},
+ a:"<ul><li>Ambos inyectan configuración como variables de entorno o como volumen</li>"+
+   "<li>El <strong>Secret</strong> se guarda en <strong>base64</strong> (codificado, no cifrado)</li>"+
+   "<li>Ambos son <em>namespaced</em></li></ul>"+
+   "OJO: el curso da por <strong>FALSA</strong> la afirmación «el volumen montado de un ConfigMap se actualiza automáticamente»."},
 {tipo:"corta",tema:10,q:"Deployment vs StatefulSet.",
- a:"<strong>Deployment</strong>: apps sin estado; gestiona un ReplicaSet y permite rolling update y rollback. <strong>StatefulSet</strong>: apps con estado; réplicas con hostname/identidad únicos, creación/borrado ordenados y almacenamiento estable."},
+ a:"<strong>Deployment</strong>: apps sin estado; gestiona un ReplicaSet y permite rolling update y rollback · <strong>StatefulSet</strong>: apps con estado; réplicas con hostname/identidad únicos, creación/borrado ordenados y almacenamiento estable."},
 {tipo:"corta",tema:10,q:"Job vs CronJob. ¿Qué campo pone tiempo límite a un Job?",
- a:"<strong>Job</strong>: ejecuta Pods hasta completar la tarea (<code>completions</code>, <code>backoffLimit</code>). <strong>CronJob</strong>: lanza Jobs de forma programada con <code>spec.schedule</code> (sintaxis cron). El tiempo límite de ejecución lo fija <code>spec.activeDeadlineSeconds</code>."},
+ a:"<ul><li><strong>Job</strong>: ejecuta Pods hasta completar la tarea (<code>completions</code>, <code>backoffLimit</code>)</li>"+
+   "<li><strong>CronJob</strong>: lanza Jobs de forma programada con <code>spec.schedule</code> (sintaxis cron)</li></ul>"+
+   "El tiempo límite de ejecución lo fija <code>spec.activeDeadlineSeconds</code>."},
 {tipo:"corta",tema:10,q:"Comandos de rollout de un Deployment.",
  a:"<code>kubectl rollout status</code> (estado) · <code>kubectl rollout undo</code> (revertir) · <code>kubectl rollout pause</code> (pausar) · <code>kubectl scale</code> (cambiar nº de réplicas)."},
 {tipo:"corta",tema:7,q:"kubectl esenciales para operar sobre Pods.",
- a:"<code>get/describe</code> (ver), <code>exec</code> (comando dentro), <code>logs</code> (registros), <code>cp</code> (copiar ficheros), <code>port-forward</code> (puerto local → Pod) y <code>apply -f</code> (aplicar manifiesto YAML)."},
+ a:"<code>get/describe</code> (ver) · <code>exec</code> (comando dentro) · <code>logs</code> (registros) · <code>cp</code> (copiar ficheros) · <code>port-forward</code> (puerto local → Pod) · <code>apply -f</code> (aplicar manifiesto YAML)."},
 
 /* ===================== LARGAS ===================== */
 {tipo:"larga",tema:1,q:"Explica la arquitectura de Docker (cliente, demonio, registro) y qué aporta frente a las máquinas virtuales.",

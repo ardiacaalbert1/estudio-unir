@@ -97,6 +97,16 @@ function buildFilters(){
 function visible(){
   return ITEMS.filter(x=>fGrupo.has(x.grupo)&&fTema.has(x.tema));
 }
+/* Convierte respuestas escritas como enumeración plana ("a · b · c") en una lista
+   de bullets. Deja intactas las que ya traen bloques (ul/ol/li/pre/p/div). */
+function fmt(html){
+  const s=(html||'').trim();
+  if(/<(ul|ol|li|pre|p|div)\b/i.test(s)) return s;   // ya estructurada
+  if(s.indexOf(' · ')===-1) return s;                // no es enumeración
+  const items=s.split(' · ').map(t=>t.trim()).filter(Boolean)
+    .map(t=>'<li>'+t.replace(/\.$/,'')+'</li>').join('');
+  return '<ul>'+items+'</ul>';
+}
 function render(){
   buildFilters();
   const items=visible();
@@ -110,7 +120,7 @@ function render(){
     d.className='q '+(CLS[x.grupo]||'');
     d.innerHTML='<span class="tag">'+(LAB[x.grupo]||x.grupo)+' · '+(x.tema===0?'General':'Tema '+x.tema)+'</span>'+
       '<div class="qh"><span class="arrow">▶</span><span>'+x.q+'</span></div>'+
-      '<div class="a">'+x.a+'</div>';
+      '<div class="a">'+fmt(x.a)+'</div>';
     d.querySelector('.qh').onclick=()=>d.classList.toggle('open');
     l.appendChild(d);
   });
