@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD — Test completo</title>
+<style>
+  :root{--bg:#fff;--fg:#1a1a1a;--mut:#555;--line:#e2e2e2;--card:#f7f7f8;--green:#1d8a4e;--red:#c0392b;--blue:#2563c9;--amber:#b9770e;}
+  @media (prefers-color-scheme:dark){:root{--bg:#1e1e1e;--fg:#ededed;--mut:#b0b0b0;--line:#3a3a3a;--card:#272727;--green:#46c98b;--red:#ff7a6b;--blue:#6ea8ff;--amber:#e0a830;}}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;margin:0 0 2px;} h2{font-size:1.15rem;margin:30px 0 8px;border-bottom:2px solid var(--line);padding-bottom:5px;}
+  .sub{color:var(--mut);margin:0 0 6px;font-size:.95rem;}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .qh{font-weight:600;margin:0 0 9px;}
+  .opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;cursor:pointer;font:inherit;transition:.15s;}
+  .opt:hover{border-color:var(--blue);}
+  .opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);font-weight:600;}
+  .opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .opt:disabled{cursor:default;opacity:1;}
+  .exp{display:none;margin-top:10px;padding:10px 12px;border-left:3px solid var(--blue);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .exp.show{display:block;}
+  .reveal{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600;}
+  .model{display:none;margin-top:10px;padding:11px 13px;border-left:3px solid var(--green);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
+  .model.show{display:block;}
+  .model ul,.exp ul{margin:6px 0 2px;padding-left:18px;} .model li{margin:3px 0;}
+  code{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:.86em;}
+  pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:auto;font-size:.82rem;line-height:1.4;}
+  .tag{font-size:.78rem;color:var(--mut);font-weight:600;}
+
+  h3{font-size:1.02rem;margin:22px 0 4px;color:var(--mut);}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .toc a{border:1px solid var(--line);border-radius:8px;padding:4px 9px;text-decoration:none;color:var(--fg);font-size:.85rem;background:var(--card);}
+  .toc a:hover{border-color:var(--blue);}
+  .pair{margin:5px 0;} .pair b{color:var(--blue);}
+</style>
+</head>
+<body>
+
+<h2 id="banco">🎯 Banco oficial de la plataforma (96 preguntas)</h2>
+<p class="sub">Preguntas reales de los Test Tema 1–10 del campus, con la respuesta correcta verificada (todos los intentos al 100%). El orden es el del PDF.</p>
+<div class="toc"><a href="#bt1">T1</a><a href="#bt2">T2</a><a href="#bt3">T3</a><a href="#bt4">T4</a><a href="#bt5">T5</a><a href="#bt6">T6</a><a href="#bt7">T7</a><a href="#bt8">T8</a><a href="#bt9">T9</a><a href="#bt10">T10</a></div>
+<h3 id="bt1">Tema 1 · Introducción (ALM, CI/CD)</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T1·P1 · banco oficial</span><br>¿Cuáles son los tres aspectos de ALM?</div>
+<div class="opts"><button class="opt">Gobierno, integración y despliegue.</button><button class="opt">Gobierno, desarrollo y operaciones.</button><button class="opt">SDLC, CICD y despliegue continuo.</button><button class="opt">Desarrollo y operaciones.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P2 · banco oficial</span><br>¿Qué significa construir, probar y desplegar automáticamente?</div>
+<div class="opts"><button class="opt">Escribir unos scripts de bash para cada tarea.</button><button class="opt">Definir trabajos en Jenkins y ejecutarlos cada vez que hay un cambio.</button><button class="opt">Documentar cada paso del despliegue exhaustivamente.</button><button class="opt">Conseguir que los cambios de código inicien una construcción, ejecuten las pruebas y permitan un despliegue sin intervención humana.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P3 · banco oficial</span><br>¿Por qué es útil desplegar un entorno de producción antes de que acabe el desarrollo?</div>
+<div class="opts"><button class="opt">Para probar el proceso de despliegue antes de la fecha clave.</button><button class="opt">Para comprobar que el sistema funciona bien en este entorno, que puede ser y será diferente de los entornos de desarrollo.</button><button class="opt">Para aumentar la fiabilidad del proceso.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P4 · banco oficial</span><br>¿Qué significa gestionar automáticamente la configuración?</div>
+<div class="opts"><button class="opt">Mantener la configuración de cada entorno separada del script de despliegue y con un control de versiones.</button><button class="opt">Escribir scripts separados, uno por entorno, que no dependan de ningún otro fichero.</button><button class="opt">Guardar la configuración aplicada en cada entorno en una base de datos.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P5 · banco oficial</span><br>¿Cuál es el objetivo de la integración continua?</div>
+<div class="opts"><button class="opt">Obligar a los desarrolladores a integrar cambios todos los días para controlar lo que hacen.</button><button class="opt">Implantar una herramienta moderna como Jenkins.</button><button class="opt">Aumentar la calidad del código detectando los errores lo más pronto posible y la velocidad a la que se entrega a los clientes.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P6 · banco oficial</span><br>¿Cuál es el objetivo de la entrega continua?</div>
+<div class="opts"><button class="opt">Aumentar la fiabilidad del código, reduciendo el número de errores.</button><button class="opt">Reducir el tiempo necesario para entregar software en producción.</button><button class="opt">Aumentar la fiabilidad de los procesos de despliegue.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T1·P7 · banco oficial</span><br>¿Qué diferencia hay entre entrega y despliegue continuos?</div>
+<div class="opts"><button class="opt">Ninguna, son sinónimos.</button><button class="opt">La entrega deja el producto listo para desplegar después de cada cambio, pero no tiene por qué desplegar en producción. El despliegue continuo prosigue el flujo de la entrega múltiples veces al día hasta completar el despliegue en producción.</button><button class="opt">La entrega solo compila el código, el despliegue, además, incorpora las pruebas.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T1·P8 · banco oficial</span><br>¿Qué se puede esperar de las construcciones de software en una organización que no ha empezado a madurar en la integración continua?</div>
+<div class="opts"><button class="opt">El pase a producción es automático, fiable e indoloro.</button><button class="opt">Los cambios en la base de datos se ejecutan manualmente.</button><button class="opt">La construcción es manual y no se gestionan los artefactos.</button><button class="opt">No hay batería de pruebas alguna.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T1·P9 · banco oficial</span><br>¿En qué debe centrar sus esfuerzos una organización que intenta mejorar su calidad de software?</div>
+<div class="opts"><button class="opt">En aquellos aspectos del proceso de integración y entrega que sean más dolorosos.</button><button class="opt">En automatizar todo el proceso cuanto antes.</button><button class="opt">En desplegar la aplicación sobre Kubernetes.</button><button class="opt">En versionar todos los elementos de la configuración.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T1·P10 · banco oficial</span><br>¿Cuál de estos elementos es fundamental para empezar a aplicar integración continua?</div>
+<div class="opts"><button class="opt">Un sistema de control de versiones.</button><button class="opt">Una batería de pruebas y automatización.</button><button class="opt">Aceptación del equipo.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<h3 id="bt2">Tema 2 · Control de versiones</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T2·P1 · banco oficial</span><br>¿En qué consiste un commit?</div>
+<div class="opts"><button class="opt">Es el proceso de incluir un fichero en un sistema de control de cambios.</button><button class="opt">Es un conjunto de cambios registrados en la historia de un sistema de control de cambios.</button><button class="opt">Es una carpeta con los ficheros de una versión de la aplicación.</button><button class="opt">Es el cambio a un punto anterior de la historia del repositorio.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P2 · banco oficial</span><br>¿Qué debería ser versionado?</div>
+<div class="opts"><button class="opt">El código fuente de la aplicación.</button><button class="opt">La documentación.</button><button class="opt">Las herramientas de despliegue.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P3 · banco oficial</span><br>¿En qué consiste la edición simultánea?</div>
+<div class="opts"><button class="opt">Varios desarrolladores editan un mismo fichero y uno de ellos combina los cambios del resto manualmente.</button><button class="opt">Un desarrollador bloquea un fichero para trabajar sobre él.</button><button class="opt">Varios desarrolladores trabajan sobre el mismo repositorio y probablemente sobre los mismos ficheros y el sistema se encarga de fusionar los cambios de todos automáticamente.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T2·P4 · banco oficial</span><br>Relaciona el concepto con su definición. Commit. Rama. Repositorio. Fusión. Respuesta correcta <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Commit</b> → Conjunto de cambios registrados en la historia del repositorio.</div><div class="pair"><b>Rama</b> → Línea de desarrollo independiente que parte de un punto de la historia.</div><div class="pair"><b>Repositorio</b> → Almacén con los ficheros y toda su historia de versiones.</div><div class="pair"><b>Fusión (merge)</b> → Combinación de los cambios de dos ramas en una.</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P5 · banco oficial</span><br>¿Qué significa «viajar en el tiempo» en el contexto de los sistemas de control de versiones?</div>
+<div class="opts"><button class="opt">Que se pueden instalar versiones antiguas de una aplicación.</button><button class="opt">Que las nuevas versiones son compatibles con las anteriores.</button><button class="opt">Que un desarrollador puede trabajar en una versión antigua del repositorio.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P6 · banco oficial</span><br>¿Qué metadatos incluyen los commits?</div>
+<div class="opts"><button class="opt">Autor.</button><button class="opt">Fecha.</button><button class="opt">Comentarios.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T2·P7 · banco oficial</span><br>¿Cómo se recomienda versionar las dependencias de una aplicación?</div>
+<div class="opts"><button class="opt">Copiando el código fuente de la dependencia dentro de una carpeta del repositorio de la aplicación.</button><button class="opt">Manteniendo un documento con instrucciones sobre cómo instalarla.</button><button class="opt">Referenciando la versión de la dependencia como una librería e instalándola con un gestor de paquetes durante el despliegue.</button><button class="opt">Todas los anteriores son estrategias válidas.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T2·P8 · banco oficial</span><br>¿Cómo se crea una nueva rama llamada feature en Git?</div>
+<div class="opts"><button class="opt">git checkout -b feature.</button><button class="opt">git branch feature.</button><button class="opt">git create branch feature.</button><button class="opt">A y B.</button></div>
+</div>
+<h3 id="bt3">Tema 3 · Flujos de trabajo con Git</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P1 · banco oficial</span><br>¿Por qué un sistema de control de versiones distribuido no necesita bloqueo de archivos?</div>
+<div class="opts"><button class="opt">Sí que lo necesita.</button><button class="opt">Porque cada usuario trabaja con una copia completa del repositorio.</button><button class="opt">Porque son sistemas más antiguos y limitados.</button><button class="opt">Porque cada usuario es propietario de un fichero y solo ese usuario puede modificarlo.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T3·P2 · banco oficial</span><br>¿Por qué no se puede aplicar el flujo de GitHub en un sistema de control de versiones centralizado?</div>
+<div class="opts"><button class="opt">Técnicamente se puede, aunque no es habitual.</button><button class="opt">Porque solo funciona con GitHub, que se basa en Git, que es un sistema de control de versiones distribuido.</button><button class="opt">Porque se basa en los conceptos de fork y pull requests, que solo ofrecen los sistemas distribuidos.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P3 · banco oficial</span><br>¿Cuántas ramas soporta el flujo centralizado?</div>
+<div class="opts"><button class="opt">Solo una, master o trunk.</button><button class="opt">Solo una en el repositorio principal y tantas como sean necesarias en los forks.</button><button class="opt">Una principal y una de desarrollo.</button><button class="opt">Una principal, una de desarrollo y tantas como sean necesarias para las funcionalidades nuevas.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T3·P4 · banco oficial</span><br>¿Por qué una rama de hotfix se fusiona tanto a master como a develop en el Gitflow?</div>
+<div class="opts"><button class="opt">Solo se fusiona a master, no a develop.</button><button class="opt">En Gitflow las modificaciones se fusionan en develop y este se fusiona sobre master, siempre.</button><button class="opt">Por convenio. Técnicamente no hace falta.</button><button class="opt">Porque el cambio es necesario en producción y debe estar disponible en master, pero; además, hay que incorporarlo en cualquier prueba que se esté realizando en el desarrollo de la siguiente versión. producción.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T3·P5 · banco oficial</span><br>¿Se puede implementar feature branching con GitHub sin usar pull requests?</div>
+<div class="opts"><button class="opt">No, en GitHub es obligatorio usar pull requests.</button><button class="opt">Sí, porque GitHub ofrece la funcionalidad de abrir pull requests dentro de un mismo repositorio, que son otro tipo de pull requests.</button><button class="opt">Sí, feature branching puede implementarse en cualquier tipo de sistema de control de versiones centralizado o distribuido.</button><button class="opt">B y C.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P6 · banco oficial</span><br>¿Cómo se crea un fork en GitHub?</div>
+<div class="opts"><button class="opt">En la interfaz de GitHub, haciendo clic sobre el botón Fork.</button><button class="opt">Con git fork new.</button><button class="opt">Con git clone --fork .</button><button class="opt">En la interfaz de GitHub, en el asistente de New repository, hay que seleccionar que se trata de un fork e indicar el repositorio principal.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T3·P7 · banco oficial</span><br>Relaciona cada flujo con su característica. Flujo centralizado. Feature branching workflow. Flujo de GitLab. Forking workflow. Respuesta correcta <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Flujo centralizado</b> → Una sola rama principal (trunk/master); todos commitean ahí, sin ramas de feature.</div><div class="pair"><b>Feature branching</b> → Cada funcionalidad en su propia rama dentro del mismo repositorio; se fusiona al acabar.</div><div class="pair"><b>Flujo de GitLab</b> → Ramas de feature + ramas asociadas a entornos (production/pre-production); el despliegue va ligado a ramas.</div><div class="pair"><b>Forking workflow</b> → Cada desarrollador tiene su propio fork del repo principal y contribuye vía pull requests entre forks.</div></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P8 · banco oficial</span><br>Un desarrollador no tiene acceso de escritura al repositorio principal repo y ha trabajado en una rama new-feature en su fork. Al abrir la pull request, ¿cuál es la rama de origen y cuál es la de destino?</div>
+<div class="opts"><button class="opt">El origen es repo:new-feature y el destino es repo:master.</button><button class="opt">El origen es fork/repo:new-feature y el destino es repo:master.</button><button class="opt">El origen es fork/repo:new-feature y el destino es repo:new-feature.</button><button class="opt">El origen es repo:new-feature y el destino es fork/repo:master.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T3·P9 · banco oficial</span><br>¿Qué significa que un repositorio local pueda tener varios repositorios remotos?</div>
+<div class="opts"><button class="opt">En un sistema distribuido un repositorio puede intercambiar ramas y commits con cualquier otro repositorio. Estos otros repositorios se consideran remotos, y puede definirse más de uno.</button><button class="opt">Lo normal es que haya un único repositorio remoto: el fork del usuario.</button><button class="opt">Git solo permite un repositorio remoto, pero Subversion permite varios.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T3·P10 · banco oficial</span><br>En Gitflow, ¿por qué se dice que cada fusión sobre master es una nueva versión?</div>
+<div class="opts"><button class="opt">No es cierto; en Gitflow se trabaja únicamente con master.</button><button class="opt">Porque se añade una etiqueta con el número de la versión a esos commits.</button><button class="opt">Por convenio, en master no se añaden commits que no se hayan planificado para una versión concreta.</button><button class="opt">Por convenio, las ramas de características nuevas se fusionan sobre master justo antes de preparar la nueva versión. Se fusionan todas juntas, por lo que master está listo para producción.</button></div>
+</div>
+<h3 id="bt4">Tema 4 · Fases de la entrega continua</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P1 · banco oficial</span><br>¿Cuántas fases de prueba tiene un pipeline de CICD?</div>
+<div class="opts"><button class="opt">Tres: unitarias, de aceptación automáticas y de aceptación manuales.</button><button class="opt">Tantas como sean necesarias en cada proyecto de desarrollo.</button><button class="opt">Solo una, la inicial.</button><button class="opt">Cinco: unitarias, estáticas, de aceptación automática, de aceptación manual y smoke tests.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P2 · banco oficial</span><br>¿Cuándo debe detenerse un pipeline?</div>
+<div class="opts"><button class="opt">Cuando se detecta un error de sintaxis en el código.</button><button class="opt">Cuando falla la compilación.</button><button class="opt">Cuando falla una de las pruebas.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T4·P3 · banco oficial</span><br>¿Cuándo no hace falta compilar un software?</div>
+<div class="opts"><button class="opt">Siempre es necesario compilar el software.</button><button class="opt">Cuando se trata de Java, ya que el bytecode no es realmente una compilación.</button><button class="opt">En lenguajes interpretados.</button><button class="opt">En lenguajes compilados.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P4 · banco oficial</span><br>¿Por qué es necesario empaquetar un software?</div>
+<div class="opts"><button class="opt">Solo es necesario empaquetar si el lenguaje es compilado.</button><button class="opt">Para facilitar la distribución e instalación.</button><button class="opt">Para incluir ficheros necesarios para el funcionamiento, como configuraciones y ficheros estáticos.</button><button class="opt">B y C.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P5 · banco oficial</span><br>¿En qué consiste un smoke test?</div>
+<div class="opts"><button class="opt">Es una prueba sencilla que permite comprobar si un sistema ha arrancado correctamente, incluyendo todas sus dependencias.</button><button class="opt">Es una prueba sin estado ni base de datos.</button><button class="opt">Es una prueba manual en la que se verifican funcionalidades ofrecidas al usuario.</button><button class="opt">Es una comprobación del servicio para saber si ha arrancado o no.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P6 · banco oficial</span><br>¿Por qué hay que construir una única vez?</div>
+<div class="opts"><button class="opt">Para acelerar el proceso.</button><button class="opt">Para asegurar que el paquete que ha pasado las pruebas es el mismo que se despliega en producción.</button><button class="opt">A y B.</button><button class="opt">No es necesario. De hecho, conviene construir en cada fase para paralelizar mejor.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T4·P7 · banco oficial</span><br>¿Qué propiedades deben tener los scripts de despliegue?</div>
+<div class="opts"><button class="opt">Deben estar incluidos en el control de cambios.</button><button class="opt">Se debe usar el mismo script para desplegar todos los entornos.</button><button class="opt">El script debe aplicar diferentes configuraciones en cada entorno, que obtiene de una ubicación diferente (del control de cambios o de un gestor de configuraciones).</button><button class="opt">Todas a las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T4·P8 · banco oficial</span><br>¿En qué consiste desplegar una copia de producción?</div>
+<div class="opts"><button class="opt">En clonar el sistema de producción, antes de los despliegues, como copia de seguridad.</button><button class="opt">En desplegar, en un entorno lo más parecido posible a producción, en una fase de prueba para reducir el riesgo del despliegue en producción.</button><button class="opt">Esto se consigue con despliegues blue/green: se despliega una copia de producción y se apuntan los balanceadores a la nueva instancia.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T4·P9 · banco oficial</span><br>¿Por qué un pipeline no sirve para proyectos que funcionan con pull requests?</div>
+<div class="opts"><button class="opt">Sí que se pueden usar.</button><button class="opt">Porque entonces no hay una construcción única del paquete.</button><button class="opt">Porque el flujo no se puede adaptar.</button><button class="opt">Porque es un desperdicio construir el paquete para todas las pull requests.</button></div>
+</div>
+<h3 id="bt5">Tema 5 · Pruebas</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P1 · banco oficial</span><br>¿Cómo debería ser una prueba unitaria?</div>
+<div class="opts"><button class="opt">Rápida.</button><button class="opt">Independiente del estado.</button><button class="opt">Dirigida a una única función.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P2 · banco oficial</span><br>¿Qué pruebas requieren que la aplicación esté arrancada?</div>
+<div class="opts"><button class="opt">De sistema.</button><button class="opt">De rendimiento.</button><button class="opt">De aceptación.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T5·P3 · banco oficial</span><br>¿Cuáles de las siguientes se pueden considerar pruebas no funcionales?</div>
+<div class="opts"><button class="opt">De rendimiento.</button><button class="opt">De cobertura.</button><button class="opt">De seguridad.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P4 · banco oficial</span><br>¿Por qué es útil que el desarrollador pueda acceder a los resultados de las pruebas?</div>
+<div class="opts"><button class="opt">En general no lo necesitan.</button><button class="opt">Para poder estudiar el error y ser capaz de corregirlo.</button><button class="opt">Para identificar quién ha roto el código.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T5·P5 · banco oficial</span><br>Relaciona los tipos de pruebas con sus características. Unitarias De sistema. De GUI. De rendimiento. Respuesta correcta <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Unitarias</b> → Rápidas, aisladas, prueban una única función/unidad sin dependencias.</div><div class="pair"><b>De sistema</b> → Prueban el sistema completo integrado (end-to-end), con la app arrancada.</div><div class="pair"><b>De GUI</b> → Prueban la interfaz de usuario, normalmente vía navegador.</div><div class="pair"><b>De rendimiento</b> → Miden tiempos de respuesta/carga bajo demanda (no funcionales).</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P6 · banco oficial</span><br>¿Para qué sirve el decorador @pytest.mark.unit?</div>
+<div class="opts"><button class="opt">Convierte una prueba de servicio en unitaria.</button><button class="opt">Para evitar la ejecución de una prueba.</button><button class="opt">Etiqueta la prueba en la batería de pruebas unit.      Estas etiquetas sirven para dividir la ejecución de pruebas en grupos diferentes.</button><button class="opt">Exporta el informe de la prueba en formato JUnit.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T5·P7 · banco oficial</span><br>¿Qué significa que una prueba de GUI se ejecute en un navegador headless?</div>
+<div class="opts"><button class="opt">En el navegador no tiene una ventana visible.</button><button class="opt">Que es un navegador en modo texto, por lo que no ejecutará código JavaScript.</button><button class="opt">Que el navegador se ejecuta en un servidor remoto sin pantalla.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P8 · banco oficial</span><br>¿Qué son los informes JUnit?</div>
+<div class="opts"><button class="opt">Ficheros XML exclusivos de pruebas en Java.</button><button class="opt">Ficheros XML resultado de ejecución de pruebas.</button><button class="opt">Ficheros XML exclusivos de pruebas unitarias.</button><button class="opt">Ficheros PDF archivados por las herramientas de CICD.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T5·P9 · banco oficial</span><br>¿Cómo se pueden paralelizar las pruebas?</div>
+<div class="opts"><button class="opt">Aprovechando la ejecución en múltiples hilos.</button><button class="opt">Separando las pruebas en baterías y ejecutándolas en paralelo.</button><button class="opt">Todas las anteriores.</button><button class="opt">En general no se puede y deben ejecutarse en serie.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T5·P10 · banco oficial</span><br>¿Para qué sirve una fixture?</div>
+<div class="opts"><button class="opt">Para fijar el resultado de una prueba.</button><button class="opt">Para fijar un estado conocido antes de ejecutar una prueba y devolver el entorno al estado original al terminar.</button><button class="opt">Para borrar la base de datos al terminar las pruebas.</button><button class="opt">Para deshabilitar una prueba puntualmente.</button></div>
+</div>
+<h3 id="bt6">Tema 6 · Evaluación y calidad del código</h3>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P1 · banco oficial</span><br>¿Por qué las revisiones de código deberían estar incorporadas en el flujo de integración continua?</div>
+<div class="opts"><button class="opt">Para que los compañeros del equipo puedan aportar feedback antes de que el código esté fusionado en la rama principal.</button><button class="opt">Porque todos los pasos del desarrollo deben estar integrados en una única herramienta de CICD.</button><button class="opt">No tienen por qué estar integradas, las revisiones deben ser siempre presenciales y antes de que se envíe el commit.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T6·P2 · banco oficial</span><br>¿En qué casos es obligatorio que una revisión apruebe una pull request en GitHub para poder fusionarla?</div>
+<div class="opts"><button class="opt">En cualquier caso.</button><button class="opt">Cuando se activa la protección de rama.</button><button class="opt">Cuando el autor de la pull request no es administrador del repositorio.</button><button class="opt">Cuando se abre la pull request en modo borrador.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P3 · banco oficial</span><br>¿Qué tipo de reglas se tienen en cuenta en una convención de estilo?</div>
+<div class="opts"><button class="opt">La longitud máxima de línea.</button><button class="opt">El formato de los nombres de variables y funciones.</button><button class="opt">El número máximo de líneas de una función.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P4 · banco oficial</span><br>¿Por qué los proyectos adoptan convenciones de estilo?</div>
+<div class="opts"><button class="opt">Para que el código sea más legible.</button><button class="opt">Para facilitar el mantenimiento por desarrolladores diferentes al autor.</button><button class="opt">Para aumentar la consistencia entre módulos.</button><button class="opt">Todas las anteriores.      En definitiva, para hacer código más fácil de entender.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P5 · banco oficial</span><br>¿Qué mide la cobertura?</div>
+<div class="opts"><button class="opt">El número de pruebas unitarias.</button><button class="opt">El número de pruebas totales, incluyendo unitarias, de integración y UI.</button><button class="opt">El porcentaje de líneas que se ejecutan durante las pruebas.</button><button class="opt">El número de líneas de código.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P6 · banco oficial</span><br>¿Es una cobertura del 100 % sinónimo de riesgo cero?</div>
+<div class="opts"><button class="opt">Claro, porque se han ejecutado todas las líneas del código durante las pruebas.</button><button class="opt">Claro, porque no tiene sentido escribir más pruebas.</button><button class="opt">No, porque llegar al 100 % no es posible.</button><button class="opt">No, porque eso no implica que se hayan probado todas las condiciones y valores de frontera.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P7 · banco oficial</span><br>¿Qué valor aporta Sonar a un proyecto?</div>
+<div class="opts"><button class="opt">La evaluación de la calidad del proyecto desde diferentes puntos de vista.</button><button class="opt">El seguimiento de la evolución de la calidad a lo largo del tiempo.</button><button class="opt">La identificación de problemas potenciales.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T6·P8 · banco oficial</span><br>¿Por qué es deseable reducir la complejidad del código?</div>
+<div class="opts"><button class="opt">Para que el código sea más legible.</button><button class="opt">Para facilitar el mantenimiento por desarrolladores diferentes al autor.</button><button class="opt">La A y la B.</button><button class="opt">Para poder pasar el umbral de aceptación de Sonar.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T6·P9 · banco oficial</span><br>¿Qué significa que Sonar utilice un agente?</div>
+<div class="opts"><button class="opt">Que un proceso se encarga de analizar el código y de enviar los resultados a un servidor central.</button><button class="opt">Que hay que subir el código a un servidor central para su análisis.</button><button class="opt">Que hay que instalar un software adicional junto con el producto para poder analizarlo.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T6·P10 · banco oficial</span><br>¿En qué consisten los perfiles de calidad de Sonar?</div>
+<div class="opts"><button class="opt">En un proyecto concreto.</button><button class="opt">En todas las reglas posibles de un lenguaje.</button><button class="opt">En un umbral de complejidad que marca el proyecto como válido.</button><button class="opt">En conjuntos de reglas que se evalúan durante el análisis de los proyectos a los que se asigna el perfil.</button></div>
+</div>
+<h3 id="bt7">Tema 7 · Jenkins</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P1 · banco oficial</span><br>¿Qué trabajos se pueden programar en Jenkins?</div>
+<div class="opts"><button class="opt">Compilación.</button><button class="opt">Pruebas.</button><button class="opt">Despliegues.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T7·P2 · banco oficial</span><br>¿Cuál es la contraseña por defecto de Jenkins?</div>
+<div class="opts"><button class="opt">admin</button><button class="opt">Password1!</button><button class="opt">Es aleatoria, Jenkins la imprime por la salida estándar.</button><button class="opt">No hay contraseña por defecto, el inicio de sesión es automático.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P3 · banco oficial</span><br>¿Dónde debe definirse el código de un pipeline?</div>
+<div class="opts"><button class="opt">En un Jenkinsfile en el repositorio.</button><button class="opt">En la definición del trabajo.</button><button class="opt">Los trabajos se definen en un formulario web donde se escribe el código a ejecutar.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T7·P4 · banco oficial</span><br>¿Sobre qué plataformas puede ejecutar un proyecto Jenkins?</div>
+<div class="opts"><button class="opt">Sobre cualquier que soporte Java.</button><button class="opt">Solo sobre Linux, ya que Jenkins es de código abierto.</button><button class="opt">En Windows, Debian y RedHat.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T7·P5 · banco oficial</span><br>¿Para qué sirve archivar artefactos?</div>
+<div class="opts"><button class="opt">Para hacer una copia de seguridad de los informes de pruebas.</button><button class="opt">Para que Jenkins pueda mostrar los informes de pruebas.</button><button class="opt">Para almacenar el resultado de una compilación, una construcción o de un informe de pruebas, junto a los detalles de la ejecución.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P6 · banco oficial</span><br>¿Cómo se puede configurar un trabajo para que se ejecute cuando hay cambios en un repositorio?</div>
+<div class="opts"><button class="opt">Configurando un webhook en GitHub sobre Jenkins.</button><button class="opt">Haciendo una comprobación periódica del repositorio.</button><button class="opt">A través de una petición a la API de Jenkins desde un Githook.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T7·P7 · banco oficial</span><br>¿Qué configuración hay que usar para ejecutar un trabajo de Jenkins a cada hora?</div>
+<div class="opts"><button class="opt">A partir de un webhook en un sistema con cron.</button><button class="opt">Un trigger periódico y una agenda 0 * * * *.      Esta programación ejecutará el trabajo cada hora en punto.</button><button class="opt">Una comprobación periódica del repositorio con una agenda 0 * * * *.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T7·P8 · banco oficial</span><br>¿Qué relación hay entre «trabajo» y «ejecución» en Jenkins?</div>
+<div class="opts"><button class="opt">Son sinónimos.</button><button class="opt">Un trabajo se ejecuta en el master, mientras que los agentes se encargan de las ejecuciones.</button><button class="opt">Un trabajo es una definición de un pipeline y la ejecución es cada una de las fases del pipeline.</button><button class="opt">Un trabajo es una definición de una tarea que puede tener varias fases; una ejecución es una activación concreta del trabajo con unos parámetros y un resultado concretos.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T7·P9 · banco oficial</span><br>¿Cómo se indica que debe ser la ejecución de un trabajo en un nodo con herramientas de compilación de Java?</div>
+<div class="opts"><button class="opt">Con la sentencia label 'maven' en la sección del agente.</button><button class="opt">Con la sentencia label 'java' en la sección del agente.</button><button class="opt">Asignando una etiqueta concreta a los agentes con herramientas de compilación e indicando esa etiqueta en la sentencia label ''.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt8">Tema 8 · GitLab</h3>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P1 · banco oficial</span><br>¿Qué servicios ofrece GitLab?</div>
+<div class="opts"><button class="opt">Repositorio remoto de Git.</button><button class="opt">Pipelines de CICD.</button><button class="opt">Registros de paquetes.</button><button class="opt">Todos los anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P2 · banco oficial</span><br>¿Cómo se llama la funcionalidad de pull request de GitLab?</div>
+<div class="opts"><button class="opt">Pull request.</button><button class="opt">Merge request.</button><button class="opt">Join request.</button><button class="opt">Branch merge.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P3 · banco oficial</span><br>¿Dónde se definen las fases de un pipeline en GitLab?</div>
+<div class="opts"><button class="opt">En el fichero .gitlab-ci.yml, en la raíz del repositorio.</button><button class="opt">En la interfaz de GitLab, en la sección de opciones del repositorio.</button><button class="opt">En Jenkins, a través del plugin de GitLab.</button><button class="opt">Todas las anteriores son opciones válidas.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P4 · banco oficial</span><br>¿Dónde se ejecutan los trabajos de un pipeline en GitLab?</div>
+<div class="opts"><button class="opt">En el servidor principal, si no hay runners asociados al proyecto, o en los runners asociados.</button><button class="opt">En los runners asociados al proyecto, en los compartidos entre varios proyectos.</button><button class="opt">En los agentes de Jenkins a través del plugin de GitLab.</button><button class="opt">En el servidor principal de GitLab.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P5 · banco oficial</span><br>¿Cómo se determina el orden de ejecución de fases y trabajos?</div>
+<div class="opts"><button class="opt">Las fases se ejecutan secuencialmente.</button><button class="opt">Los trabajos de una misma fase se ejecutan en paralelo.</button><button class="opt">Los trabajos empiezan tan pronto terminan sus dependencias.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P6 · banco oficial</span><br>¿Para qué sirve la directiva artifacts?</div>
+<div class="opts"><button class="opt">Para guardar archivos o directorios que serán utilizados en fases posteriores del pipeline.</button><button class="opt">Para guardar archivos o directorios que deben estar disponibles para los usuarios al terminar el pipeline.</button><button class="opt">Para recopilar informes de pruebas, cobertura o análisis de seguridad y mostrarlos en la interfaz de GitLab.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T8·P7 · banco oficial</span><br>¿Cuándo se ejecuta un pipeline en GitLab?</div>
+<div class="opts"><button class="opt">Cuando hay un cambio en una rama, ya sean etiquetas de Git o commits nuevos.</button><button class="opt">Cuando se abre una merge request a partir de una rama de un fork.</button><button class="opt">Es necesario arrancarlas manualmente desde la interfaz de GitLab o con el comando gitlab-runner start.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T8·P8 · banco oficial</span><br>¿Cuándo se borran las imágenes del registro de contenedores?</div>
+<div class="opts"><button class="opt">Manualmente.</button><button class="opt">Al finalizar el pipeline, a menos que se etiqueten con *-latest.</button><button class="opt">Tras un intervalo configurable, a menos que estén incluidas como excepción.</button><button class="opt">A los noventa días.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T8·P9 · banco oficial</span><br>¿Cuándo se ejecuta el contenido de before_script?</div>
+<div class="opts"><button class="opt">Al inicio del pipeline.</button><button class="opt">Antes de iniciar cada trabajo, siempre y cuando el trabajo no sobreescriba la sección beforescript explícitamente.</button><button class="opt">Antes de iniciar cada trabajo.</button><button class="opt">Al terminar cada trabajo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T8·P10 · banco oficial</span><br>¿Cuándo se detiene un pipeline?</div>
+<div class="opts"><button class="opt">Se pueden detener manualmente.</button><button class="opt">Si un trabajo falla, la siguiente fase no se ejecuta, pero los trabajos que se pongan en marcha en paralelo pueden terminar.</button><button class="opt">Se pueden cancelar automáticamente si la rama recibe más cambios durante la ejecución de su pipeline.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt9">Tema 9 · Otras herramientas</h3>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P1 · banco oficial</span><br>¿Con qué sistemas de control de versiones distribuidos es compatible Bitbucket?</div>
+<div class="opts"><button class="opt">GitHub.</button><button class="opt">Git.</button><button class="opt">Mercurial.</button><button class="opt">SVN.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T9·P2 · banco oficial</span><br>¿En qué fichero se definen los pipelines de CircleCI?</div>
+<div class="opts"><button class="opt">.circleci/config.yml.</button><button class="opt">gitlab-ci.yml.</button><button class="opt">Jenkinsfile.</button><button class="opt">.circle-ci.yml.</button></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T9·P3 · banco oficial</span><br>¿Cómo se ejecutan los trabajos de un workflow de CircleCI?</div>
+<div class="opts"><button class="opt">Secuencialmente.</button><button class="opt">En paralelo.</button><button class="opt">En paralelo por defecto, salvo que se definan dependencias entre ellos.</button><button class="opt">Secuencialmente por defecto, salvo que se indique que pueden ejecutarse en paralelo.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P4 · banco oficial</span><br>¿Se puede seguir un flujo de trabajo de GitHub con Bitbucket?</div>
+<div class="opts"><button class="opt">No, en todo caso se podría seguir el flujo de trabajo de Bitbucket.</button><button class="opt">No, porque Bitbucket no soporta forks ni pull requests.</button><button class="opt">No, aunque sí que soporta el flujo de trabajo de GitLab.</button><button class="opt">Sí, ya que soporta la creación de forks y pull requests.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T9·P5 · banco oficial</span><br>¿Con qué servicios de control de versiones se integra CircleCI?</div>
+<div class="opts"><button class="opt">GitHub y Bitbucket.</button><button class="opt">GitHub, GitLab y Bitbucket.</button><button class="opt">Con cualquiera que ofrezca un plugin, como Jenkins.</button><button class="opt">Con cualquiera que use Git como sistema de control de versiones.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P6 · banco oficial</span><br>¿A partir de qué cambios se ejecuta un pipeline de CircleCI?</div>
+<div class="opts"><button class="opt">Creación de ramas nuevas y cambios en ramas existentes.</button><button class="opt">Creación de pull requests.</button><button class="opt">Creación de etiquetas de Git, si se activan explícitamente.</button><button class="opt">Cualquiera de las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P7 · banco oficial</span><br>¿En qué consiste un orb de CircleCI?</div>
+<div class="opts"><button class="opt">En una plantilla con fases habituales para un sistema concreto.</button><button class="opt">En un paquete YAML reutilizable.</button><button class="opt">Código reutilizable, bien privado o público, ofrecido habitualmente por las propias organizaciones.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P8 · banco oficial</span><br>¿Qué ventaja tiene usar Nexus como proxy?</div>
+<div class="opts"><button class="opt">Acelera la descarga de paquetes en una red local.</button><button class="opt">Aísla a los sistemas internos de posibles caídas de servicio de repositorios públicos.</button><button class="opt">Centraliza el acceso a Internet a un único sistema en sistemas privados donde esta conectividad está restringida.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T9·P9 · banco oficial</span><br>¿Cuándo tiene sentido usar Nexus como repositorio para paquetes o imágenes?</div>
+<div class="opts"><button class="opt">Cuando los proyectos son privados y no se desea alojarlos en un repositorio público.</button><button class="opt">Cuando se quiere acelerar la publicación de paquetes.</button><button class="opt">Cuando no se dispone de una cuenta en el repositorio público.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T9·P10 · banco oficial</span><br>¿Qué gestores de paquetes soporta Nexus?</div>
+<div class="opts"><button class="opt">npm.</button><button class="opt">docker.</button><button class="opt">apt.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<h3 id="bt10">Tema 10 · Modelos de despliegue</h3>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P1 · banco oficial</span><br>Qué significa que un despliegue no tenga pérdida de servicio?</div>
+<div class="opts"><button class="opt">Que ofrece todas las funcionalidades durante todo el proceso de despliegue.</button><button class="opt">Que puede no prestar servicio durante un período de tiempo anunciado previamente como «mantenimiento».</button><button class="opt">Que, en la mayoría de los casos, los usuarios pueden seguir accediendo, pero las respuestas del sistema pueden ser inconsistentes.</button><button class="opt">Que el despliegue siempre es exitoso y nunca hay vuelta atrás.</button></div>
+</div>
+<div class="q">
+<div class="qh"><span class="tag">T10·P2 · banco oficial</span><br>Relaciona el concepto con su característica principal. Blue/green. Actualización incremental. Canary releasing. Feature flag. Respuesta correcta <em>(relacionar)</em></div>
+<button class="reveal" data-t="Ver solución">Ver solución</button>
+<div class="model"><div class="pair"><b>Blue/green</b> → Dos entornos idénticos; se conmuta todo el tráfico de golpe (todo o nada); rollback inmediato.</div><div class="pair"><b>Rolling (incremental)</b> → Se sustituyen los servidores poco a poco; ambas versiones conviven durante el proceso.</div><div class="pair"><b>Canary releasing</b> → Una porción del tráfico va a la nueva versión para probar con usuarios reales; un fallo solo afecta a esa porción.</div><div class="pair"><b>Feature flag</b> → Activa/desactiva funcionalidades por configuración sin desplegar; desacopla despliegue de exposición.</div></div>
+</div>
+<div class="q" data-c="2">
+<div class="qh"><span class="tag">T10·P3 · banco oficial</span><br>¿Por qué el esquema de datos se puede convertir en un problema si dos versiones conviven en el tiempo?</div>
+<div class="opts"><button class="opt">En general, no suele ser un problema. Las bases de datos se encargan de mantener el esquema.</button><button class="opt">Porque dos servidores con versiones diferentes pueden escribir el mismo registro a la vez provocando un bloqueo.</button><button class="opt">Porque el código nuevo puede escribir un dato con un esquema incompatible con el código antiguo.</button><button class="opt">Porque habría que aplicar una subida de esquema si accede la versión nueva, y una bajada de esquema si accede la versión antigua.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P4 · banco oficial</span><br>¿Cómo se pueden actualizar sistemas dependientes sin que haya problemas de compatibilidad?</div>
+<div class="opts"><button class="opt">Ofreciendo una API que siempre sea compatible hacia atrás.</button><button class="opt">Versionando la API, de forma que se pueda actualizar un sistema dependiente a la siguiente versión en cualquier momento.</button><button class="opt">Actualizándolos siempre en conjunto.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T10·P5 · banco oficial</span><br>¿Por qué se ha dicho que el modelo de despliegue blue/green ofrece todo o nada?</div>
+<div class="opts"><button class="opt">Porque actualiza los servidores in situ, sin desplegar ninguno nuevo.</button><button class="opt">Porque en un momento dado, todos los servidores que dan servicio tienen la misma versión del código.</button><button class="opt">Porque solo sirve para todos los sistemas de una aplicación.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P6 · banco oficial</span><br>¿Qué ventajas ofrece el Canary releasing frente a un despliegue blue/green?</div>
+<div class="opts"><button class="opt">Si se introduce un error en la nueva versión, solo afecta a los usuarios del servidor canario.</button><button class="opt">Si se detecta un error, se puede detener el servidor canario o dejar de dirigirle tráfico, sin necesidad de modificar los otros servidores en funcionamiento.</button><button class="opt">Puede usarse para pruebas A/B.</button><button class="opt">A y B son correctas.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P7 · banco oficial</span><br>¿Cuánto tiempo conviven dos versiones en un despliegue incremental?</div>
+<div class="opts"><button class="opt">Desde que se despliega el primer servidor con la nueva versión hasta que se apaga el último de la versión antigua.</button><button class="opt">No conviven ambas versiones, ya que se modifica el enrutador de tráfico instantáneamente para que apunte a la versión nueva o a la antigua.</button><button class="opt">Desde que se despliega el servidor canario hasta que se sustituyen todos los demás servidores.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+<div class="q" data-c="1">
+<div class="qh"><span class="tag">T10·P8 · banco oficial</span><br>¿Qué significa que los despliegues y la oferta de funcionalidades deba desacoplarse?</div>
+<div class="opts"><button class="opt">Que hay que desplegar las versiones cuando se decida ofrecer una funcionalidad concreta.</button><button class="opt">Que la fecha de un despliegue no tiene por qué coincidir con la exposición de una nueva funcionalidad a los usuarios.</button><button class="opt">Que un despliegue debe estar disponible para todos los usuarios exactamente al mismo tiempo.</button><button class="opt">Que los despliegues deben estar controlados por configuraciones definidas en una feature flag.</button></div>
+</div>
+<div class="q" data-c="3">
+<div class="qh"><span class="tag">T10·P9 · banco oficial</span><br>¿Qué usos se le puede dar a una feature flag?</div>
+<div class="opts"><button class="opt">Desplegar funcionalidades de manera incremental a nivel de usuario.</button><button class="opt">Bloquear funcionalidades secundarias de manera global.</button><button class="opt">Experimentar con usuarios reales en producción.</button><button class="opt">Todas las anteriores.</button></div>
+</div>
+<div class="q" data-c="0">
+<div class="qh"><span class="tag">T10·P10 · banco oficial</span><br>¿Cómo detecta Kubernetes si un pod ha arrancado correctamente?</div>
+<div class="opts"><button class="opt">Si hay suficientes ejecuciones exitosas consecutivas de la sonda readinessProbe.</button><button class="opt">Una vez desplegado un contenedor, Kubernetes lo considera disponible automáticamente.</button><button class="opt">Si el proceso no termina automáticamente tras initialDelaySeconds segundos.</button><button class="opt">Ninguna de las anteriores.</button></div>
+</div>
+
+
+<script>
+  const tests=[...document.querySelectorAll('.q[data-c]')];
+  const total=tests.length;
+  let done=0, ok=0;
+  function update(){document.getElementById('bar').textContent=`Test: ${done} / ${total} respondidas · Aciertos: ${ok}`;}
+  update();
+  tests.forEach(q=>{
+    const c=+q.dataset.c, opts=[...q.querySelectorAll('.opt')], exp=q.querySelector('.exp');
+    opts.forEach((o,i)=>o.addEventListener('click',()=>{
+      if(opts[0].disabled) return;
+      opts.forEach(x=>x.disabled=true);
+      opts[c].classList.add('ok');
+      if(i===c) ok++; else o.classList.add('no');
+      if(exp) exp.classList.add('show');
+      done++; update();
+    }));
+  });
+  document.querySelectorAll('.reveal').forEach(b=>b.addEventListener('click',()=>{
+    const m=b.nextElementSibling, shown=m.classList.toggle('show');
+    b.textContent=shown?'Ocultar respuesta':b.dataset.t||'Ver respuesta modelo';
+  }));
+</script>
+
+</body>
+</html>
