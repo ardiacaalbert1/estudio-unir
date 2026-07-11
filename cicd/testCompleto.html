@@ -11,13 +11,16 @@
   body{background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;max-width:840px;margin:0 auto;padding:24px 20px 80px;}
   h1{font-size:1.5rem;margin:0 0 2px;} h2{font-size:1.15rem;margin:30px 0 8px;border-bottom:2px solid var(--line);padding-bottom:5px;}
   .sub{color:var(--mut);margin:0 0 6px;font-size:.95rem;}
-  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:0 0 6px;font-weight:600;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .markall{background:var(--green);color:#fff;border:0;border-radius:9px;padding:7px 13px;cursor:pointer;font:inherit;font-weight:600;font-size:.88rem;}
+  .markall:hover{opacity:.9;}
   .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;}
   .qh{font-weight:600;margin:0 0 9px;}
   .opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;cursor:pointer;font:inherit;transition:.15s;}
   .opt:hover{border-color:var(--blue);}
   .opt.ok{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);font-weight:600;}
   .opt.no{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent);}
+  .opt.oculta{display:none;}
   .opt:disabled{cursor:default;opacity:1;}
   .exp{display:none;margin-top:10px;padding:10px 12px;border-left:3px solid var(--blue);background:var(--bg);border-radius:0 8px 8px 0;font-size:.93rem;}
   .exp.show{display:block;}
@@ -39,7 +42,7 @@
 <body>
 
 <h1>CI/CD — Test completo</h1>
-<div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
+<div class="bar"><span id="bar">Test: 0 / 0 respondidas · Aciertos: 0</span><button id="markAll" class="markall">Marcar correctas y ocultar otras</button></div>
 
 <h2 id="banco">🎯 Banco oficial de la plataforma (96 preguntas)</h2>
 <p class="sub">Preguntas reales de los Test Tema 1–10 del campus, con la respuesta correcta verificada (todos los intentos al 100%). El orden es el del PDF.</p>
@@ -468,6 +471,34 @@
     const m=b.nextElementSibling, shown=m.classList.toggle('show');
     b.textContent=shown?'Ocultar respuesta':b.dataset.t||'Ver respuesta modelo';
   }));
+  const markBtn=document.getElementById('markAll');
+  let allShown=false;
+  markBtn.addEventListener('click',()=>{
+    allShown=!allShown;
+    tests.forEach(q=>{
+      const c=+q.dataset.c, opts=[...q.querySelectorAll('.opt')], exp=q.querySelector('.exp');
+      opts.forEach((x,i)=>{
+        x.disabled=allShown;
+        x.classList.remove('ok','no','oculta');
+        if(allShown && i!==c) x.classList.add('oculta');
+      });
+      if(allShown){
+        opts[c].classList.add('ok');
+        if(exp) exp.classList.add('show');
+      }else if(exp){
+        exp.classList.remove('show');
+      }
+    });
+    document.querySelectorAll('.model').forEach(m=>m.classList.toggle('show',allShown));
+    document.querySelectorAll('.reveal').forEach(b=>{
+      const m=b.nextElementSibling;
+      if(m&&m.classList.contains('model')) b.textContent=allShown?'Ocultar respuesta':(b.dataset.t||'Ver respuesta modelo');
+    });
+    done=allShown?total:0;
+    ok=allShown?total:0;
+    update();
+    markBtn.textContent=allShown?'Mostrar todas las opciones':'Marcar correctas y ocultar otras';
+  });
 </script>
 
 </body>
