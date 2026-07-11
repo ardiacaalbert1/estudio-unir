@@ -38,6 +38,9 @@
 </head>
 <body>
 
+<h1>CI/CD — Test completo</h1>
+<div class="bar" id="bar">Test: 0 / 0 respondidas · Aciertos: 0</div>
+
 <h2 id="banco">🎯 Banco oficial de la plataforma (96 preguntas)</h2>
 <p class="sub">Preguntas reales de los Test Tema 1–10 del campus, con la respuesta correcta verificada (todos los intentos al 100%). El orden es el del PDF.</p>
 <div class="toc"><a href="#bt1">T1</a><a href="#bt2">T2</a><a href="#bt3">T3</a><a href="#bt4">T4</a><a href="#bt5">T5</a><a href="#bt6">T6</a><a href="#bt7">T7</a><a href="#bt8">T8</a><a href="#bt9">T9</a><a href="#bt10">T10</a></div>
@@ -445,7 +448,10 @@
   const tests=[...document.querySelectorAll('.q[data-c]')];
   const total=tests.length;
   let done=0, ok=0;
-  function update(){document.getElementById('bar').textContent=`Test: ${done} / ${total} respondidas · Aciertos: ${ok}`;}
+  function update(){
+    const bar=document.getElementById('bar');
+    if(bar) bar.textContent=`Test: ${done} / ${total} respondidas · Aciertos: ${ok}`;
+  }
   update();
   tests.forEach(q=>{
     const c=+q.dataset.c, opts=[...q.querySelectorAll('.opt')], exp=q.querySelector('.exp');
